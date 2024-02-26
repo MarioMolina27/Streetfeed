@@ -4,8 +4,9 @@ import PrimeVue from 'primevue/config';
 import panelUser from './components/admin/panelUser.vue';
 
 const app = createApp({});
-app.use(PrimeVue);
-app
-    .component('panelUser', panelUser)
 
-app.mount('#app');
+const appDOM = document.getElementById('app');
+
+app.component('panel-user', panelUser)
+
+app.mount(appDOM);

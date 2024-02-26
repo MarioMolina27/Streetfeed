@@ -1,5 +1,5 @@
 @extends('layouts.layout')
        
 @section('content')
-    <panelUser></panelUser>
+    <panel-user/>
 @endsection

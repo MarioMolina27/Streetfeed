@@ -1,5 +1,5 @@
 <template>
-    <div class="m-5">
+    <div>
         <h1>COMPONENT</h1>
     </div>
 </template>
