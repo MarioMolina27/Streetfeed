@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>STREETFEED</title>
+    <link rel="icon" href="img/logo.svg">
     @vite(['resources/css/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 </head>
 <body>
