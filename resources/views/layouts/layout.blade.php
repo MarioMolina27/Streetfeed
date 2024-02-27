@@ -8,8 +8,8 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 </head>
 <body>
-    <p>LAYOUT TEMPLATE</p>
     <main id="app">
+        <navmenu></navmenu>
         @yield('content')
     </main>
 </body>
