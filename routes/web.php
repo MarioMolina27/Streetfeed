@@ -16,6 +16,10 @@ Route::get('menu', function () {
 Route::get('delivery', function () {
     return view('riders.delivery');
 });
+Route::get('details/{encodedProvider}', function ($encodedProvider) {
+    $provider = json_decode(base64_decode($encodedProvider));
+    return view('riders.details', ['provider' => $provider]);
+});
 Route::get('riderlanding', function () {
     return view('landings.riderlanding');
 });

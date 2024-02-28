@@ -1,12 +1,12 @@
 <template>
-    <Card class="provider-card mx-3">
+    <Card class="provider-card mx-3" @click="showDetails">
         <template #header>
             <div class="card-header">
             <h3 class="provider-name">{{ provider.name }}</h3>
-            <button class="heart-button" @click="toggleHeart">
+            <button class="heart-button" style="outline: 0;" @click.stop.prevent="toggleHeart">
                 <i :class="heartClass" style="font-size: 1.5rem"></i>
             </button>
-            <img :alt="`Provider ${index + 1} image`" :src="`img/${provider.image}`" class="card-img-top" />
+            <img :alt="`Provider image`" :src="`img/${provider.image}`" class="card-img-top" />
             </div>
         </template>
         <template #content>
@@ -28,8 +28,7 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 export default{
     props: {
-      provider: Object,
-      index: Number
+      provider: Object
     },
     data(){
       return {
@@ -49,6 +48,10 @@ export default{
         setTimeout(() => {
           button.classList.remove('heart-icon-clicked');
         }, 300);
+      },
+      showDetails(){
+        const encodedProvider = btoa(JSON.stringify(this.provider));
+        window.location.href = 'details/' + encodeURIComponent(encodedProvider);
       }
     },
     components: {
@@ -66,6 +69,11 @@ export default{
   margin-left: 0 !important;
   border: 3px solid #B48753;
   background-color: #FDF8EB;
+  transition: box-shadow 0.3s ease-in-out;
+}
+.provider-card:hover {
+  box-shadow: 0 0 10px 0 #B48753;
+  cursor: pointer;
 }
 .heart-button {
   cursor: pointer;

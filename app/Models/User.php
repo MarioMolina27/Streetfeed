@@ -2,44 +2,50 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $table = 'user';
+    // protected $primaryKey = 'id';
+    // protected $incrementing= true;
+    // protected $keyType= 'string';
+    public $timestamps= false;
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function addresses()
+    {
+        return $this->hasMany(Adress::class, 'id_user');
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'id_user');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'id_user');
+    }
+
+    public function typeUsers()
+    {
+        return $this->belongsToMany(Type_User::class, 'user_type_user', 'id_user', 'id_type_user')->withPivot('type_of_provider');
+    }
+
+    public function favoriteProviders()
+    {
+        return $this->belongsToMany(User::class, 'user_favorites', 'id_user', 'id_provider_fav');
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class, 'id_user');
+    }
+    public function menus()
+    {
+        return $this->hasMany(Menu::class, 'id_user');
+    }
 }
