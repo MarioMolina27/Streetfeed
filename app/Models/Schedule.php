@@ -9,7 +9,7 @@ class Schedule extends Model
 {
     use HasFactory;
     protected $table = 'schedule';
-    // protected $primaryKey = 'id';
+    protected $primaryKey = 'id_schedule';
     // protected $incrementing= true;
     // protected $keyType= 'string';
     public $timestamps= false;

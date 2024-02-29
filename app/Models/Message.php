@@ -9,7 +9,7 @@ class Message extends Model
 {
     use HasFactory;
     protected $table = 'message';
-    // protected $primaryKey = 'id';
+    protected $primaryKey = 'id_message';
     // protected $incrementing= true;
     // protected $keyType= 'string';
     public $timestamps= false;

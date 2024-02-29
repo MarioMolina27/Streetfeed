@@ -9,7 +9,7 @@ class Type_User extends Model
 {
     use HasFactory;
     protected $table = 'type_user';
-    // protected $primaryKey = 'id';
+    protected $primaryKey = 'id_type_user';
     // protected $incrementing= true;
     // protected $keyType= 'string';
     public $timestamps= false;

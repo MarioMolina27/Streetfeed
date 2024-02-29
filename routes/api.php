@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\UserController;
 */
 
 Route::apiResource('users', UserController::class);
+Route::get('users/near-providers/{user}', [UserController::class, 'getMoreNearProviders']);
+Route::get('users/favourite-providers/{user}', [UserController::class, 'getFavouritesProviders']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

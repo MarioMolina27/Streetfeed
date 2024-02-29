@@ -9,7 +9,7 @@ class Marker extends Model
 {
     use HasFactory;
     protected $table = 'marker';
-    // protected $primaryKey = 'id';
+    protected $primaryKey = 'id_marker';
     // protected $incrementing= true;
     // protected $keyType= 'string';
     public $timestamps= false;

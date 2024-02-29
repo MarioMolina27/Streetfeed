@@ -32,6 +32,7 @@ import providerCard from './providerCard.vue';
 export default{
     data(){
       return {
+        nearProviders: [],
         providers : [
           {
             id: 1,
@@ -301,6 +302,15 @@ export default{
           }
         ]
       }
+    },
+    mounted(){
+      axios.get('api/users/near-providers/4')
+      .then(response => {
+        this.nearProviders = response.data;  
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos de los proveedores:', error);
+      });
     },
     components: {
       providerCard

@@ -9,7 +9,7 @@ class Delivery_Sate extends Model
 {
     use HasFactory;
     protected $table = 'delivery_state';
-    // protected $primaryKey = 'id';
+    protected $primaryKey = 'id_state';
     // protected $incrementing= true;
     // protected $keyType= 'string';
     public $timestamps= false;
