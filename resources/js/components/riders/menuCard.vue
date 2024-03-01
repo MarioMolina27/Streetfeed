@@ -1,25 +1,25 @@
 <template>
    <div class="menu-card" style="margin: 10px; display: flex;">
       <div class="menu-card-image" style="flex: 0 0 33%;">
-          <img :src="menu.image" alt="Card" style="width: 100%; height: auto;">
+          <img :src="`../img/menuDefault.png`" alt="Card" style="width: 100%; height: auto;">
       </div>
       <div class="menu-card-content" style="flex: 1;">
         <div class="menu-card-header">
             <h2>{{ menu.name }}</h2>
-            <Tag :class="{'low-availability': menu.available < 3, 'high-availability': menu.available >= 3}" value="Primary">{{ menu.available }} disponibles</Tag>
+            <Tag :class="{'low-availability': menu.launchpack.length < 3, 'high-availability': menu.launchpack.length >= 3}" value="Primary">{{ menu.launchpack.length }} disponibles</Tag>
         </div>
         <div class="menu-card-body row">
           <div class="col-lg-4 col-md-6 col-12">
               <p class="label-type-product fs-6">Primer producto</p>
-              <p class="type-product">{{ menu.firstProduct }}</p>
+              <p class="type-product">{{ menu.first_product }}</p>
           </div>
           <div class="col-lg-4 col-md-6 col-12">
               <p class="label-type-product fs-6">Segundo producto</p>
-              <p class="type-product">{{ menu.secondProduct }}</p>
+              <p class="type-product">{{ menu.second_product }}</p>
           </div>
           <div class="col-lg-4 col-md-6 col-12">
               <p class="label-type-product fs-6">Bebida</p>
-              <p class="type-product">{{ menu.drink }}</p>
+              <p class="type-product">{{ menu.drink_product }}</p>
           </div>
         </div>
         <div class="menu-card-footer">
@@ -41,6 +41,7 @@ export default{
       }
     },
     mounted() {
+      console.log(this.menu);
     },
     methods: {
       

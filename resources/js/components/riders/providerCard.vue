@@ -2,22 +2,25 @@
     <Card class="provider-card mx-3" @click="showDetails">
         <template #header>
             <div class="card-header">
-            <h3 class="provider-name">{{ provider.name }}</h3>
+            <h3 class="provider-name">{{ provider.nickname }}</h3>
             <button class="heart-button" style="outline: 0;" @click.stop.prevent="toggleHeart">
                 <i :class="heartClass" style="font-size: 1.5rem"></i>
             </button>
-            <img :alt="`Provider image`" :src="`img/${provider.image}`" class="card-img-top" />
+            <img :alt="`Provider image`" :src="`img/${provider.type_users[0].pivot.type_of_provider}.png`" class="card-img-top" />
             </div>
         </template>
         <template #content>
             <p>
             Horario:<br>
-            <strong>{{ provider.scheduleShift1 }}</strong><br>
-            <strong>{{ provider.scheduleShift2 }}</strong><br>
+            <strong v-if="provider.schedules && provider.schedules.length > 0">
+              {{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}
+            </strong>
+            <strong v-else>Sin Horario</strong><br>
+            <strong v-if="provider.schedules[1]">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
             </p>
             <div class="d-flex justify-content-between">
-            <Tag :class="{'low-availability': provider.menusAvailable < 3, 'high-availability': provider.menusAvailable >= 3}" value="Primary">{{ provider.menusAvailable }} disponibles</Tag>
-            <span><strong>{{ provider.distance }} de ti</strong></span>
+            <Tag :class="{'low-availability': totalLaunchpacks  < 3, 'high-availability': totalLaunchpacks  >= 3}" value="Primary">{{ totalLaunchpacks  }} disponibles</Tag>
+            <span><strong>{{ provider.distance }}km</strong> de ti</span>
             </div>  
         </template>
     </Card>
@@ -37,21 +40,38 @@ export default{
     },
     computed: {
       heartClass() {
-        return this.provider.isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart';
-      }
+        return this.provider.is_favorite ? 'pi pi-heart-fill' : 'pi pi-heart';
+      },
+      totalLaunchpacks() {
+        let total = 0;
+        this.provider.menus.forEach(menu => {
+            total += menu.launchpack.length;
+        });
+        return total;
+      } 
     },
     methods: {
       toggleHeart(event) {
         this.provider.isFavorite = !this.provider.isFavorite;
         let button = event.currentTarget;
-         button.classList.add('heart-icon-clicked');
+        button.classList.add('heart-icon-clicked');
         setTimeout(() => {
-          button.classList.remove('heart-icon-clicked');
+            button.classList.remove('heart-icon-clicked');
         }, 300);
+
+        axios.post('api/users/toggle-favorite-provider', {
+            userId: 4,
+            providerId: this.provider.id_user
+        })
+        .then(response => {
+            console.log(response.data.message);
+        })
+        .catch(error => {
+            console.error('Error al cambiar el estado de favorito:', error);
+        });
       },
       showDetails(){
-        const encodedProvider = btoa(JSON.stringify(this.provider));
-        window.location.href = 'details/' + encodeURIComponent(encodedProvider);
+        window.location.href = 'details/' + this.provider.nickname;
       }
     },
     components: {

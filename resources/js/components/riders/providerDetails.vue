@@ -4,23 +4,34 @@
         <button class="heart-button" style="outline: 0;" @click="toggleHeart">
             <i :class="heartClass" style="font-size: 1.5rem"></i>
         </button>
-        <img :alt="`Provider image`" :src="`img/${provider.image}`" class="card-img-top" />
+        <img v-if="provider && provider.type_users && provider.type_users.length > 0"
+         :alt="`Provider image`"
+         :src="`../img/${provider.type_users[0].pivot.type_of_provider}.png`"
+         class="card-img-detail" />
     </div>
     <div class="detail-provider-content">
         <p>
             Horario:<br>
-            <strong>{{ provider.scheduleShift1 }}</strong><br>
-            <strong>{{ provider.scheduleShift2 }}</strong><br>
+            <strong v-if="provider.schedules && provider.schedules.length > 0">
+                {{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}
+            </strong>
+            <strong v-else>Sin Horario</strong><br>
+            <strong v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
         </p>
         <p>
             Ubicación:<br>
-            <strong>{{ provider.city }}</strong><br>
-            <strong>{{ provider.adress }}</strong><br>
+            <div v-if="provider.addresses && provider.addresses.length > 0">
+                <strong>{{ provider.addresses[0].country + " " + provider.addresses[0].city }}</strong><br>
+                <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
+            </div>
+            <div v-else>
+                No se encontraron direcciones.
+            </div>    
         </p>
     </div>
     <div class="divider"></div>
     <div class="detail-provider-menus">
-        <template v-for="(menu) in provider.menu">
+        <template v-for="(menu) in provider.menus">
             <menu-card :menu = menu ></menu-card>
         </template>
     </div>
@@ -30,15 +41,16 @@
 import menuCard from './menuCard.vue';
 export default{
     props: {
-        provider: Object
+        nickname: String
     },
     data(){
       return {
-      
+        idUser: 4,
+        provider: []
       }
     },
-    mounted() {
-        console.log(this.provider);
+    created() {
+        this.loadProvider();
     },
     computed: {
       heartClass() {
@@ -46,13 +58,34 @@ export default{
       }
     },
     methods: {
+        loadProvider() {
+            axios.get(`api/users/get-provider/${this.nickname}/${this.idUser}`)
+            .then(response => {
+                this.provider = response.data;
+                console.log(this.provider);
+            })
+            .catch(error => {
+                console.error('Error al obtener el proveedor:', error);
+            });
+        },
         toggleHeart(event) {
             this.provider.isFavorite = !this.provider.isFavorite;
             let button = event.currentTarget;
             button.classList.add('heart-icon-clicked');
             setTimeout(() => {
-            button.classList.remove('heart-icon-clicked');
+                button.classList.remove('heart-icon-clicked');
             }, 300);
+
+            axios.post('api/users/toggle-favorite-provider', {
+                userId: 4,
+                providerId: this.provider.id_user
+            })
+            .then(response => {
+                this.loadProvider();
+            })
+            .catch(error => {
+                console.error('Error al cambiar el estado de favorito:', error);
+            });
         },
     },
     components: {
@@ -68,6 +101,10 @@ export default{
         width: 100%;
         height: 30vh;
         border-bottom: 5px solid #B48753;
+    }
+    .card-img-detail{
+        width: 100%;
+        background-size: auto;
     }
     .provider-name {
         position: absolute;
