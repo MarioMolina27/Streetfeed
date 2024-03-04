@@ -3,7 +3,7 @@
   <Card>
     <template #content>
       <DataTable v-model:filters="filters" :value="customers" paginator :rows="10" dataKey="id" filterDisplay="row" :loading="loading"
-              :globalFilterFields="['name', 'country.name', 'representative.name', 'status']">
+              :globalFilterFields="['nickname', 'email', 'name', 'surname']">
           <template #header>
               <div class="flex justify-content-end">
                   <IconField iconPosition="left">
@@ -16,46 +16,48 @@
           </template>
           <template #empty> No customers found. </template>
           <template #loading> Loading customers data. Please wait. </template>
-          <Column field="name" header="Name" style="min-width: 12rem">
+
+          <Column field="nickname" header="Nickname" style="min-width: 12rem">
               <template #body="{ data }">
+                  {{ data.nickname }}
+              </template>
+              <template #filter="{ filterModel, filterCallback }">
+                  <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by nickname" />
+              </template>
+          </Column>
+
+          <Column header="Email" filterField="email" style="min-width: 12rem">
+            <template #body="{ data }">
+                  {{ data.email }}
+              </template>
+              <template #filter="{ filterModel, filterCallback }">
+                  <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by email" />
+              </template>
+          </Column>
+          
+          <Column header="Name" filterField="name" style="min-width: 12rem">
+            <template #body="{ data }">
                   {{ data.name }}
               </template>
               <template #filter="{ filterModel, filterCallback }">
                   <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by name" />
               </template>
           </Column>
-          <Column header="Country" filterField="country.name" style="min-width: 12rem">
-              <template #body="{ data }">
-                  <div class="flex align-items-center gap-2">
-                      <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.country.code}`" style="width: 24px" />
-                      <span>{{ data.country.name }}</span>
-                  </div>
+
+          <Column header="Surname" filterField="surname" style="min-width: 12rem">
+            <template #body="{ data }">
+                  {{ data.surname }}
               </template>
               <template #filter="{ filterModel, filterCallback }">
-                  <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by country" />
+                  <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Search by surname" />
               </template>
           </Column>
-          <Column header="Agent" filterField="representative" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
+
+          
+
+          <Column field="type" header="Status" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
               <template #body="{ data }">
-                  <div class="flex align-items-center gap-2">
-                      <img :alt="data.representative.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`" style="width: 32px" />
-                      <span>{{ data.representative.name }}</span>
-                  </div>
-              </template>
-              <template #filter="{ filterModel, filterCallback }">
-                  <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="representatives" optionLabel="name" placeholder="Any" class="p-column-filter" style="min-width: 14rem" :maxSelectedLabels="1">
-                      <template #option="slotProps">
-                          <div class="flex align-items-center gap-2">
-                              <img :alt="slotProps.option.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.option.image}`" style="width: 32px" />
-                              <span>{{ slotProps.option.name }}</span>
-                          </div>
-                      </template>
-                  </MultiSelect>
-              </template>
-          </Column>
-          <Column field="status" header="Status" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-              <template #body="{ data }">
-                  <Tag :value="data.status" :severity="getSeverity(data.status)" />
+                  <Tag :value="data.type" :severity="getSeverity(data.type)" />
               </template>
               <template #filter="{ filterModel, filterCallback }">
                   <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One" class="p-column-filter" style="min-width: 12rem" :showClear="true">
@@ -65,18 +67,28 @@
                   </Dropdown>
               </template>
           </Column>
-          <Column field="verified" header="Verified" dataType="boolean" style="min-width: 6rem">
+
+          
+          <Column field="active" header="Active" dataType="boolean" style="min-width: 6rem">
               <template #body="{ data }">
-                  <i class="pi" :class="{ 'pi-check-circle text-green-500': data.verified, 'pi-times-circle text-red-400': !data.verified }"></i>
+                  <i class="pi" :class="{ 'pi-check-circle text-green-500': data.active, 'pi-times-circle text-red-400': !data.active }"></i>
               </template>
               <template #filter="{ filterModel, filterCallback }">
                   <TriStateCheckbox v-model="filterModel.value" @change="filterCallback()" />
               </template>
           </Column>
+
+          <Column header="" style="min-width: 8rem">
+              <template #body="{ data }">
+                  <div class="button-delete">
+                    <i class="pi pi-trash" style="color: #B52A2A" />
+                  </div>
+              </template>
+          </Column>
+
       </DataTable>
     </template>
   </Card>
-      
 </template>
 
 <script>
@@ -101,25 +113,14 @@ export default {
       customers: null,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        nickname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
         name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        'country.name': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        representative: { value: null, matchMode: FilterMatchMode.IN },
-        status: { value: null, matchMode: FilterMatchMode.EQUALS },
-        verified: { value: null, matchMode: FilterMatchMode.EQUALS }
+        surname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        type: { value: null, matchMode: FilterMatchMode.EQUALS },
+        active: { value: null, matchMode: FilterMatchMode.EQUALS },
+        email: { value: null, matchMode: FilterMatchMode.STARTS_WITH }
       },
-      representatives: [
-        { name: 'Amy Elsner', image: 'amyelsner.png' },
-        { name: 'Anna Fali', image: 'annafali.png' },
-        { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-        { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-        { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-        { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-        { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-        { name: 'Onyama Limba', image: 'onyamalimba.png' },
-        { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-        { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-      ],
-      statuses: ['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal'],
+      statuses: ['Provider', 'Rider', 'Admin'],
       loading: true
     };
   },
@@ -130,30 +131,14 @@ export default {
         return d;
       });
     },
-    formatDate(value) {
-      return value.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-    },
-
-    formatCurrency(value) {
-      return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    },
-
     getSeverity(status) {
       switch (status) {
-        case 'unqualified':
-          return 'danger';
-        case 'qualified':
-          return 'success';
-        case 'new':
-          return 'info';
-        case 'negotiation':
+        case 'Rider':
           return 'warning';
-        case 'renewal':
-          return null;
+        case 'Provider':
+          return 'success';
+        case 'Admin':
+          return 'info';
       }
     }
   },
@@ -177,12 +162,49 @@ export default {
     Card
   } 
 };
+
 </script>
 
 <style>
-.p-card-body{
-  box-shadow: 0 0 0 1px #e0e0e0;
-  margin: 35px;
-  border-radius: 15px;
-}
+  .p-card{
+    margin: 20px;
+    border-radius: 5px;
+    font-family: Poppins, sans-serif;
+  }
+
+
+  .button-delete{
+    border-radius: 50%;
+    border: 1px solid #B52A2A;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .p-inputtext:hover{
+    border-color: #984EAE;
+  }
+
+  .p-inputtext:focus{
+    outline: 1px solid #984EAE;
+  }
+
+  .p-highlight .p-checkbox-box {
+    background-color: #984EAE;
+    border-color: #984EAE;
+  }
+
+  .p-column-filter-overlay .p-column-filter-row-items .p-column-filter-row-item.p-highlight {
+    background-color: #ebe1d7;
+    color: #B48753;
+  }
+
+  .p-paginator .p-highlight {
+    background-color: #ebe1d7;
+    color: #B48753;
+    border-radius: 50%;
+  }
+  
 </style>
