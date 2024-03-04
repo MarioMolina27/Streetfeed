@@ -35,7 +35,7 @@ export default{
     },
     data(){
       return {
-      
+        isRequesting: false
       }
     },
     computed: {
@@ -52,7 +52,8 @@ export default{
     },
     methods: {
       toggleHeart(event) {
-        this.provider.isFavorite = !this.provider.isFavorite;
+        this.isRequesting = true;
+        this.provider.is_favorite = !this.provider.is_favorite;
         let button = event.currentTarget;
         button.classList.add('heart-icon-clicked');
         setTimeout(() => {
@@ -65,9 +66,13 @@ export default{
         })
         .then(response => {
             console.log(response.data.message);
+            this.$emit('favoriteToggled');
+            this.isRequesting = false;
         })
         .catch(error => {
             console.error('Error al cambiar el estado de favorito:', error);
+                        this.isRequesting = false;
+
         });
       },
       showDetails(){

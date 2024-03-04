@@ -76,13 +76,13 @@ class UserController extends Controller
                     $query->where('day', $currentDay); 
                 },
                 'typeUsers' => function ($query) {
-                    $query->whereIn('type_user.id_type_user', [2, 4])->withPivot('type_of_provider');
+                    $query->whereIn('type_user.id_type_user', [2])->withPivot('type_of_provider');
                 },
                 'menus.launchpack',
                 'favoriteProviders'
             ])
             ->whereHas('typeUsers', function ($query) {
-                $query->whereIn('type_user.id_type_user', [2, 4]);
+                $query->whereIn('type_user.id_type_user', [2]);
             })
             ->where('nickname', $nickname)
             ->first();
@@ -98,100 +98,94 @@ class UserController extends Controller
         $currentDay = Carbon::now()->dayOfWeek;
         $currentUserLat = $user->latitude;
         $currentUserLng = $user->longitude;
-        $currentUser = $user;
 
-        $users = User::with([
+        $providers = User::with([
             'addresses.roadType', 
             'schedules' => function ($query) use ($currentDay) {
                 $query->where('day', $currentDay); 
             },
             'typeUsers' => function ($query) {
-                $query->whereIn('type_user.id_type_user', [2, 4])->withPivot('type_of_provider');
+                $query->whereIn('type_user.id_type_user', [2])->withPivot('type_of_provider');
             },
             'menus.launchpack',
             'favoriteProviders'
         ])
         ->whereHas('typeUsers', function ($query) {
-            $query->whereIn('type_user.id_type_user', [2, 4]);
+            $query->whereIn('type_user.id_type_user', [2]);
         })
         ->get();
 
-        $users->each(function ($user) use ($currentUserLat, $currentUserLng, $currentUser) {
-            $user->distance = $this->haversineDistance($currentUserLat, $currentUserLng, $user->latitude, $user->longitude);
-            $user->is_favorite = $currentUser->favoriteProviders->contains($user->id_user);
+        $providers->each(function ($provider) use ($currentUserLat, $currentUserLng, $user) {
+            $provider->distance = $this->haversineDistance($currentUserLat, $currentUserLng, $provider->latitude, $provider->longitude);
+            $provider->is_favorite = $user->favoriteProviders->contains($provider->id_user);
         });
 
-        $users = $users->sortBy('distance');
+        $providers = $providers->sortBy('distance');
 
-        return UserResource::collection($users);
+        return UserResource::collection($providers);
     }
     public function getBetterProviders(User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
-        $currentUserLat = $user->latitude;
-        $currentUserLng = $user->longitude;
-        $currentUser = $user;
     
-        $users = User::with([
+        $providers  = User::with([
             'addresses.roadType', 
             'schedules' => function ($query) use ($currentDay) {
                 $query->where('day', $currentDay); 
             },
             'typeUsers' => function ($query) {
-                $query->whereIn('type_user.id_type_user', [2, 4])->withPivot('type_of_provider');
+                $query->whereIn('type_user.id_type_user', [2])->withPivot('type_of_provider');
             },
             'menus.launchpack',
             'favoriteProviders'
         ])
         ->whereHas('typeUsers', function ($query) {
-            $query->whereIn('type_user.id_type_user', [2, 4]);
+            $query->whereIn('type_user.id_type_user', [2]);
         })
         ->get();
     
-        $users->each(function ($user) use ($currentUserLat, $currentUserLng, $currentUser) {
-            $user->distance = $this->haversineDistance($currentUserLat, $currentUserLng, $user->latitude, $user->longitude);
-            $user->is_favorite = $currentUser->favoriteProviders->pluck('id_user')->contains($user->id_user);
+        $providers->each(function ($provider) use ($user) {
+            $provider->distance = $this->haversineDistance($user->latitude, $user->longitude, $provider->latitude, $provider->longitude);
+            $provider->is_favorite = $user->favoriteProviders->pluck('id_user')->contains($provider->id_user);
+            $provider->favorite_count = $provider->favoriteProviders()->count();
         });
     
-        $users = $users->sortByDesc(function ($user) {
-            return $user->favoriteProviders->count();
-        });
+        $providers = $providers->sortByDesc('favorite_count');
     
-        return UserResource::collection($users);
+        return UserResource::collection($providers);
     }
     public function getFavouritesProviders(User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
         $currentUserLat = $user->latitude;
         $currentUserLng = $user->longitude;
-        $currentUser = $user;
 
-        $users = User::with([
+        $providers = User::with([
             'addresses.roadType', 
             'schedules' => function ($query) use ($currentDay) {
                 $query->where('day', $currentDay); 
             },
             'typeUsers' => function ($query) {
-                $query->whereIn('type_user.id_type_user', [2, 4])->withPivot('type_of_provider');
+                $query->whereIn('type_user.id_type_user', [2])->withPivot('type_of_provider');
             },
             'menus.launchpack',
             'favoriteProviders'
         ])
         ->whereHas('typeUsers', function ($query) {
-            $query->whereIn('type_user.id_type_user', [2, 4]);
+            $query->whereIn('type_user.id_type_user', [2]);
         })
         ->get();
 
-        $favoriteUsers = $users->filter(function ($user) use ($currentUser) {
-            return $currentUser->favoriteProviders->pluck('id_user')->contains($user->id_user);
+        $favoriteProviders = $providers->filter(function ($provider) use ($user) {
+            return $user->favoriteProviders->pluck('id_user')->contains($provider->id_user);
         });
         
-        $favoriteUsers->each(function ($user) use ($currentUserLat, $currentUserLng, $currentUser) {
-            $user->distance = $this->haversineDistance($currentUserLat, $currentUserLng, $user->latitude, $user->longitude);
-            $user->is_favorite = true;
+        $favoriteProviders->each(function ($provider) use ($currentUserLat, $currentUserLng, $user) {
+            $provider->distance = $this->haversineDistance($currentUserLat, $currentUserLng, $provider->latitude, $provider->longitude);
+            $provider->is_favorite = true;
         });
     
-        $favoriteUsers = $favoriteUsers->sortBy('distance');
+        $favoriteProviders = $favoriteProviders->sortBy('distance');
     
-        return UserResource::collection($favoriteUsers);
+        return UserResource::collection($favoriteProviders);
     }
 
     private function haversineDistance($lat1, $lon1, $lat2, $lon2) {

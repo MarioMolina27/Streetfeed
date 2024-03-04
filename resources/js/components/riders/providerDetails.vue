@@ -1,6 +1,6 @@
 <template>
     <div class="detail-header">
-        <h1 class="provider-name">{{ provider.name }}</h1>
+        <h1 class="provider-name">{{ provider.nickname }}</h1>
         <button class="heart-button" style="outline: 0;" @click="toggleHeart">
             <i :class="heartClass" style="font-size: 1.5rem"></i>
         </button>
@@ -9,25 +9,29 @@
          :src="`../img/${provider.type_users[0].pivot.type_of_provider}.png`"
          class="card-img-detail" />
     </div>
-    <div class="detail-provider-content">
-        <p>
-            Horario:<br>
-            <strong v-if="provider.schedules && provider.schedules.length > 0">
-                {{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}
-            </strong>
-            <strong v-else>Sin Horario</strong><br>
-            <strong v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
-        </p>
-        <p>
-            Ubicación:<br>
-            <div v-if="provider.addresses && provider.addresses.length > 0">
-                <strong>{{ provider.addresses[0].country + " " + provider.addresses[0].city }}</strong><br>
-                <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
-            </div>
-            <div v-else>
-                No se encontraron direcciones.
-            </div>    
-        </p>
+    <div class="detail-provider-content row">
+        <div class="col-lg-6 col-12 d-flex justify-content-center">
+            <p>
+                Horario:<br>
+                <div class="info-text" v-if="provider.schedules && provider.schedules.length > 0">
+                    <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
+                </div>
+                <strong class="info-text" v-else>Sin Horario<br></strong>
+                <strong class="info-text" v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
+            </p>
+        </div>
+        <div class="col-lg-6 col-12 d-flex justify-content-center">
+            <p>
+                Ubicación:<br>
+                <div class="info-text" v-if="provider.addresses && provider.addresses.length > 0">
+                    <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
+                    <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
+                </div>
+                <div class="info-text" v-else>
+                    <strong>No se encontraron direcciones.</strong>
+                </div>    
+            </p>
+        </div>
     </div>
     <div class="divider"></div>
     <div class="detail-provider-menus">
@@ -54,7 +58,7 @@ export default{
     },
     computed: {
       heartClass() {
-        return this.provider.isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart';
+        return this.provider.is_favorite ? 'pi pi-heart-fill' : 'pi pi-heart';
       }
     },
     methods: {
@@ -69,7 +73,7 @@ export default{
             });
         },
         toggleHeart(event) {
-            this.provider.isFavorite = !this.provider.isFavorite;
+            this.provider.is_favorite = !this.provider.is_favorite;
             let button = event.currentTarget;
             button.classList.add('heart-icon-clicked');
             setTimeout(() => {
@@ -115,6 +119,9 @@ export default{
         padding: 10px;
         z-index: 2;
     }
+    .info-text {
+        font-size: 1.5rem;
+    }
     .heart-button {
         cursor: pointer;
         position: absolute;
@@ -143,9 +150,7 @@ export default{
         }
     }
     .detail-provider-content {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
+
         margin-block: 10px;
     }
     .detail-provider-content > p{

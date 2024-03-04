@@ -1,28 +1,31 @@
 <template>
-   <div class="menu-card" style="margin: 10px; display: flex;">
-      <div class="menu-card-image" style="flex: 0 0 33%;">
-          <img :src="`../img/menuDefault.png`" alt="Card" style="width: 100%; height: auto;">
-      </div>
+   <div class="menu-card" style="margin-top: 30px; display: flex;">
       <div class="menu-card-content" style="flex: 1;">
         <div class="menu-card-header">
-            <h2>{{ menu.name }}</h2>
+          <h2>{{ menu.title }}</h2>
+        </div>
+        <div class="menu-card-body row gx-3">
+          <div class="col-lg-4 col-md-6 col-sm-12">
+              <div class="menu-products">
+                  <p class="label-type-product mb-0 fs-6">Primer producto</p>
+                  <p class="type-product">{{ menu.first_product }}</p>
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+              <div class="menu-products">
+                  <p class="label-type-product mb-0 fs-6">Segundo producto</p>
+                  <p class="type-product">{{ menu.second_product }}</p>
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+              <div class="menu-products">
+                  <p class="label-type-product mb-0 fs-6">Bebida</p>
+                  <p class="type-product">{{ menu.drink_product }}</p>
+              </div>
+          </div>
+        </div>
+        <div class="menu-card-footer d-flex justify-content-between">
             <Tag :class="{'low-availability': menu.launchpack.length < 3, 'high-availability': menu.launchpack.length >= 3}" value="Primary">{{ menu.launchpack.length }} disponibles</Tag>
-        </div>
-        <div class="menu-card-body row">
-          <div class="col-lg-4 col-md-6 col-12">
-              <p class="label-type-product fs-6">Primer producto</p>
-              <p class="type-product">{{ menu.first_product }}</p>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-              <p class="label-type-product fs-6">Segundo producto</p>
-              <p class="type-product">{{ menu.second_product }}</p>
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-              <p class="label-type-product fs-6">Bebida</p>
-              <p class="type-product">{{ menu.drink_product }}</p>
-          </div>
-        </div>
-        <div class="menu-card-footer">
             <button class="btn-menu-reservation">RESERVA</button>
         </div>
     </div>
@@ -78,22 +81,24 @@ export default{
 
   .menu-card-body {
       display: flex;
-      justify-content: space-between;
-      width: 70%;
+      justify-content: center;
+      width: 100%;
   }
   .menu-products {
     display: flex;
     flex-direction: column;
+    text-align: center;
   }
   .label-type-product {
     color: #08173390;
   }
   .type-product {
     color: #081733;
+    font-size: 1.25rem;
   }
   .menu-card-footer {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
   }
   .low-availability {
     border: #B52A2A solid 1px;
