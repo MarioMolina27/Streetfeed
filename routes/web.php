@@ -13,6 +13,12 @@ Route::get('admin', function () {
 Route::get('menu', function () {
     return view('providers.menu');
 });
+Route::get('delivery', function () {
+    return view('riders.delivery');
+});
+Route::get('details/{nickname}', function ($nickname) {
+    return view('riders.details', ['nickname' => $nickname]);
+});
 Route::get('riderlanding', function () {
     return view('landings.riderlanding');
 });

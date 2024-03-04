@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::apiResource('users', UserController::class);
+Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
+Route::get('users/near-providers/{user}', [UserController::class, 'getMoreNearProviders']);
+Route::get('users/has-more-favourites-providers/{user}', [UserController::class, 'getBetterProviders']);
+Route::get('users/favourite-providers/{user}', [UserController::class, 'getFavouritesProviders']);
+Route::post('users/toggle-favorite-provider', [UserController::class, 'toggleFavoriteProvider']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
