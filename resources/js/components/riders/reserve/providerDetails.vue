@@ -36,7 +36,7 @@
     <div class="divider"></div>
     <div class="detail-provider-menus">
         <template v-for="(menu) in provider.menus">
-            <menu-card :menu = menu ></menu-card>
+            <menu-card :menu = menu ></menu-card>          
         </template>
     </div>
 </template>
@@ -173,4 +173,4 @@ export default{
         width: 100%;
         align-items: center;
     } 
-</style>
+</style>./reserve/menuCard.vue

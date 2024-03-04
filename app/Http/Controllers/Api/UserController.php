@@ -78,7 +78,9 @@ class UserController extends Controller
                 'typeUsers' => function ($query) {
                     $query->whereIn('type_user.id_type_user', [2])->withPivot('type_of_provider');
                 },
-                'menus.launchpack',
+                'menus' => function ($query) {
+                    $query->withCount('launchpack')->whereHas('launchpack');
+                },
                 'favoriteProviders'
             ])
             ->whereHas('typeUsers', function ($query) {
@@ -113,6 +115,9 @@ class UserController extends Controller
         ->whereHas('typeUsers', function ($query) {
             $query->whereIn('type_user.id_type_user', [2]);
         })
+        ->whereHas('menus', function ($query) {
+            $query->has('launchpack');
+        })
         ->get();
 
         $providers->each(function ($provider) use ($currentUserLat, $currentUserLng, $user) {
@@ -140,6 +145,9 @@ class UserController extends Controller
         ])
         ->whereHas('typeUsers', function ($query) {
             $query->whereIn('type_user.id_type_user', [2]);
+        })
+        ->whereHas('menus', function ($query) {
+            $query->has('launchpack');
         })
         ->get();
     
@@ -172,6 +180,9 @@ class UserController extends Controller
         ->whereHas('typeUsers', function ($query) {
             $query->whereIn('type_user.id_type_user', [2]);
         })
+        ->whereHas('menus', function ($query) {
+            $query->has('launchpack');
+        })
         ->get();
 
         $favoriteProviders = $providers->filter(function ($provider) use ($user) {
@@ -203,6 +214,13 @@ class UserController extends Controller
         $distance = $earthRadius * $c;
 
         return round($distance, 1);
+    }
+
+    public function reserveData(User $user, $menuid)
+    {
+        $provider = User::find($menuid); 
+
+
     }
 
     public function toggleFavoriteProvider(Request $request)

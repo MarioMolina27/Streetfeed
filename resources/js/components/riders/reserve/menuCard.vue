@@ -25,8 +25,8 @@
           </div>
         </div>
         <div class="menu-card-footer d-flex justify-content-between">
-            <Tag :class="{'low-availability': menu.launchpack.length < 3, 'high-availability': menu.launchpack.length >= 3}" value="Primary">{{ menu.launchpack.length }} disponibles</Tag>
-            <button class="btn-menu-reservation">RESERVA</button>
+            <Tag :class="{'low-availability': menu.launchpack_count < 3, 'high-availability': menu.launchpack_count >= 3}" value="Primary">{{ menu.launchpack_count }} disponibles</Tag>
+            <button class="btn-menu-reservation" @click="assignReserve">RESERVA</button>
         </div>
     </div>
   </div>
@@ -47,7 +47,11 @@ export default{
       console.log(this.menu);
     },
     methods: {
-      
+      assignReserve() {
+        const dataToPass = `${this.menu.id}`;
+        const encodedData = btoa(dataToPass);
+        window.location.href = `../assignreserve/${encodedData}`;
+      }
     },
     components: {
       Tag

@@ -19,6 +19,9 @@ Route::get('delivery', function () {
 Route::get('details/{nickname}', function ($nickname) {
     return view('riders.details', ['nickname' => $nickname]);
 });
+Route::get('assignreserve/{menuid}', function ($menuid) {
+    return view('riders.assignreserve', ['menuid' => $menuid]);
+});
 Route::get('riderlanding', function () {
     return view('landings.riderlanding');
 });

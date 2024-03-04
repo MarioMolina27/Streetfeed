@@ -5,8 +5,9 @@ import PrimeVue from 'primevue/config';
 import navMenu from './components/shared/nav.vue';
 import panelUser from './components/admin/panelUser.vue';
 import panelMenu from './components/providers/panelMenu.vue';
-import panelDelivery from './components/riders/panelDelivery.vue';
-import providerDetails from './components/riders/providerDetails.vue';
+import panelDelivery from './components/riders/explore/panelDelivery.vue';
+import providerDetails from './components/riders/reserve/providerDetails.vue';
+import assignLocation from './components/riders/reserve/assignLocation.vue';
 import 'primevue/resources/themes/aura-light-green/theme.css'
 
 
@@ -20,6 +21,7 @@ app.component('paneluser', panelUser)
 app.component('panelmenu', panelMenu)
 app.component('paneldelivery', panelDelivery)
 app.component('providerdetails', providerDetails)
+app.component('assignlocation', assignLocation)
 
 
 app.mount(appDOM);

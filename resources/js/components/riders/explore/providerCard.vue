@@ -59,7 +59,7 @@ export default{
         setTimeout(() => {
             button.classList.remove('heart-icon-clicked');
         }, 300);
-
+        
         axios.post('api/users/toggle-favorite-provider', {
             userId: 4,
             providerId: this.provider.id_user
