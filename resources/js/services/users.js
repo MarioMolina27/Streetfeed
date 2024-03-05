@@ -37,7 +37,7 @@ export const reactivateUser = async (id) => {
     console.log(id);
     const url = `api/users/reactivate/${id}`;
     try{
-        const response = await axios.patch(url);
+        const response = await axios.post(url);
         console.log(response);
         const data = await response.data;
         return data;
