@@ -1,6 +1,13 @@
 <template>
     <ConfirmDialog> </ConfirmDialog>
-    <Card>
+    <div class="row">
+        <div class="col-lg-1 col-12 d-flex align-items-start mt-4 ps-5">
+        <button class="burger-menu">
+            <i class="pi pi-bars burger-logo"></i>
+        </button>
+    </div>
+    <div class="col-lg-11 col-12">
+        <Card>
         <template #content>
             <DataTable
                 v-model:filters="filters"
@@ -195,6 +202,8 @@
             </DataTable>
         </template>
     </Card>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -432,5 +441,18 @@ export default {
 
 .not-active-user{
     color: #b52a2a;
+}
+
+.navbar{
+    display: none;
+}
+
+.burger-menu{
+    background: transparent;
+    border: none;
+}
+    
+.burger-logo{
+    font-size: 1.8rem;
 }
 </style>
