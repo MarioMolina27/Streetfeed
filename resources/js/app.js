@@ -1,4 +1,5 @@
 import './bootstrap';
+import 'primevue/resources/themes/aura-light-green/theme.css'
 import * as bootstrap from 'bootstrap';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
@@ -7,12 +8,11 @@ import panelUser from './components/admin/panelUser.vue';
 import panelMenu from './components/providers/panelMenu.vue';
 import panelDelivery from './components/riders/panelDelivery.vue';
 import providerDetails from './components/riders/providerDetails.vue';
-import 'primevue/resources/themes/aura-light-green/theme.css'
+import ConfirmationService from 'primevue/confirmationservice';
 
 
-const app = createApp({});
-app.use(PrimeVue, {
-});
+
+const app = createApp({}).use(PrimeVue).use(ConfirmationService);
 const appDOM = document.getElementById('app');
 
 app.component('navmenu', navMenu)
