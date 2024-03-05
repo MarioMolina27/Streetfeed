@@ -40,7 +40,7 @@ export default{
     },
     data(){
       return {
-        
+        menuid: String
       }
     },
     mounted() {
@@ -48,9 +48,8 @@ export default{
     },
     methods: {
       assignReserve() {
-        const dataToPass = `${this.menu.id}`;
-        const encodedData = btoa(dataToPass);
-        window.location.href = `../assignreserve/${encodedData}`;
+        const encodedMenuId = btoa(JSON.stringify(this.menu.id_menu));
+        window.location.href = '../assignreserve/' + encodeURIComponent(encodedMenuId);
       }
     },
     components: {

@@ -20,7 +20,7 @@ Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getP
 Route::get('users/near-providers/{user}', [UserController::class, 'getMoreNearProviders']);
 Route::get('users/has-more-favourites-providers/{user}', [UserController::class, 'getBetterProviders']);
 Route::get('users/favourite-providers/{user}', [UserController::class, 'getFavouritesProviders']);
-Route::get('users/reserve-data/{user}/{menuid}', [UserController::class, 'reserveData']);
+Route::get('users/reserve-data/{user}/{menuid}', [UserController::class, 'reserveMarkers']);
 Route::post('users/toggle-favorite-provider', [UserController::class, 'toggleFavoriteProvider']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

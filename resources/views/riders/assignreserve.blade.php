@@ -1,5 +1,5 @@
 @extends('layouts.layout')
 
 @section('content')
-    <assignlocation></assignlocation>
+    <assignlocation :idmenu="'{{ $idmenu }}'"></assignlocation>
 @endsection

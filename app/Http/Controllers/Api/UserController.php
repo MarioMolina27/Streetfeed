@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Marker;
+use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -216,11 +218,21 @@ class UserController extends Controller
         return round($distance, 1);
     }
 
-    public function reserveData(User $user, $menuid)
+    public function reserveMarkers(User $user, $menuid)
     {
-        $provider = User::find($menuid); 
+        $currentUser = $user;
 
-
+        // Obtener el proveedor asociado al menu
+        $provider = Menu::findOrFail($menuid)->user;
+        $markers = Marker::with(['history' => function ($query) {
+            $query->orderBy('timestamp', 'desc');
+        }, 'history.state'])->get();
+    
+        return [
+            'provider' => $provider,
+            'markers' => $markers,
+            'user' => $currentUser
+        ];
     }
 
     public function toggleFavoriteProvider(Request $request)
