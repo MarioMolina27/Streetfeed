@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
         <div class="col-lg-1 col-12 d-flex align-items-start mt-4 ps-4">
-            <Navbar />
+            <SidebarAdmin />
         </div>
         <div class="col-lg-11 col-12">
             <UsersTable />
@@ -12,15 +12,13 @@
 </template>
 
 <script>
-import Navbar from "./Navbar.vue";
+import SidebarAdmin from "./SidebarAdmin.vue";
 import UsersTable from "./UsersTable.vue";
 
 export default {
     components: {
-        Navbar,
+        SidebarAdmin,
         UsersTable,
     }
 }
 </script>
-
-

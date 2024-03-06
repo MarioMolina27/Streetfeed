@@ -11,7 +11,6 @@ export const fecthAllUsers = async () => {
             })   
         });
         
-        console.log(data);
         return data;
     }
     catch(error){
@@ -24,7 +23,6 @@ export const deleteUser = async (id) => {
     const url = `api/users/${id}`;
     try{
         const response = await axios.delete(url);
-        console.log(response);
         const data = await response.data;
         return data;
     }
@@ -38,7 +36,6 @@ export const reactivateUser = async (id) => {
     const url = `api/users/reactivate/${id}`;
     try{
         const response = await axios.post(url);
-        console.log(response);
         const data = await response.data;
         return data;
     }
