@@ -36,8 +36,11 @@
     <div class="divider"></div>
     <div class="detail-provider-menus">
         <template v-for="(menu) in provider.menus">
-            <menu-card :menu = menu ></menu-card>          
+            <menu-card :menu = menu @value-changed="updateLaunchpack"></menu-card>          
         </template>
+        <div id="reserve-details" v-show="showReserveData" class="reserve-data">
+        </div>
+        <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
     </div>
 </template>
 
@@ -50,23 +53,27 @@ export default{
     data(){
       return {
         idUser: 4,
-        provider: []
+        provider: [],
+        menus: []
       }
     },
     created() {
         this.loadProvider();
     },
     computed: {
-      heartClass() {
-        return this.provider.is_favorite ? 'pi pi-heart-fill' : 'pi pi-heart';
-      }
+        heartClass() {
+            return this.provider.is_favorite ? 'pi pi-heart-fill' : 'pi pi-heart';
+        },
+        showReserveData() {
+            return this.menus.length === 0 || this.menus.some(menu => menu.launchpacks > 0);
+        }
     },
     methods: {
         loadProvider() {
             axios.get(`api/users/get-provider/${this.nickname}/${this.idUser}`)
             .then(response => {
                 this.provider = response.data;
-                console.log(this.provider);
+                this.createMenusArray();
             })
             .catch(error => {
                 console.error('Error al obtener el proveedor:', error);
@@ -91,6 +98,44 @@ export default{
                 console.error('Error al cambiar el estado de favorito:', error);
             });
         },
+        assignReserve() {
+            const encodedMenuId = btoa(JSON.stringify(this.menus));
+            window.location.href = '../assignreserve/' + encodeURIComponent(encodedMenuId);
+        },
+        createMenusArray() {
+            this.provider.menus.forEach(menu => {
+                this.menus.push({
+                    id: menu.id_menu,
+                    launchpacks: 0
+                });
+            })
+        },
+        updateLaunchpack(newLaunchpackValue, menuid) {
+            const menuToUpdate = this.menus.find(menu => menu.id === menuid);
+            const menuFromProvider = this.provider.menus.find(menu => menu.id_menu === menuid);
+            const menuTitle = menuFromProvider.title;
+            if (menuToUpdate) {
+                menuToUpdate.launchpacks = newLaunchpackValue;
+            } else {
+                console.error(`No se encontró el menú con el ID ${menuid}`);
+            }
+            const existingP = document.getElementById(`menu-${menuid}`);
+
+            if (newLaunchpackValue === 0 && existingP) {
+                existingP.remove();
+            } else {
+                if (existingP) {
+                    existingP.textContent = `${menuTitle} x ${newLaunchpackValue}`;
+                } else {
+                    const p = document.createElement('p');
+                    p.id = `menu-${menuid}`;
+                    p.classList.add('menu-info-reserve');
+                    
+                    p.textContent = `${menuTitle} x ${newLaunchpackValue}`;
+                    document.getElementById('reserve-details').appendChild(p);
+                }
+            }
+        }
     },
     components: {
         menuCard
@@ -162,6 +207,30 @@ export default{
         background-color: #B48753; 
         margin: 0 auto;
     }
+    .reserve-button {
+        width: 80%;
+        height: 50px;
+        background-color: #984EAE;
+        color: white;
+        font-size: 1.5rem;
+        border: none;
+        margin: 20px 0 0 0;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .reserve-data {
+        width: 80%;
+        background-color: #984eae20;
+        border: #984EAE 1px dashed;
+        font-size: 1.5rem;
+        margin: 20px 0 0 0;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    .menu-info-reserve {
+        display: flex;
+        justify-content: center;
+    }
     .detail-provider-menus {
         display: flex;
         flex-direction: column;
@@ -173,4 +242,4 @@ export default{
         width: 100%;
         align-items: center;
     } 
-</style>./reserve/menuCard.vue
+</style>

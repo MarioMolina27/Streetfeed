@@ -26,7 +26,10 @@
         </div>
         <div class="menu-card-footer d-flex justify-content-between">
             <Tag :class="{'low-availability': menu.launchpack_count < 3, 'high-availability': menu.launchpack_count >= 3}" value="Primary">{{ menu.launchpack_count }} disponibles</Tag>
-            <button class="btn-menu-reservation" @click="assignReserve">RESERVA</button>
+            <InputNumber v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="menu.launchpack_count" @update:modelValue="emitChangeValue">
+              <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
+              <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
+            </InputNumber>
         </div>
     </div>
   </div>
@@ -34,26 +37,29 @@
 
 <script>
 import Tag from 'primevue/tag';
+import InputNumber from 'primevue/inputnumber';
 export default{
     props: {
       menu: Object
     },
     data(){
       return {
-        menuid: String
+        menuid: String,
+        launchapack_counting: 0
       }
     },
     mounted() {
       console.log(this.menu);
     },
     methods: {
-      assignReserve() {
-        const encodedMenuId = btoa(JSON.stringify(this.menu.id_menu));
-        window.location.href = '../assignreserve/' + encodeURIComponent(encodedMenuId);
+      emitChangeValue() {
+        console.log(this.launchapack_counting);
+        this.$emit('value-changed', this.launchapack_counting, this.menu.id_menu);
       }
     },
     components: {
-      Tag
+      Tag,
+      InputNumber
     },
 }
 </script>
@@ -121,5 +127,27 @@ export default{
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+  }
+  .p-inputnumber-button-down {
+    border-radius: 5px 0 0 5px;
+    border: 1px solid #984EAE;
+
+  }
+  .p-inputnumber-button-up {
+    border-radius: 0 5px 5px 0;
+    border: 1px solid #984EAE;
+  }
+  .p-inputtext:enabled:focus {
+    outline: 1px solid #984EAE;
+    pointer-events: none;
+  }
+  .p-inputnumber-input {
+    width:50px; 
+    text-align: center; 
+    background-color: #ffffff; 
+    font-weight: bold; 
+    border-top: 1px solid #984EAE;
+    border-bottom: 1px solid #984EAE;
+    pointer-events: none;
   }
 </style>

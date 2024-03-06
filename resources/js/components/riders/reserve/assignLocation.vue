@@ -1,5 +1,28 @@
 <template>
-  <div id="map"></div>
+    <div style="position: relative;">
+        <div id="map" style="width: 100%; height: calc(100vh - 58px);"></div>
+        <div class="menus-container">
+            <span>MENÚS A REPARTIR: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span><br>
+            <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span>
+        </div>
+        <div class="homeless-assigning">
+            <div class="homeless-information">
+                <span>Ubicación</span>
+                <span>Barcelona</span>
+                <span>Barcelona</span>
+                <span>Plz Urquinaona 12</span>
+                <span>2</span>
+            </div>
+            <div class="homeless-information">
+                <span>Ubicación</span>
+                <span>Barcelona</span>
+                <span>Barcelona</span>
+                <span>Plz Urquinaona 12</span>
+                <span>2</span>
+            </div>
+        </div>
+        <button class="delivery-button">Hacer la entrega!</button>
+    </div>
 </template>
 
 <script>
@@ -8,7 +31,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
     props: {
-        idmenu: String
+        menusjson: String 
     },
     data() {
         return {
@@ -18,7 +41,10 @@ export default {
             defaultLocation: { lat: 41.388752, lng: 2.17271 },
             userId: 4,
             reserveData: [],
-            userCurrentLocation: { latitude: null, longitude: null }
+            userCurrentLocation: { latitude: null, longitude: null },
+            menus: JSON.parse(this.menusjson),
+            launchpacks: 0,
+            homelessMarkers: []
         };
     },
     mounted() {
@@ -29,22 +55,21 @@ export default {
             center: this.defaultLocation,
             zoom: 16
         });
-
+        this.countLaunchpacks();
         this.askForLocation();
-        
-        axios.get(`api/users/reserve-data/${this.userId}/${this.idmenu}`)
+        axios.get(`api/users/reserve-data/${this.userId}/${this.menus[0].id}`)
             .then(response => {
                 this.reserveData = response.data;
                 this.reserveData.markers.forEach(marker => {
                     const { latitude, longitude } = marker;
-                    this.createMarker([longitude, latitude], '#984EAE');
+                    this.createMarker([longitude, latitude], '#984EAE', marker);
                 });
 
                 const { latitude: userLat, longitude: userLng } = this.reserveData.user;
-                this.createUserMarker([userLng, userLat], '#984EAE');
+                this.createUserMarker([userLng, userLat], '#984EAE', null);
 
                 const { latitude: providerLat, longitude: providerLng } = this.reserveData.provider;
-                this.createMarker([providerLng, providerLat], '#B48753');
+                this.createMarker([providerLng, providerLat], '#B48753', null);
 
                 const providerCoords = [providerLng, providerLat];
                 this.createRoute(providerCoords, [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude], 'walking');
@@ -57,6 +82,11 @@ export default {
             this.map.remove();
     },
     methods: {
+        countLaunchpacks() {
+            this.menus.forEach(menu => {
+                this.launchpacks += menu.launchpacks;
+            });
+        },
         askForLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(
@@ -76,13 +106,19 @@ export default {
                 console.error('El navegador no soporta la geolocalización');
             }
         },
-        createMarker(coordinates, color) {
-            new mapboxgl.Marker({ color: color })
+        createMarker(coordinates, color, data) {
+            const marker = new mapboxgl.Marker({ color: color })
                 .setLngLat(coordinates)
                 .addTo(this.map);
+                marker.getElement().classList.add('marker');
+            if (data !== null) {
+                this.homelessMarkers.push({ marker, data });
+            }
+            marker.getElement().addEventListener('click', () => {
+                console.log(data);
+            });
         },
         createUserMarker(coordinates, color) {
-            console.log(coordinates)
             const houseMarker = document.createElement('i');
             houseMarker.className = 'fa-solid fa-house';
             houseMarker.style.fontSize = '2.5rem';
@@ -92,7 +128,6 @@ export default {
                 .addTo(this.map);
         },
         updateCurrentLocation(coordinates) {
-            console.log(coordinates)
             const userMarker = document.createElement('i');
             userMarker.className = 'fa-solid fa-location-arrow';
             userMarker.style.fontSize = '2.5rem';
@@ -131,8 +166,66 @@ export default {
 
 <style scoped>
     #map {
-        position: absolute;
+        position: relative;
         width: 100vw;
         height: 100%;
+    }
+    .mapbox-logo{
+    display: none !important;
+}
+    .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+        display: none !important;
+    }
+    .menus-container {
+        position: absolute;
+        top: 10px; 
+        right: 10px; 
+        background-color: #FDF8EB; 
+        padding: 20px;
+        border-radius: 5px;
+        border: 1px solid #B48753;
+        font-size: 1.5rem;
+        box-shadow: 0px 0px 10px #b487537a;
+    }
+    .marker {
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .marker:hover {
+        transform: scale(1.1);
+    }
+    .homeless-assigning {
+        position: absolute;
+        bottom: 70px; 
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        width: 90%;
+        
+    }
+    .homeless-information {
+        margin: 10px 0;
+        background-color: #FDF8EB; 
+        padding: 20px;
+        border-radius: 5px;
+        border: 1px solid #B48753;
+        font-size: 1.5rem;
+        box-shadow: 0px 0px 10px #b487537a;
+    }
+    .delivery-button {
+        position: absolute;
+        bottom: 10px;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        width: 90%;
+        height: 50px;
+        background-color: #984EAE;
+        color: white;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 </style>

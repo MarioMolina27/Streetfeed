@@ -20,8 +20,8 @@ Route::get('details/{nickname}', function ($nickname) {
     return view('riders.details', ['nickname' => $nickname]);
 });
 Route::get('assignreserve/{encodedMenuId}', function ($encodedMenuId) {
-    $idmenu = json_decode(base64_decode($encodedMenuId));
-    return view('riders.assignreserve', ['idmenu' => $idmenu]);
+    $menusjson = json_decode(base64_decode($encodedMenuId));
+    return view('riders.assignreserve', ['menusjson' => $menusjson]);
 });
 Route::get('riderlanding', function () {
     return view('landings.riderlanding');
