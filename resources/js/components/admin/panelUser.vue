@@ -18,7 +18,7 @@ import UsersTable from "./UsersTable.vue";
 export default {
     components: {
         Navbar,
-        UsersTable
+        UsersTable,
     }
 }
 </script>

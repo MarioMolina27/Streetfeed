@@ -13,7 +13,6 @@
 </head>
 <body>
     <main id="app">
-        <navmenu></navmenu>
         @yield('content')
     </main>
 </body>
