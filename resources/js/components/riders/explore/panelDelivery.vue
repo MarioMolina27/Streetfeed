@@ -28,7 +28,6 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -41,10 +40,11 @@ export default{
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
         menuItems: [
-          {name: 'Inicio', href: '/'},
-          {name: 'Explorar', href: '/explore'},
-          {name: 'Reservas', href: '/reservations'},
-          {name: 'Perfil', href: '/profile'}
+          { name: 'Home', href: '/home' },
+          { name: 'Providers', href: '/providers' },
+          { name: 'Riders', href: '/riders' },
+          { name: 'Users', href: '/users' },
+          { name: 'Map', href: '/map' }
         ]
       }
     },
