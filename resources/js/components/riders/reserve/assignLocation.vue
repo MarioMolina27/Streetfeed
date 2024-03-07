@@ -5,12 +5,14 @@
             <div id="map" style="width: 100%; height: calc(100vh - 10vh);"></div>
             <div class="menus-container">
                 <span>MENÚS A REPARTIR: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span><br>
-                <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span>
+                <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacksLeft }}</strong></span>
             </div>
             <div class="homeless-assigning">
-                <homelessInformation></homelessInformation>
+                <template v-for="(information) in homelessInformation">
+                    <homelessInformation :information = information></homelessInformation>
+                </template>
             </div>
-            <button class="delivery-button">Hacer la entrega!</button>
+            <button class="delivery-button" :class="{ 'disabled-button': launchpacksLeft !== 0 }" :disabled="launchpacksLeft !== 0">{{ launchpacksLeft !== 0 ? 'Tienes que assignar todos los puntos' : 'Hacer la entrega!'}}</button>
         </div>
     </div>
 </template>
@@ -42,7 +44,9 @@ export default {
             userCurrentLocation: { latitude: null, longitude: null },
             menus: JSON.parse(this.menusjson),
             launchpacks: 0,
-            homelessMarkers: []
+            launchpacksLeft: 0,
+            homelessMarkers: [],
+            homelessInformation: [],
         };
     },
     mounted() {
@@ -84,6 +88,7 @@ export default {
             this.menus.forEach(menu => {
                 this.launchpacks += menu.launchpacks;
             });
+            this.launchpacksLeft = this.launchpacks;
         },
         askForLocation() {
             if (navigator.geolocation) {
@@ -93,7 +98,7 @@ export default {
                             this.userCurrentLocation.latitude = position.coords.latitude;
                             this.userCurrentLocation.longitude = position.coords.longitude;
                             const userCurrentCoordenates = [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude];
-                            this.map.setCenter(userCurrentCoordenates);
+                            //this.map.setCenter(userCurrentCoordenates);
                             this.updateCurrentLocation(userCurrentCoordenates);
                         }
                     },
@@ -109,13 +114,45 @@ export default {
             const marker = new mapboxgl.Marker({ color: color })
                 .setLngLat(coordinates)
                 .addTo(this.map);
-                marker.getElement().classList.add('marker');
             if (data !== null) {
-                this.homelessMarkers.push({ marker, data });
+                const popupContent = `
+                    <div class="mb-2" style="text-align: center;">
+                        <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people_not_eat}</strong>
+                        <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
+                    </div>
+                    <button id="popup-button-${data.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
+                `;
+                
+                marker.setPopup(new mapboxgl.Popup({ closeButton: false }).setHTML(popupContent));
+
+                marker.getPopup().on('open', () => {
+                    const popupButton = document.getElementById(`popup-button-${data.id_marker}`);
+                    if (popupButton) {
+                        popupButton.addEventListener('click', () => {
+                            this.addHomeless(data);
+                            marker.remove()
+                        });
+                    } else {
+                        console.error('Elemento con ID popup-button no encontrado.');
+                    }
+                });
             }
-            marker.getElement().addEventListener('click', () => {
-                console.log(data);
+            let activePopup = null;
+            
+            marker.getElement().addEventListener('mouseenter', () => {
+                marker.getElement().style.cursor ="pointer";
+                marker.togglePopup();
             });
+            marker.getElement().addEventListener('mouseleave', () => {
+                marker.getElement().style.cursor ="default";
+            });
+            this.map.on('click', () => {
+                if (activePopup) {
+                    activePopup.remove();
+                    activePopup = null;
+                }
+            });
+            
         },
         createUserMarker(coordinates, color) {
             const houseMarker = document.createElement('i');
@@ -158,6 +195,39 @@ export default {
             .catch(error => {
                 console.error('Error al obtener la ruta:', error);
             });
+        },
+        addHomeless(data) {
+            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${data.longitude},${data.latitude}.json?access_token=${this.accessToken}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No se pudo obtener la información');
+                    }
+                    return response.json();
+                })
+                .then(markerInfo => {
+                    const features = markerInfo.features;
+                    if (features.length > 0) {
+                        const location = features[0].place_name || 'No se ha encontrado la ubicación';
+                        if (data.num_people_not_eat > this.launchpacksLeft) {
+                            const people_eat = data.num_people_not_eat - this.launchpacksLeft;
+                            this.launchpacksLeft = 0;
+                            this.addToEatenList(data.id_marker, location, people_eat);
+                        } else {
+                            this.launchpacksLeft -= data.num_people_not_eat;
+                            this.addToEatenList(data.id_marker, location, data.num_people_not_eat);
+                        } 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener la información:', error);
+                });
+        },
+        addToEatenList(id_marker, location, people_eat) {
+            this.homelessInformation.push({
+                id_marker: id_marker,
+                location: location,
+                people_eat: people_eat
+            });
         }
     },
     components: {
@@ -189,14 +259,6 @@ export default {
         border: 1px solid #B48753;
         font-size: 1.5rem;
         box-shadow: 0px 0px 10px #b487537a;
-    }
-    .marker {
-        cursor: pointer;
-        transition: transform 0.2s ease-in-out;
-    }
-
-    .marker:hover {
-        transform: scale(1.1);
     }
     .homeless-assigning {
         position: absolute;
@@ -232,5 +294,11 @@ export default {
         border: none;
         border-radius: 5px;
         cursor: pointer;
+    }
+    .disabled-button {
+        background-color: #ccc;
+        border: #555 1px solid;
+        color: #000;
+        cursor: not-allowed;
     }
 </style>
