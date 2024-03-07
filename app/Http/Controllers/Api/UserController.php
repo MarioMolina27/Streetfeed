@@ -15,8 +15,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        //
-        
+        $users = User::with('typeUsers')->get();  
+        return UserResource::collection($users);
     }
 
     /**
@@ -62,8 +62,30 @@ class UserController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        //
+        try 
+        {
+           $user->active = 0;
+           $user->save();
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(['message' => 'Error al eliminar el usuario'], 500);
+        }
     }
+
+    public function reactivate(Request $request, User $user)
+    {
+        try 
+        {
+           $user->active = 1;
+           $user->save();
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(['message' => 'Error al reactivar el usuario'], 500);
+        }
+    }
+    
     public function getProviderByNick($nickname, User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
         $currentUserLat = $user->latitude;

@@ -22,6 +22,7 @@ Route::get('users/has-more-favourites-providers/{user}', [UserController::class,
 Route::get('users/favourite-providers/{user}', [UserController::class, 'getFavouritesProviders']);
 Route::get('users/reserve-data/{user}/{menuid}', [UserController::class, 'reserveData']);
 Route::post('users/toggle-favorite-provider', [UserController::class, 'toggleFavoriteProvider']);
+Route::post('users/reactivate/{user}', [UserController::class, 'reactivate']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
