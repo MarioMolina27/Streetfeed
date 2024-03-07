@@ -7,7 +7,7 @@
                     <h3 class="sidebar-title">STREETFEED</h3>
                 </div>
                 <div class="col-12 mt-5">
-                    <a class="d-flex flex-row align-items-center mt-5">
+                    <a class="d-flex flex-row align-items-center mt-5" href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                         <img
                             src="img/home_nav_img.svg"
                             alt="Home Logo Nav"
@@ -31,17 +31,19 @@
                                         </p>
                                     </div>
                                 </template>
-                               <div class="mt-5">
+                               <div class="d-flex flex-column">
+                                <a class="mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                                     <a class="mb-0 ms-5 mt-5 title-nav-admin">PROVIDERS</a>
-                                </div>
-                                <div class="mt-5">
+                               </a>
+                                <a class="mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                                     <a class="mb-0 ms-5 mt-4 title-nav-admin">RIDERS</a>
-                                </div>
+                                </a>
+                               </div>
                             </AccordionTab>
                         </Accordion>
                     </div>
 
-                    <a class="d-flex flex-row align-items-center mt-5">
+                    <a class="d-flex flex-row align-items-center mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                         <img
                             src="img/users_nav_img.svg"
                             alt="Home Logo Nav"

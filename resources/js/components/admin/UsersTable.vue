@@ -152,13 +152,13 @@
                     style="min-width: 6rem"
                 >
                     <template #body="{ data }">
-                        <i
-                            class="pi"
-                            :class="{
-                                'pi-check-circle active-user': data.active,
-                                'pi-times-circle not-active-user': !data.active,
-                            }"
-                        ></i>
+                        <img
+                            v-if="!data.active"
+                            src="img/block.svg"
+                            alt="active"
+                            width="20"
+                            height="20"
+                            class="not-active-user"></img>
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <TriStateCheckbox
@@ -239,7 +239,7 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.STARTS_WITH,
                 },
-                type_users: { value: null, matchMode: FilterMatchMode.EQUALS },
+                type_users: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 active: { value: null, matchMode: FilterMatchMode.EQUALS },
                 email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
             },
@@ -438,7 +438,7 @@ export default {
 }
 
 .not-active-user {
-    color: #b52a2a;
+    fill: #b52a2a;
 }
 
 .navbar {
