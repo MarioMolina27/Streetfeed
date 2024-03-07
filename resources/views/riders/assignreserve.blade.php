@@ -1,5 +1,5 @@
 @extends('layouts.layout')
 
 @section('content')
-    <assignlocation></assignlocation>
+    <assignlocation :menusjson="{{ json_encode(json_encode($menusjson)) }}"></assignlocation>
 @endsection

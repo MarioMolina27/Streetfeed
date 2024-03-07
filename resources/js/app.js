@@ -3,7 +3,6 @@ import 'primevue/resources/themes/aura-light-green/theme.css'
 import * as bootstrap from 'bootstrap';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
-
 import panelUser from './components/admin/panelUser.vue';
 import panelMenu from './components/providers/panelMenu.vue';
 import panelDelivery from './components/riders/explore/panelDelivery.vue';
