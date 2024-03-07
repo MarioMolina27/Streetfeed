@@ -95,6 +95,7 @@ export default {
                             this.userCurrentLocation.latitude = position.coords.latitude;
                             this.userCurrentLocation.longitude = position.coords.longitude;
                             const userCurrentCoordenates = [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude];
+                            this.map.setCenter(userCurrentCoordenates);
                             this.updateCurrentLocation(userCurrentCoordenates);
                         }
                     },
