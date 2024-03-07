@@ -32,7 +32,7 @@
 
 <script>
 import providerCard from './providerCard.vue';
-import Navbar from '../../admin/Navbar.vue';
+import Navbar from '../../shared/Navbar.vue';
 export default{
     data(){
       return {
@@ -94,4 +94,4 @@ body {
   white-space: nowrap;
   scrollbar-width: none;
 }
-</style>
+</style>../../shared/Navbar.vue

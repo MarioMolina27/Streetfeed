@@ -1,0 +1,1 @@
+export const logoUrl = 'http://localhost:8080/Streetfeed/public/img/logo.svg';
