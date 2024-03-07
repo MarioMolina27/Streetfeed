@@ -5,12 +5,11 @@
     <nav class=" row nav-header d-flex flex-column justify-content-center me-0" style="position: sticky; top: 0;">
       <div class="d-flex flex-row">
         <div class="ps-4 me-2" :class="{ 'col-6 d-flex align-items-center justify-content-start': isMobile, 'col-1 d-flex align-items-center justify-content-center': !isMobile }">
-            <img src="img/logo.svg" alt="logo-white" height="40">
+            <img :src="logoUrl" alt="logo-white" height="40">
         </div>
         <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-11 d-flex flex-row justify-content-start ': !isMobile }">
-
             <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
-              <a class="mb-0 item-nav" href="{{ item.href }}">{{ item.name }}</a>
+              <a class="mb-0 item-nav" :href="item.href">{{ item.name }}</a>
             </div>
 
             <div v-if="isMobile" @click="toggleMenu" class="d-flex justify-content-center align-items-center p-3 item-nav d">
@@ -25,9 +24,9 @@
         </div>
       <div v-if="isMobile && showMenu" class="burger-menu">
           <div class="submenu d-flex flex-column"> 
-            <div class="submenu-top" style="flex:1">
+            <div class="submenu-top d-flex flex-column" style="flex:1">
               <h3 class="title-nav mt-5">STREET<span class="title-2-nav">FEED</span></h3>
-              <a v-for="(item, index) in menuItems" :key="index" class="mb-0 item-nav ms-4 mt-5" href="{{ item.href }}">{{ item.name }}</a>
+              <a v-for="(item, index) in menuItems" :key="index" class="mb-0 item-nav ms-4 mt-5" :href="item.href">{{ item.name }}</a>
             </div>
 
             <div class="d-flex justify-content-center align-items-end mb-" style="flex:1">
@@ -40,6 +39,8 @@
 </template>
 
 <script>
+import { logoUrl } from '../../utilities/constant.js';
+
 export default {
   name: 'Navbar',
 
@@ -53,12 +54,14 @@ export default {
     return {
       isMobile: false,
       showMenu: false,
-      bodyOverflow: false
+      bodyOverflow: false,
+      logoUrl
     };
   },
   mounted() {
     window.addEventListener('resize', this.checkScreenWidth);
     this.checkScreenWidth();
+    console.log(this.menuItems);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.checkScreenWidth);

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Navbar from '../../admin/Navbar.vue';
+import Navbar from '../../shared/Navbar.vue';
 import homelessInformation from './homelessInformation.vue';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';

@@ -1,55 +1,60 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
         <Navbar :menuItems = 'menuItems'></Navbar>
-        <div class="detail-header">
+        <div class="container-fluid">
+            <div v-if ="provider && provider.type_users && provider.type_users.length > 0" class="detail-header" :style="`background-image: url(../img/${provider.type_users[0].pivot.type_of_provider}.png)`">
             <h1 class="provider-name">{{ provider.nickname }}</h1>
             <button class="heart-button" style="outline: 0;" @click="toggleHeart">
                 <i :class="heartClass" style="font-size: 1.5rem"></i>
             </button>
-            <img v-if="provider && provider.type_users && provider.type_users.length > 0"
-            :alt="`Provider image`"
-            :src="`../img/${provider.type_users[0].pivot.type_of_provider}.png`"
-            class="card-img-detail" />
         </div>
-        <div class="detail-provider-content row">
-            <div class="col-lg-6 col-12 d-flex justify-content-center">
-                <p>
-                    Horario:<br>
+        <div class="row mt-3 mb-3">
+            <div class="col-lg-6 col-12 d-flex flex-column justify-content-center">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                   <div>
+                    <div>
+                        <p>Horario: </p>
+                    </div>
                     <div class="info-text" v-if="provider.schedules && provider.schedules.length > 0">
-                        <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
+                            <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
                     </div>
                     <strong class="info-text" v-else>Sin Horario<br></strong>
                     <strong class="info-text" v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
-                </p>
+                   </div>
+                </div>
             </div>
-            <div class="col-lg-6 col-12 d-flex justify-content-center">
-                <p>
-                    Ubicación:<br>
+            <div class="col-lg-6 col-12">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div>
+                        <div>
+                        <p>Ubicación: </p>
+                    </div>
                     <div class="info-text" v-if="provider.addresses && provider.addresses.length > 0">
-                        <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
-                        <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
+                            <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
+                            <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
                     </div>
                     <div class="info-text" v-else>
                         <strong>No se encontraron direcciones.</strong>
-                    </div>    
-                </p>
+                    </div> 
+                    </div> 
+                </div>
             </div>
         </div>
         <div class="divider"></div>
         <div class="detail-provider-menus">
-            <template v-for="(menu) in provider.menus">
-                <menu-card :menu = menu @value-changed="updateLaunchpack"></menu-card>          
+            <template v-for="(menu, index) in provider.menus">
+                <menu-card :menu="menu" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
             </template>
-            <div id="reserve-details" v-show="showReserveData" class="reserve-data">
-            </div>
+            <div id="reserve-details" v-show="showReserveData" class="reserve-data"></div>
             <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
+        </div>
         </div>
     </div>
 </template>
 
 <script>
 import menuCard from './menuCard.vue';
-import Navbar from '../../admin/Navbar.vue';
+import Navbar from '../../shared/Navbar.vue';
 export default{
     props: {
         nickname: String
@@ -161,6 +166,11 @@ export default{
         width: 100%;
         height: 30vh;
         border-bottom: 5px solid #B48753;
+        background-position-x: center;
+        background-position-y: center;
+        background-size: cover;
+        filter: drop-shadow(0px 0px 10px #b487537a);
+        filter: brightness(0.9);
     }
     .card-img-detail{
         width: 100%;

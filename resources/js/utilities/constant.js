@@ -1,0 +1,1 @@
+export const logoUrl = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/img/logo.svg`;
