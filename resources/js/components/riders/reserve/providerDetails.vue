@@ -42,11 +42,10 @@
         </div>
         <div class="divider"></div>
         <div class="detail-provider-menus">
-            <template v-for="(menu) in provider.menus">
-                <menu-card :menu = menu @value-changed="updateLaunchpack"></menu-card>          
+            <template v-for="(menu, index) in provider.menus">
+                <menu-card :menu="menu" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
             </template>
-            <div id="reserve-details" v-show="showReserveData" class="reserve-data">
-            </div>
+            <div id="reserve-details" v-show="showReserveData" class="reserve-data"></div>
             <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
         </div>
         </div>
