@@ -11,7 +11,6 @@ import assignLocation from './components/riders/reserve/assignLocation.vue';
 import ConfirmationService from 'primevue/confirmationservice';
 
 
-
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
 const appDOM = document.getElementById('app');
 

@@ -1,33 +1,25 @@
 <template>
-    <div style="position: relative;">
-        <div id="map" style="width: 100%; height: calc(100vh - 58px);"></div>
-        <div class="menus-container">
-            <span>MENÚS A REPARTIR: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span><br>
-            <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span>
-        </div>
-        <div class="homeless-assigning">
-            <div class="homeless-information">
-                <span>Ubicación</span>
-                <span>Barcelona</span>
-                <span>Barcelona</span>
-                <span>Plz Urquinaona 12</span>
-                <span>2</span>
+    <div class="container-fluid ps-0 pe-0">
+        <Navbar :menuItems = 'menuItems'></Navbar>
+        <div style="position: relative;">
+            <div id="map" style="width: 100%; height: calc(100vh - 10vh);"></div>
+            <div class="menus-container">
+                <span>MENÚS A REPARTIR: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span><br>
+                <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span>
             </div>
-            <div class="homeless-information">
-                <span>Ubicación</span>
-                <span>Barcelona</span>
-                <span>Barcelona</span>
-                <span>Plz Urquinaona 12</span>
-                <span>2</span>
+            <div class="homeless-assigning">
+                <homelessInformation></homelessInformation>
             </div>
+            <button class="delivery-button">Hacer la entrega!</button>
         </div>
-        <button class="delivery-button">Hacer la entrega!</button>
     </div>
 </template>
 
 <script>
+import Navbar from '../../admin/Navbar.vue';
+import homelessInformation from './homelessInformation.vue';
 import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css'; 
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default {
     props: {
@@ -35,6 +27,12 @@ export default {
     },
     data() {
         return {
+            menuItems: [
+                {name: 'Inicio', href: '/'},
+                {name: 'Explorar', href: '/explore'},
+                {name: 'Reservas', href: '/reservations'},
+                {name: 'Perfil', href: '/profile'}
+            ],
             map: null,
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
             mapStyle: "mapbox://styles/mapbox/standard",
@@ -162,6 +160,10 @@ export default {
             });
         }
     },
+    components: {
+        Navbar,
+        homelessInformation
+    }
 }
 </script>
 
@@ -213,6 +215,8 @@ export default {
         border: 1px solid #B48753;
         font-size: 1.5rem;
         box-shadow: 0px 0px 10px #b487537a;
+        display: flex;
+        justify-content: space-between;
     }
     .delivery-button {
         position: absolute;

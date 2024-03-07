@@ -1,40 +1,51 @@
 <template>
-  <div class="delivery-container">
-    <div class="provider-container">
-      <h2>Descubre a tus proveedores más cercanos</h2>
-      <div class="card-container d-flex flex-nowrap">
-        <template v-for="(provider) in nearProviders">
-          <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
-        </template>
+  <div class="container-fluid ps-0 pe-0">
+    <Navbar :menuItems = 'menuItems'></Navbar>
+    <div class="delivery-container">
+      <div class="provider-container">
+        <h2>Descubre a tus proveedores más cercanos</h2>
+        <div class="card-container d-flex flex-nowrap">
+          <template v-for="(provider) in nearProviders">
+            <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
+          </template>
+        </div>
       </div>
-    </div>
-    <div class="provider-container">
-      <h2>Los proveedores más queridos</h2>
-      <div class="card-container d-flex flex-nowrap">
-        <template v-for="(provider) in hasMoreFavoritesPrvoviders">
-          <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
-        </template>
+      <div class="provider-container">
+        <h2>Los proveedores más queridos</h2>
+        <div class="card-container d-flex flex-nowrap">
+          <template v-for="(provider) in hasMoreFavoritesPrvoviders">
+            <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
+          </template>
+        </div>
       </div>
-    </div>
-    <div class="provider-container">
-      <h2>Favoritos</h2>
-      <div class="card-container d-flex flex-nowrap">
-        <template v-for="(provider) in favouriteProviders">
-          <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
-        </template>
+      <div class="provider-container">
+        <h2>Favoritos</h2>
+        <div class="card-container d-flex flex-nowrap">
+          <template v-for="(provider) in favouriteProviders">
+            <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
+          </template>
+        </div>
       </div>
     </div>
   </div>
+  
 </template>
 
 <script>
 import providerCard from './providerCard.vue';
+import Navbar from '../../admin/Navbar.vue';
 export default{
     data(){
       return {
         nearProviders: [],
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
+        menuItems: [
+          {name: 'Inicio', href: '/'},
+          {name: 'Explorar', href: '/explore'},
+          {name: 'Reservas', href: '/reservations'},
+          {name: 'Perfil', href: '/profile'}
+        ]
       }
     },
     mounted(){
@@ -58,7 +69,8 @@ export default{
       }
     },
     components: {
-      providerCard
+      providerCard,
+      Navbar
     },
 }
 </script>

@@ -1,51 +1,55 @@
 <template>
-    <div class="detail-header">
-        <h1 class="provider-name">{{ provider.nickname }}</h1>
-        <button class="heart-button" style="outline: 0;" @click="toggleHeart">
-            <i :class="heartClass" style="font-size: 1.5rem"></i>
-        </button>
-        <img v-if="provider && provider.type_users && provider.type_users.length > 0"
-         :alt="`Provider image`"
-         :src="`../img/${provider.type_users[0].pivot.type_of_provider}.png`"
-         class="card-img-detail" />
-    </div>
-    <div class="detail-provider-content row">
-        <div class="col-lg-6 col-12 d-flex justify-content-center">
-            <p>
-                Horario:<br>
-                <div class="info-text" v-if="provider.schedules && provider.schedules.length > 0">
-                    <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
-                </div>
-                <strong class="info-text" v-else>Sin Horario<br></strong>
-                <strong class="info-text" v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
-            </p>
+    <div class="container-fluid ps-0 pe-0">
+        <Navbar :menuItems = 'menuItems'></Navbar>
+        <div class="detail-header">
+            <h1 class="provider-name">{{ provider.nickname }}</h1>
+            <button class="heart-button" style="outline: 0;" @click="toggleHeart">
+                <i :class="heartClass" style="font-size: 1.5rem"></i>
+            </button>
+            <img v-if="provider && provider.type_users && provider.type_users.length > 0"
+            :alt="`Provider image`"
+            :src="`../img/${provider.type_users[0].pivot.type_of_provider}.png`"
+            class="card-img-detail" />
         </div>
-        <div class="col-lg-6 col-12 d-flex justify-content-center">
-            <p>
-                Ubicación:<br>
-                <div class="info-text" v-if="provider.addresses && provider.addresses.length > 0">
-                    <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
-                    <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
-                </div>
-                <div class="info-text" v-else>
-                    <strong>No se encontraron direcciones.</strong>
-                </div>    
-            </p>
+        <div class="detail-provider-content row">
+            <div class="col-lg-6 col-12 d-flex justify-content-center">
+                <p>
+                    Horario:<br>
+                    <div class="info-text" v-if="provider.schedules && provider.schedules.length > 0">
+                        <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
+                    </div>
+                    <strong class="info-text" v-else>Sin Horario<br></strong>
+                    <strong class="info-text" v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
+                </p>
+            </div>
+            <div class="col-lg-6 col-12 d-flex justify-content-center">
+                <p>
+                    Ubicación:<br>
+                    <div class="info-text" v-if="provider.addresses && provider.addresses.length > 0">
+                        <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
+                        <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
+                    </div>
+                    <div class="info-text" v-else>
+                        <strong>No se encontraron direcciones.</strong>
+                    </div>    
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="divider"></div>
-    <div class="detail-provider-menus">
-        <template v-for="(menu) in provider.menus">
-            <menu-card :menu = menu @value-changed="updateLaunchpack"></menu-card>          
-        </template>
-        <div id="reserve-details" v-show="showReserveData" class="reserve-data">
+        <div class="divider"></div>
+        <div class="detail-provider-menus">
+            <template v-for="(menu) in provider.menus">
+                <menu-card :menu = menu @value-changed="updateLaunchpack"></menu-card>          
+            </template>
+            <div id="reserve-details" v-show="showReserveData" class="reserve-data">
+            </div>
+            <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
         </div>
-        <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
     </div>
 </template>
 
 <script>
 import menuCard from './menuCard.vue';
+import Navbar from '../../admin/Navbar.vue';
 export default{
     props: {
         nickname: String
@@ -54,7 +58,13 @@ export default{
       return {
         idUser: 4,
         provider: [],
-        menus: []
+        menus: [],
+        menuItems: [
+          {name: 'Inicio', href: '/'},
+          {name: 'Explorar', href: '/explore'},
+          {name: 'Reservas', href: '/reservations'},
+          {name: 'Perfil', href: '/profile'}
+        ]
       }
     },
     created() {
@@ -138,7 +148,8 @@ export default{
         }
     },
     components: {
-        menuCard
+        menuCard,
+        Navbar
     },
 }
 </script>
