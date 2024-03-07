@@ -1,1 +1,1 @@
-export const logoUrl = 'http://localhost:8080/Streetfeed/public/img/logo.svg';
+export const logoUrl = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/img/logo.svg`;
