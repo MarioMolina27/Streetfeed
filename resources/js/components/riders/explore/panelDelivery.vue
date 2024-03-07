@@ -1,5 +1,7 @@
 <template>
-  <div class="delivery-container">
+  <div class="container-fluid pe-0 ps-0">
+    <Navbar :menuItems="menuItems" />
+    <div class="delivery-container">
     <div class="provider-container">
       <h2>Descubre a tus proveedores más cercanos</h2>
       <div class="card-container d-flex flex-nowrap">
@@ -25,16 +27,25 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import providerCard from './providerCard.vue';
+import Navbar from '../../admin/Navbar.vue'
 export default{
     data(){
       return {
         nearProviders: [],
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
+        menuItems: [
+          { name: 'Home', href: '/home' },
+          { name: 'Providers', href: '/providers' },
+          { name: 'Riders', href: '/riders' },
+          { name: 'Users', href: '/users' },
+          { name: 'Map', href: '/map' }
+        ]
       }
     },
     mounted(){
@@ -58,7 +69,8 @@ export default{
       }
     },
     components: {
-      providerCard
+      providerCard,
+      Navbar
     },
 }
 </script>

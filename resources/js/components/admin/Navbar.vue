@@ -2,12 +2,12 @@
 <!--La nav tiene que estar dentro de un container-fluid para funcionar correctamente, si quieres que ocupe todo el width quita los margenes del container-->
 
 <template>
-    <nav class="ps-0 pe-0 nav-header d-flex flex-column justify-content-center" style="position: sticky; top: 0;">
+    <nav class=" row nav-header d-flex flex-column justify-content-center me-0" style="position: sticky; top: 0;">
       <div class="d-flex flex-row">
         <div class="ps-4 me-2" :class="{ 'col-6 d-flex align-items-center justify-content-start': isMobile, 'col-1 d-flex align-items-center justify-content-center': !isMobile }">
             <img src="img/logo.svg" alt="logo-white" height="40">
         </div>
-        <div class="pe-4" :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-11 d-flex flex-row justify-content-start ': !isMobile }">
+        <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-11 d-flex flex-row justify-content-start ': !isMobile }">
 
             <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
               <a class="mb-0 item-nav" href="{{ item.href }}">{{ item.name }}</a>
