@@ -3,13 +3,13 @@
                 <div
                     class="col-12 d-flex justify-content-center align-items-center flex-column"
                 >
-                    <img src="img/logo.svg" alt="StreetFeed Logo" height="60" />
+                    <img :src="logoUrl" alt="StreetFeed Logo" height="60" />
                     <h3 class="sidebar-title">STREETFEED</h3>
                 </div>
                 <div class="col-12 mt-5">
                     <a class="d-flex flex-row align-items-center mt-5" href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                         <img
-                            src="img/home_nav_img.svg"
+                            :src="sideNavFirstImg"
                             alt="Home Logo Nav"
                             class="logo-nav-admin ms-2"
                         />
@@ -22,7 +22,7 @@
                                 <template #header>
                                     <div class="d-flex flex-row align-items-center">
                                         <img
-                                            src="img/stadistics_nav_img.svg"
+                                            :src="sideNavSecondImg"
                                             alt="Home Logo Nav"
                                             class="logo-nav-admin ms-2"
                                         />
@@ -45,7 +45,7 @@
 
                     <a class="d-flex flex-row align-items-center mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                         <img
-                            src="img/users_nav_img.svg"
+                            :src="sideNavThirdImg"
                             alt="Home Logo Nav"
                             class="logo-nav-admin ms-2"
                         />
@@ -54,7 +54,7 @@
 
                     <a class="d-flex flex-row align-items-center mt-5" href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
                         <img
-                            src="img/map_nav_img.svg"
+                            :src="sideNavFourthImg"
                             alt="Home Logo Nav"
                             class="logo-nav-admin ms-2"
                         />
@@ -71,6 +71,8 @@
 import Sidebar from "primevue/sidebar";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
+import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg } from '../../utilities/constant.js';
+
  
 
 export default {
@@ -83,7 +85,12 @@ export default {
 
     data() {
         return {
-            visible: false
+            visible: false,
+            logoUrl: logoUrl,
+            sideNavFirstImg: sideNavFirstImg,
+            sideNavSecondImg: sideNavSecondImg,
+            sideNavThirdImg: sideNavThirdImg,
+            sideNavFourthImg: sideNavFourthImg
         }
     }
 };

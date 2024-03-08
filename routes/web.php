@@ -7,7 +7,7 @@ Route::get('/', function () {
     return view('layouts.layout');
 });
 
-Route::get('admin', function () {
+Route::get('admin/users', function () {
     return view('admin.admin');
 });
 Route::get('menu', function () {
@@ -34,4 +34,8 @@ Route::get('login', function () {
 });
 Route::get('register', function () {
     return view('auth.register');
+});
+
+Route::get('admin', function () {
+    return view('admin.home');
 });

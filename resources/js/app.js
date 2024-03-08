@@ -8,6 +8,7 @@ import panelMenu from './components/providers/panelMenu.vue';
 import panelDelivery from './components/riders/explore/panelDelivery.vue';
 import providerDetails from './components/riders/reserve/providerDetails.vue';
 import assignLocation from './components/riders/reserve/assignLocation.vue';
+import adminHome from './components/admin/adminHome.vue';
 import ConfirmationService from 'primevue/confirmationservice';
 
 
@@ -19,6 +20,7 @@ app.component('panelmenu', panelMenu)
 app.component('paneldelivery', panelDelivery)
 app.component('providerdetails', providerDetails)
 app.component('assignlocation', assignLocation)
+app.component('adminhome', adminHome)
 
 
 app.mount(appDOM);
