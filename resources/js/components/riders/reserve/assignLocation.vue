@@ -8,9 +8,11 @@
                 <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacksLeft }}</strong></span>
             </div>
             <div class="homeless-assigning">
-                <template v-for="(information) in homelessInformation">
-                    <homelessInformation :information = information></homelessInformation>
-                </template>
+                <Carousel v-if="homelessInformation.length > 0" :value="homelessInformation" :numVisible="1" :numScroll="1" :showIndicators="false">
+                    <template #item="item">
+                        <homelessInformation :information  = "item" @marker-removed="handleMarkerRemoved"></homelessInformation>
+                    </template>
+                </Carousel>
             </div>
             <button class="delivery-button" :class="{ 'disabled-button': launchpacksLeft !== 0 }" :disabled="launchpacksLeft !== 0">{{ launchpacksLeft !== 0 ? 'Tienes que assignar todos los puntos' : 'Hacer la entrega!'}}</button>
         </div>
@@ -22,6 +24,7 @@ import Navbar from '../../shared/Navbar.vue';
 import homelessInformation from './homelessInformation.vue';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import Carousel from 'primevue/carousel';
 
 export default {
     props: {
@@ -67,14 +70,14 @@ export default {
                     this.createMarker([longitude, latitude], '#984EAE', marker);
                 });
 
-                const { latitude: userLat, longitude: userLng } = this.reserveData.user;
-                this.createUserMarker([userLng, userLat], '#984EAE', null);
+                // const { latitude: userLat, longitude: userLng } = this.reserveData.user;
+                // this.createUserMarker([userLng, userLat], '#984EAE', null);
 
                 const { latitude: providerLat, longitude: providerLng } = this.reserveData.provider;
                 this.createMarker([providerLng, providerLat], '#B48753', null);
 
-                const providerCoords = [providerLng, providerLat];
-                this.createRoute(providerCoords, [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude], 'walking');
+                // const providerCoords = [providerLng, providerLat];
+                // this.createRoute(providerCoords, [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude], 'walking');
             })
             .catch(error => {
                 console.error('Error al obtener los datos de reserva:', error);
@@ -120,7 +123,7 @@ export default {
                         <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people_not_eat}</strong>
                         <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
                     </div>
-                    <button id="popup-button-${data.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
+                    <button id="popup-button-${data.id_marker}" class="btn btn-popup" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
                 `;
                 
                 marker.setPopup(new mapboxgl.Popup({ closeButton: false }).setHTML(popupContent));
@@ -128,31 +131,38 @@ export default {
                 marker.getPopup().on('open', () => {
                     const popupButton = document.getElementById(`popup-button-${data.id_marker}`);
                     if (popupButton) {
-                        popupButton.addEventListener('click', () => {
-                            this.addHomeless(data);
-                            marker.remove()
-                        });
+                        popupButton.addEventListener('click', e => { 
+                            console.log(e.currentTarget);
+                            this.handleButtonClick(data, marker) });
                     } else {
                         console.error('Elemento con ID popup-button no encontrado.');
                     }
                 });
+            
             }
-            let activePopup = null;
             
             marker.getElement().addEventListener('mouseenter', () => {
                 marker.getElement().style.cursor ="pointer";
                 marker.togglePopup();
             });
+
             marker.getElement().addEventListener('mouseleave', () => {
                 marker.getElement().style.cursor ="default";
+                const popupButton = document.getElementById(`popup-button-${data.id_marker}`);
+                console.log(popupButton);
+                popupButton.removeEventListener('click', () => {
+                    this.handleButtonClick(data, marker);
+                });
             });
+
             this.map.on('click', () => {
-                if (activePopup) {
-                    activePopup.remove();
-                    activePopup = null;
-                }
+                
             });
             
+        },
+        handleButtonClick(data, marker) {
+            this.addHomeless(data);
+            marker.remove();
         },
         createUserMarker(coordinates, color) {
             const houseMarker = document.createElement('i');
@@ -205,11 +215,12 @@ export default {
                     return response.json();
                 })
                 .then(markerInfo => {
+                    console.log("se ha hecho click")
                     const features = markerInfo.features;
                     if (features.length > 0) {
                         const location = features[0].place_name || 'No se ha encontrado la ubicación';
                         if (data.num_people_not_eat > this.launchpacksLeft) {
-                            const people_eat = data.num_people_not_eat - this.launchpacksLeft;
+                            const people_eat = this.launchpacksLeft;
                             this.launchpacksLeft = 0;
                             this.addToEatenList(data.id_marker, location, people_eat);
                         } else {
@@ -228,24 +239,32 @@ export default {
                 location: location,
                 people_eat: people_eat
             });
+        },
+        handleMarkerRemoved(markerData) {
+            this.homelessInformation = this.homelessInformation.filter(information => information.id_marker !== markerData.id);
+            const { id, peopleEat } = markerData;
+            this.launchpacksLeft += peopleEat;
+            const markerObject = this.reserveData.markers.find(marker => marker.id_marker === id);
+            this.createMarker([markerObject.longitude, markerObject.latitude], '#984EAE', markerObject);
         }
     },
     components: {
         Navbar,
-        homelessInformation
+        homelessInformation,
+        Carousel
     }
 }
 </script>
 
-<style scoped>
+<style>
     #map {
         position: relative;
         width: 100vw;
         height: 100%;
     }
-    .mapbox-logo{
-    display: none !important;
-}
+    .mapboxgl-ctrl-bottom-left{
+        display: none !important;
+    }
     .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
         display: none !important;
     }
@@ -266,7 +285,7 @@ export default {
         right: 0;
         left: 0;
         margin: 0 auto;
-        width: 90%;
+        width: 93%;
         
     }
     .homeless-information {
@@ -300,5 +319,26 @@ export default {
         border: #555 1px solid;
         color: #000;
         cursor: not-allowed;
+    }
+    button.p-carousel-prev.p-link.p-disabled, button.p-carousel-next.p-link.p-disabled, button.p-carousel-prev.p-link, button.p-carousel-next.p-link {
+        color: #984EAE;
+        opacity: 1;
+        background-color: #FDF8EB;
+        border: #B48753 1px solid;
+    }
+    button.p-carousel-prev.p-link.p-disabled, button.p-carousel-next.p-link.p-disabled {
+        color: #c4accc;
+
+    }
+    button.p-carousel-prev.p-link.p-disabled, button.p-carousel-prev.p-link {
+        border-right: 0;
+        border-radius: 5px 0 0 5px;
+    }
+    button.p-carousel-next.p-link.p-disabled, button.p-carousel-next.p-link {
+        border-left: 0;
+        border-radius: 0 5px 5px 0;
+    }
+    button.p-carousel-prev.p-link:hover, button.p-carousel-next:hover {
+        background-color: #ffe9b2;
     }
 </style>
