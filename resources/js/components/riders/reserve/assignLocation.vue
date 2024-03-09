@@ -20,7 +20,7 @@
                     </template>
                 </Carousel>
             </div>
-            <button class="delivery-button" :class="{ 'disabled-button': launchpacksLeft !== 0 }" :disabled="launchpacksLeft !== 0">{{ launchpacksLeft !== 0 ? 'Tienes que assignar todos los puntos' : 'Hacer la entrega!'}}</button>
+            <button class="delivery-button" :class="{ 'disabled-button': launchpacksLeft !== 0 }" :disabled="launchpacksLeft !== 0" @click="doReserve">{{ launchpacksLeft !== 0 ? 'Assigna todos los menús' : 'Hacer la entrega!'}}</button>
         </div>
     </div>
 </template>
@@ -221,7 +221,7 @@ export default {
                     if (features.length > 0) {
                         const location = features[0].place_name || 'No se ha encontrado la ubicación';
                         if(this.launchpacksLeft !== 0) {
-                            if (data.num_people_not_eat > this.launchpacksLeft) {
+                            if (data.num_people_not_eat >= this.launchpacksLeft) {
                                 const people_eat = this.launchpacksLeft;
                                 this.launchpacksLeft = 0;
                                 this.addToEatenList(data.id_marker, location, people_eat);
@@ -257,6 +257,19 @@ export default {
             this.createMarker([markerObject.longitude, markerObject.latitude], '#984EAE', markerObject);
             if(this.homelessInformation.length > 0) {
                 this.$refs.assignedCarrousel.$el.querySelector('.p-carousel-prev').click();
+            }
+        },
+        doReserve() {
+            if(this.launchpacksLeft === 0) {
+                axios.post('api/delivery/do-reserve', {
+                    userId: this.userId,
+                    menus: this.menus,
+                    assignMarkers: this.homelessInformation
+                })
+                .then(response => {
+                    console.log(response.data);
+                    window.location.href = '../delivery';
+                })
             }
         }
     },
