@@ -65,10 +65,10 @@ export default{
         provider: [],
         menus: [],
         menuItems: [
-          {name: 'Inicio', href: '/'},
-          {name: 'Explorar', href: '/explore'},
-          {name: 'Reservas', href: '/reservations'},
-          {name: 'Perfil', href: '/profile'}
+            {name: 'Tus Repartos', href: '/'},
+            {name: 'Explorar', href: '../delivery'},
+            {name: 'Favoritos', href: '/reservations'},
+            {name: 'Perfil', href: '/profile'}
         ]
       }
     },

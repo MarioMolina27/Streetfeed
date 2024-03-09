@@ -3,12 +3,18 @@
         <Navbar :menuItems = 'menuItems'></Navbar>
         <div style="position: relative;">
             <div id="map" style="width: 100%; height: calc(100vh - 10vh);"></div>
-            <div class="menus-container">
-                <span>MENÚS A REPARTIR: <strong style="color: #984EAE;">{{ launchpacks }}</strong></span><br>
-                <span>MENÚS RESTANTES: <strong style="color: #984EAE;">{{ launchpacksLeft }}</strong></span>
+            <div class="menus-container ms-2">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="me-4">MENÚS QUE TIENES QUE ASIGNAR: </span>
+                    <strong style="color: #984EAE;">{{ launchpacks }}</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="me-4">MENÚS QUE TE FALTAN PARA ASIGNAR: </span>
+                    <strong class="d-flex flex-column justify-content-center" style="color: #984EAE;">{{ launchpacksLeft }}</strong>
+                </div>
             </div>
             <div class="homeless-assigning">
-                <Carousel v-if="homelessInformation.length > 0" :value="homelessInformation" :numVisible="1" :numScroll="1" :showIndicators="false">
+                <Carousel ref="assignedCarrousel" v-if="homelessInformation.length > 0" :autoplayInterval=3000 :value="homelessInformation" :numVisible="1" :numScroll="1" :showIndicators="false">
                     <template #item="item">
                         <homelessInformation :information  = "item" @marker-removed="handleMarkerRemoved"></homelessInformation>
                     </template>
@@ -33,14 +39,14 @@ export default {
     data() {
         return {
             menuItems: [
-                {name: 'Inicio', href: '/'},
-                {name: 'Explorar', href: '/explore'},
-                {name: 'Reservas', href: '/reservations'},
+                {name: 'Tus Repartos', href: '/'},
+                {name: 'Explorar', href: '../delivery'},
+                {name: 'Favoritos', href: '/reservations'},
                 {name: 'Perfil', href: '/profile'}
             ],
             map: null,
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
-            mapStyle: "mapbox://styles/mapbox/standard",
+            mapStyle: "mapbox://styles/mapbox/light-v11",
             defaultLocation: { lat: 41.388752, lng: 2.17271 },
             userId: 4,
             reserveData: [],
@@ -61,7 +67,7 @@ export default {
             zoom: 16
         });
         this.countLaunchpacks();
-        this.askForLocation();
+        //this.askForLocation();
         axios.get(`api/users/reserve-data/${this.userId}/${this.menus[0].id}`)
             .then(response => {
                 this.reserveData = response.data;
@@ -93,26 +99,26 @@ export default {
             });
             this.launchpacksLeft = this.launchpacks;
         },
-        askForLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(
-                    position => {
-                        if (position && position.coords) {
-                            this.userCurrentLocation.latitude = position.coords.latitude;
-                            this.userCurrentLocation.longitude = position.coords.longitude;
-                            const userCurrentCoordenates = [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude];
-                            //this.map.setCenter(userCurrentCoordenates);
-                            this.updateCurrentLocation(userCurrentCoordenates);
-                        }
-                    },
-                    error => {
-                        console.error('Error al obtener la ubicación:', error.message);
-                    }
-                );
-            } else {
-                console.error('El navegador no soporta la geolocalización');
-            }
-        },
+        // askForLocation() {
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.watchPosition(
+        //             position => {
+        //                 if (position && position.coords) {
+        //                     this.userCurrentLocation.latitude = position.coords.latitude;
+        //                     this.userCurrentLocation.longitude = position.coords.longitude;
+        //                     const userCurrentCoordenates = [this.userCurrentLocation.longitude, this.userCurrentLocation.latitude];
+        //                     //this.map.setCenter(userCurrentCoordenates);
+        //                     this.updateCurrentLocation(userCurrentCoordenates);
+        //                 }
+        //             },
+        //             error => {
+        //                 console.error('Error al obtener la ubicación:', error.message);
+        //             }
+        //         );
+        //     } else {
+        //         console.error('El navegador no soporta la geolocalización');
+        //     }
+        // },
         createMarker(coordinates, color, data) {
             const marker = new mapboxgl.Marker({ color: color })
                 .setLngLat(coordinates)
@@ -123,16 +129,15 @@ export default {
                         <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people_not_eat}</strong>
                         <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
                     </div>
-                    <button id="popup-button-${data.id_marker}" class="btn btn-popup" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
+                    <button id="popup-button-${data.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
                 `;
                 
                 marker.setPopup(new mapboxgl.Popup({ closeButton: false }).setHTML(popupContent));
 
-                marker.getPopup().on('open', () => {
+                marker.getPopup().once('open', () => {
                     const popupButton = document.getElementById(`popup-button-${data.id_marker}`);
                     if (popupButton) {
                         popupButton.addEventListener('click', e => { 
-                            console.log(e.currentTarget);
                             this.handleButtonClick(data, marker) });
                     } else {
                         console.error('Elemento con ID popup-button no encontrado.');
@@ -148,11 +153,6 @@ export default {
 
             marker.getElement().addEventListener('mouseleave', () => {
                 marker.getElement().style.cursor ="default";
-                const popupButton = document.getElementById(`popup-button-${data.id_marker}`);
-                console.log(popupButton);
-                popupButton.removeEventListener('click', () => {
-                    this.handleButtonClick(data, marker);
-                });
             });
 
             this.map.on('click', () => {
@@ -162,50 +162,52 @@ export default {
         },
         handleButtonClick(data, marker) {
             this.addHomeless(data);
-            marker.remove();
+            if(this.launchpacksLeft !== 0) {
+                marker.remove();
+            }
         },
-        createUserMarker(coordinates, color) {
-            const houseMarker = document.createElement('i');
-            houseMarker.className = 'fa-solid fa-house';
-            houseMarker.style.fontSize = '2.5rem';
-            houseMarker.style.color = color;
-            new mapboxgl.Marker({ element: houseMarker })
-                .setLngLat(coordinates)
-                .addTo(this.map);
-        },
-        updateCurrentLocation(coordinates) {
-            const userMarker = document.createElement('i');
-            userMarker.className = 'fa-solid fa-location-arrow';
-            userMarker.style.fontSize = '2.5rem';
-            new mapboxgl.Marker({ element: userMarker  })
-                .setLngLat(coordinates)
-                .addTo(this.map);
-        },
-        createRoute(start, end, profile) {
-            const url = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${this.accessToken}`;
+        // createUserMarker(coordinates, color) {
+        //     const houseMarker = document.createElement('i');
+        //     houseMarker.className = 'fa-solid fa-house';
+        //     houseMarker.style.fontSize = '2.5rem';
+        //     houseMarker.style.color = color;
+        //     new mapboxgl.Marker({ element: houseMarker })
+        //         .setLngLat(coordinates)
+        //         .addTo(this.map);
+        // },
+        // updateCurrentLocation(coordinates) {
+        //     const userMarker = document.createElement('i');
+        //     userMarker.className = 'fa-solid fa-location-arrow';
+        //     userMarker.style.fontSize = '2.5rem';
+        //     new mapboxgl.Marker({ element: userMarker  })
+        //         .setLngLat(coordinates)
+        //         .addTo(this.map);
+        // },
+        // createRoute(start, end, profile) {
+        //     const url = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${this.accessToken}`;
       
-            axios.get(url).then(response => {
-                const route = response.data.routes[0].geometry;
-                this.map.addLayer({
-                    id: 'route',
-                    type: 'line',
-                    source: {
-                    type: 'geojson',
-                    data: {
-                        type: 'Feature',
-                        geometry: route
-                    }
-                    },
-                    paint: {
-                    'line-color': '#000000',
-                    'line-width': 5
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error al obtener la ruta:', error);
-            });
-        },
+        //     axios.get(url).then(response => {
+        //         const route = response.data.routes[0].geometry;
+        //         this.map.addLayer({
+        //             id: 'route',
+        //             type: 'line',
+        //             source: {
+        //             type: 'geojson',
+        //             data: {
+        //                 type: 'Feature',
+        //                 geometry: route
+        //             }
+        //             },
+        //             paint: {
+        //             'line-color': '#000000',
+        //             'line-width': 5
+        //             }
+        //         });
+        //     })
+        //     .catch(error => {
+        //         console.error('Error al obtener la ruta:', error);
+        //     });
+        // },
         addHomeless(data) {
             fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${data.longitude},${data.latitude}.json?access_token=${this.accessToken}`)
                 .then(response => {
@@ -215,18 +217,22 @@ export default {
                     return response.json();
                 })
                 .then(markerInfo => {
-                    console.log("se ha hecho click")
                     const features = markerInfo.features;
                     if (features.length > 0) {
                         const location = features[0].place_name || 'No se ha encontrado la ubicación';
-                        if (data.num_people_not_eat > this.launchpacksLeft) {
-                            const people_eat = this.launchpacksLeft;
-                            this.launchpacksLeft = 0;
-                            this.addToEatenList(data.id_marker, location, people_eat);
-                        } else {
-                            this.launchpacksLeft -= data.num_people_not_eat;
-                            this.addToEatenList(data.id_marker, location, data.num_people_not_eat);
-                        } 
+                        if(this.launchpacksLeft !== 0) {
+                            if (data.num_people_not_eat > this.launchpacksLeft) {
+                                const people_eat = this.launchpacksLeft;
+                                this.launchpacksLeft = 0;
+                                this.addToEatenList(data.id_marker, location, people_eat);
+                                const mapContainer = document.getElementById('map');
+                                mapContainer.style.opacity = '0.5';
+                                mapContainer.style.filter = 'grayscale(100%)';
+                            } else {
+                                this.launchpacksLeft -= data.num_people_not_eat;
+                                this.addToEatenList(data.id_marker, location, data.num_people_not_eat);
+                            } 
+                        }
                     }
                 })
                 .catch(error => {
@@ -241,11 +247,17 @@ export default {
             });
         },
         handleMarkerRemoved(markerData) {
+            const mapContainer = document.getElementById('map');
+            mapContainer.style.opacity = '1';
+            mapContainer.style.filter = 'none';
             this.homelessInformation = this.homelessInformation.filter(information => information.id_marker !== markerData.id);
             const { id, peopleEat } = markerData;
             this.launchpacksLeft += peopleEat;
             const markerObject = this.reserveData.markers.find(marker => marker.id_marker === id);
             this.createMarker([markerObject.longitude, markerObject.latitude], '#984EAE', markerObject);
+            if(this.homelessInformation.length > 0) {
+                this.$refs.assignedCarrousel.$el.querySelector('.p-carousel-prev').click();
+            }
         }
     },
     components: {

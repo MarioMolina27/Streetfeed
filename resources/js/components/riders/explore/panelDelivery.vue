@@ -40,12 +40,11 @@ export default{
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
         menuItems: [
-          { name: 'Home', href: '/home' },
-          { name: 'Providers', href: '/providers' },
-          { name: 'Riders', href: '/riders' },
-          { name: 'Users', href: '/users' },
-          { name: 'Map', href: '/map' }
-        ]
+                {name: 'Tus Repartos', href: '/'},
+                {name: 'Explorar', href: './delivery'},
+                {name: 'Favoritos', href: '/reservations'},
+                {name: 'Perfil', href: '/profile'}
+            ]
       }
     },
     mounted(){
