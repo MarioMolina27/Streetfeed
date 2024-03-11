@@ -9,6 +9,7 @@ import panelDelivery from './components/riders/explore/panelDelivery.vue';
 import providerDetails from './components/riders/reserve/providerDetails.vue';
 import assignLocation from './components/riders/reserve/assignLocation.vue';
 import ConfirmationService from 'primevue/confirmationservice';
+import reserveConfirmation from './components/riders/reserve/reserveConfirmation.vue';
 
 
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
@@ -19,6 +20,6 @@ app.component('panelmenu', panelMenu)
 app.component('paneldelivery', panelDelivery)
 app.component('providerdetails', providerDetails)
 app.component('assignlocation', assignLocation)
-
+app.component('reserveconfirmation', reserveConfirmation)
 
 app.mount(appDOM);

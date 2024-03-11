@@ -23,6 +23,10 @@ Route::get('assignreserve/{encodedMenuId}', function ($encodedMenuId) {
     $menusjson = json_decode(base64_decode($encodedMenuId));
     return view('riders.assignreserve', ['menusjson' => $menusjson]);
 });
+Route::get('confirmation/{dataReserve}', function ($dataReserve) {
+    $datareserve = json_decode(base64_decode($dataReserve));
+    return view('riders.reserveconfirm', ['datareserve' => $datareserve]);
+});
 Route::get('riderlanding', function () {
     return view('landings.riderlanding');
 });

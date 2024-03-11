@@ -267,8 +267,13 @@ export default {
                     assignMarkers: this.homelessInformation
                 })
                 .then(response => {
-                    window.location.href = '../delivery';
+                    console.log(response);
+                    const encodedHomelessData = btoa(JSON.stringify(this.homelessInformation));
+                    window.location.href = '../confirmation/' + encodeURIComponent(encodedHomelessData);
                 })
+                .catch(error => {
+                    window.location.href = '../confirmation/' + encodeURIComponent(btoa(JSON.stringify("null")));
+                });
             }
         }
     },

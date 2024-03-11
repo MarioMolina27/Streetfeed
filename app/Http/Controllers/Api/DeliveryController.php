@@ -75,11 +75,10 @@ class DeliveryController extends Controller
         DB::beginTransaction();
         try {
             $markerIndex = 0;
+            $assignMarker = $assignMarkers[$markerIndex];
             foreach ($menus as $menu) {
                 $remainingLaunchpacks = $menu['launchpacks'];
                 while ($remainingLaunchpacks > 0 && $markerIndex < count($assignMarkers)) {
-                    $assignMarker = $assignMarkers[$markerIndex];
-        
                     $numLaunchpacksWithMarker = min($remainingLaunchpacks, $assignMarker['people_eat']);
         
                     for ($i = 0; $i < $numLaunchpacksWithMarker; $i++) {
@@ -107,6 +106,7 @@ class DeliveryController extends Controller
         
                     if ($marker['num_people_not_eat'] == 0) {
                         $markerIndex++;
+                        $assignMarker = $assignMarkers[$markerIndex];
                     }
                 }
                 
