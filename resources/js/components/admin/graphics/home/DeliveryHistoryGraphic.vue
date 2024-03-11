@@ -24,7 +24,6 @@ export default {
     },
     methods: {
         setChartData() {
-            const documentStyle = getComputedStyle(document.documentElement);
 
             return {
                 labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

@@ -154,7 +154,7 @@
                     <template #body="{ data }">
                         <img
                             v-if="!data.active"
-                            src="img/block.svg"
+                            :src="userNotActiveImg"
                             alt="active"
                             width="20"
                             height="20"
@@ -199,6 +199,7 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
+import { userNotActiveImg } from "../../utilities/constant.js";
 import {
     deleteUser,
     reactivateUser,
@@ -226,6 +227,7 @@ export default {
     name: "UsersTable",
     data() {
         return {
+            userNotActiveImg,
             users: null,
             visible: false,
             filters: {

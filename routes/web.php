@@ -10,6 +10,7 @@ Route::get('/', function () {
 Route::get('admin/users', function () {
     return view('admin.admin');
 });
+
 Route::get('menu', function () {
     return view('providers.menu');
 });
@@ -38,4 +39,12 @@ Route::get('register', function () {
 
 Route::get('admin', function () {
     return view('admin.home');
+});
+
+Route::get('admin/stadistics/providers', function () {
+    return view('admin.stadisticsProvider');
+});
+
+Route::get('admin/stadistics/riders', function () {
+    return view('admin.stadisticsRiders');
 });

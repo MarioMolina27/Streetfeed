@@ -7,7 +7,7 @@
                     <h3 class="sidebar-title">STREETFEED</h3>
                 </div>
                 <div class="col-12 mt-5">
-                    <a class="d-flex flex-row align-items-center mt-5" href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
+                    <a class="d-flex flex-row align-items-center mt-5" :href="homeRouteAdmin">
                         <img
                             :src="sideNavFirstImg"
                             alt="Home Logo Nav"
@@ -32,10 +32,10 @@
                                     </div>
                                 </template>
                                <div class="d-flex flex-column">
-                                <a class="mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
+                                <a class="mt-5" :href="statisticsProviderRouteAdmin">
                                     <a class="mb-0 ms-5 mt-5 title-nav-admin">PROVIDERS</a>
                                </a>
-                                <a class="mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
+                                <a class="mt-5"  :href="statisticsRiderRouteAdmin">
                                     <a class="mb-0 ms-5 mt-4 title-nav-admin">RIDERS</a>
                                 </a>
                                </div>
@@ -43,7 +43,7 @@
                         </Accordion>
                     </div>
 
-                    <a class="d-flex flex-row align-items-center mt-5"  href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
+                    <a class="d-flex flex-row align-items-center mt-5"  :href="usersRouteAdmin">
                         <img
                             :src="sideNavThirdImg"
                             alt="Home Logo Nav"
@@ -71,7 +71,7 @@
 import Sidebar from "primevue/sidebar";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
-import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg } from '../../utilities/constant.js';
+import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg, homeRouteAdmin, usersRouteAdmin , statisticsProviderRouteAdmin, statisticsRiderRouteAdmin} from '../../utilities/constant.js';
 
  
 
@@ -90,7 +90,11 @@ export default {
             sideNavFirstImg: sideNavFirstImg,
             sideNavSecondImg: sideNavSecondImg,
             sideNavThirdImg: sideNavThirdImg,
-            sideNavFourthImg: sideNavFourthImg
+            sideNavFourthImg: sideNavFourthImg,
+            homeRouteAdmin: homeRouteAdmin,
+            usersRouteAdmin: usersRouteAdmin,
+            statisticsProviderRouteAdmin: statisticsProviderRouteAdmin,
+            statisticsRiderRouteAdmin: statisticsRiderRouteAdmin
         }
     }
 };

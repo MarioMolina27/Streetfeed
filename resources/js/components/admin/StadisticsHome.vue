@@ -65,9 +65,9 @@
 
 <script>
 import Card from "primevue/card";
-import NumUsersGraphic from "./graphics/NumUsers.vue";
-import EvolutionUsersGraphic from "./graphics/EvolutionUsersGraphic.vue";
-import DeliveryHistoryGraphic from "./graphics/DeliveryHistoryGraphic.vue";
+import NumUsersGraphic from "./graphics/home/NumUsers.vue";
+import EvolutionUsersGraphic from "./graphics/home/EvolutionUsersGraphic.vue";
+import DeliveryHistoryGraphic from "./graphics/home/DeliveryHistoryGraphic.vue";
 
 
 export default {
@@ -103,4 +103,4 @@ export default {
         border: 2px solid #081733;
         margin: 0 ;
     }
-</style>
+</style>./graphics/home/DeliveryHistoryGraphic.vue./graphics/home/NumUsers.vue./graphics/home/EvolutionUsersGraphic.vue
