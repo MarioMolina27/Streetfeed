@@ -267,7 +267,6 @@ export default {
                     assignMarkers: this.homelessInformation
                 })
                 .then(response => {
-                    console.log(response.data);
                     window.location.href = '../delivery';
                 })
             }

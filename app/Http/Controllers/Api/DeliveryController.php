@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Delivery;
 use App\Models\Marker;
 use App\Models\Marker_History;
+use App\Models\Launch_Pack;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryResource;
@@ -67,35 +68,55 @@ class DeliveryController extends Controller
         //
     }
     public function doReserve(Request $request) {
-        //No funciona
         $userId = $request->input('userId');
         $menus = $request->input('menus');
         $assignMarkers = $request->input('assignMarkers');
 
         DB::beginTransaction();
         try {
+            $markerIndex = 0;
             foreach ($menus as $menu) {
-                foreach ($assignMarkers as $marker) {
-                    $delivery = new Delivery();
-                    $delivery->start_time = now();
-                    $delivery->id_state = 1;
-                    $delivery->id_user = $userId;
-                    $delivery->id_marker = $marker['id_marker'];
-                    $delivery->id_menu = $menu['id'];
-                    $delivery->save();
-
-                    $marker = Marker::find($marker['id_marker']);
-                    $marker->num_people_not_eat = $marker->num_people - $marker['people_eat'];
-                    if ($marker->num_people_not_eat == 0) {
+                $remainingLaunchpacks = $menu['launchpacks'];
+                while ($remainingLaunchpacks > 0 && $markerIndex < count($assignMarkers)) {
+                    $assignMarker = $assignMarkers[$markerIndex];
+        
+                    $numLaunchpacksWithMarker = min($remainingLaunchpacks, $assignMarker['people_eat']);
+        
+                    for ($i = 0; $i < $numLaunchpacksWithMarker; $i++) {
+                        $delivery = new Delivery();
+                        $delivery->start_time = now();
+                        $delivery->id_state = 1;
+                        $delivery->id_user = $userId;
+                        $delivery->id_marker = $assignMarker['id_marker'];
+                        $delivery->id_menu = $menu['id'];
+                        $delivery->save();
+        
+                        $marker = Marker::find($assignMarker['id_marker']);
+                        $marker->num_people_not_eat -= 1;
+                        $assignMarker['people_eat'] -= 1;
+                        $marker->save();
+                        
                         $markerHistory = new Marker_History();
                         $markerHistory->id_state = 2;
                         $markerHistory->id_marker = $marker['id_marker'];
                         $markerHistory->timestamp = now();
-                        $markerHistory->save();
+                        $markerHistory->save(); 
                     }
-                    $marker->save();
+        
+                    $remainingLaunchpacks -= $numLaunchpacksWithMarker;
+        
+                    if ($marker['num_people_not_eat'] == 0) {
+                        $markerIndex++;
+                    }
+                }
+                
+                $launchPacksToDelete = Launch_Pack::where('id_menu', $menu['id'])->take($menu['launchpacks'])->get();
+        
+                foreach ($launchPacksToDelete as $launchPack) {
+                    $launchPack->delete();
                 }
             }
+
             DB::commit();
             return response()->json(['message' => 'Reserva realizada correctamente'], 200);
         } catch (\Exception $e) {
