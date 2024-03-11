@@ -271,5 +271,25 @@ class UserController extends Controller
             return response()->json(['message' => 'Proveedor añadido a favoritos']);
         }
     }
+
+    public function getUsersNums(Request $request) {
+        $ridersNum = 0;
+        $providersNum = 0;
+
+        $users = User::with('typeUsers')->get();  
+
+        foreach ($users as $user) {
+            if ($user->typeUsers->contains('id_type_user', 1)) {
+                $ridersNum++;
+            } else if ($user->typeUsers->contains('id_type_user', 2)) {
+                $providersNum++;
+            }
+        }
+
+        return response()->json([
+            'riders' => $ridersNum,
+            'providers' => $providersNum
+        ]);
+    }
 }
 

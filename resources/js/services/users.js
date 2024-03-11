@@ -43,3 +43,15 @@ export const reactivateUser = async (id) => {
         console.log('Error:', error);
     }
 }
+
+export const getUsersTypesNumbers = async () => {
+    const url = 'api/users/getUsersNums';
+    try{
+        const response = await axios.get(url);
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log('Error:', error);
+    }
+}

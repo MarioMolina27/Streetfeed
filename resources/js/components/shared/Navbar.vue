@@ -30,7 +30,7 @@
             </div>
 
             <div class="d-flex justify-content-center align-items-end mb-" style="flex:1">
-              <a class="log-out-nav">Cerrar session</a>
+              <a class="log-out-nav mb-5">Cerrar session</a>
             </div>
           </div>
       </div>
