@@ -4,6 +4,7 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getUsersTypesNumbers } from '../../../../services/users.js';
 
 export default {
     name: "NumUsersGraphic",
@@ -19,22 +20,11 @@ export default {
         };
     },
     mounted() {
-        this.chartDataNumUsers = this.setchartDataNumUsers();
         this.chartOptionsNumUsers = this.setchartOptionsNumUsers();
+        this.getNums();
     },
     methods: {
-        setchartDataNumUsers() {
-            return {
-                labels: ['Riders', 'Providers'],
-                datasets: [
-                    {
-                        data: [540, 325],
-                        backgroundColor: ['#B48753', '#984EAE' ],
-                        hoverBackgroundColor: ['#B48753', '#984EAE']
-                    }
-                ]
-            };
-        },
+        
         setchartOptionsNumUsers() {
             const documentStyle = getComputedStyle(document.documentElement);
             const textColor = documentStyle.getPropertyValue('--text-color');
@@ -49,6 +39,22 @@ export default {
                     }
                 }
             };
+        },
+        getNums() {
+            getUsersTypesNumbers().then((response) => {
+                console.log(response);
+
+                this.chartDataNumUsers = {
+                    labels: ['Riders', 'Providers'],
+                    datasets: [
+                        {
+                            data: [response.riders, response.providers],
+                            backgroundColor: ['#B48753', '#984EAE' ],
+                            hoverBackgroundColor: ['#B48753', '#984EAE']
+                        }
+                    ]
+                };
+            })   
         }
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('users/getUsersNums', [UserController::class, 'getUsersNums']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
@@ -23,6 +24,7 @@ Route::get('users/favourite-providers/{user}', [UserController::class, 'getFavou
 Route::get('users/reserve-data/{user}/{menuid}', [UserController::class, 'reserveMarkers']);
 Route::post('users/toggle-favorite-provider', [UserController::class, 'toggleFavoriteProvider']);
 Route::post('users/reactivate/{user}', [UserController::class, 'reactivate']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
