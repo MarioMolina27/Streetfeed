@@ -291,5 +291,27 @@ class UserController extends Controller
             'providers' => $providersNum
         ]);
     }
+
+    public function getNumUsersByMonth(Request $request, $idUser) {
+
+        $riders = User::with('typeUsers')->whereHas('typeUsers', function ($query) use ($idUser){
+            $query->where('user_type_user.id_type_user', $idUser);
+        })->get();
+
+        $riders = $riders->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('Y-m');
+        })->map(function ($group) {
+            return $group->count();
+        })->sortBy(function ($value, $key) {
+            return $key;
+        });
+
+        $totalUsers = 0;
+        foreach ($riders as $key => $value) {
+            $riders[$key] = $totalUsers += $value;
+        }
+       
+        return response()->json([$riders]);
+    }
 }
 

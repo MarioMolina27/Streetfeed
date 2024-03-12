@@ -124,4 +124,27 @@ class DeliveryController extends Controller
             return response()->json(['message' => 'Error al realizar la reserva'], 500);
         }
     }
+
+    public function calculateDeliveryKg(Request $request) {
+        $deliveryKg = 0.5; 
+        $deliveryCount = Delivery::all()->count();
+        $kg = $deliveryCount * $deliveryKg;
+        return response()->json(['kg' => $kg]);
+    }
+
+    public function getDeliveriesByMonth(Request $request ) {
+        $deliveries = Delivery::all();
+       
+        $deliveries = $deliveries->groupBy(function ($date) {
+            return \Carbon\Carbon::parse($date->start_time)->format('Y-m');
+        })->sortBy(function ($group, $key) {
+            return $key;
+        });
+
+        $deliveries = $deliveries->map(function($month) {
+            return $month->count();
+        });
+
+        return response()->json([$deliveries]);
+    }
 }

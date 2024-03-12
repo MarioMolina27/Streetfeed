@@ -15,6 +15,9 @@ use App\Http\Controllers\Api\DeliveryController;
 |
 */
 Route::get('users/getUsersNums', [UserController::class, 'getUsersNums']);
+Route::get('delivery/totalKg', [DeliveryController::class, 'calculateDeliveryKg']);
+Route::get('users/evolutionUsers/{idUser}', [UserController::class, 'getNumUsersByMonth']);
+Route::get('delivery/deliveryNumbers', [DeliveryController::class, 'getDeliveriesByMonth']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);

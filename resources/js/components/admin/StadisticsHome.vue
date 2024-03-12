@@ -14,7 +14,7 @@
                             </div>
                         </template>
                         <template #content>
-                            <h3 class="title-home-admin mt-0 mb-0">300 KG</h3>
+                            <h3 class="title-home-admin mt-0 mb-0">{{ deliveriesKg }}</h3>
                         </template>
                     </Card>
                 </div>
@@ -68,6 +68,8 @@ import Card from "primevue/card";
 import NumUsersGraphic from "./graphics/home/NumUsers.vue";
 import EvolutionUsersGraphic from "./graphics/home/EvolutionUsersGraphic.vue";
 import DeliveryHistoryGraphic from "./graphics/home/DeliveryHistoryGraphic.vue";
+import { getDeliveriesKg } from "../../services/delivery.js";
+
 
 
 export default {
@@ -78,6 +80,19 @@ export default {
         NumUsersGraphic,
         EvolutionUsersGraphic,
         DeliveryHistoryGraphic
+    },
+
+    data() {
+        return {
+            deliveriesKg: 0
+        };
+    },
+
+    mounted() {
+        getDeliveriesKg().then((response) => {
+            console.log(response);
+            this.deliveriesKg = response.kg + " Kg";
+        });
     },
 }
 </script>

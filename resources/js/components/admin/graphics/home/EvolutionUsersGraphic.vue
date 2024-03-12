@@ -4,6 +4,7 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getEvolutionUsers } from '../../../../services/users.js'
 export default {
     name: "EvolutionUsersGraphic",
 
@@ -14,37 +15,18 @@ export default {
     data() {
         return {
             chartDataEvolutionUsers: null,
-            chartOptionsEvolutionUsers: null
+            chartOptionsEvolutionUsers: null,
+            labelsRiders: [],
+            riders: [],
+            labelsProviders: [],
+            providers: []
         };
     },
     mounted() {
-        this.chartDataEvolutionUsers = this.setchartDataEvolutionUsers();
         this.chartOptionsEvolutionUsers = this.setchartOptionsEvolutionUsers();
+        this.loadData();
     },
     methods: {
-        setchartDataEvolutionUsers() {
-            const documentStyle = getComputedStyle(document.documentElement);
-
-            return {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                    {
-                        label: 'Riders',
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                        fill: false,
-                        borderColor: '#B48753',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Providers',
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        fill: false,
-                        borderColor: '#984EAE',
-                        tension: 0.4
-                    }
-                ]
-            };
-        },
         setchartOptionsEvolutionUsers() {
             const documentStyle = getComputedStyle(document.documentElement);
             const textColor = documentStyle.getPropertyValue('--text-color');
@@ -80,6 +62,60 @@ export default {
                     }
                 }
             };
+        },
+
+        loadData() {
+            let promises = [
+                getEvolutionUsers(1).then((response) => {
+                    let keys = Object.keys(response[0]);
+                    this.labelsRiders = keys;
+                    this.riders = Object.values(response[0]);
+                }),
+                getEvolutionUsers(2).then((response) => {
+                    let keys = Object.keys(response[0]);
+                    this.labelsProviders = keys;
+                    this.providers = Object.values(response[0]);
+                })
+            ];
+
+            Promise.all(promises).then(() => {
+
+                let ridersList = [];
+                let providersList = [];
+
+                for (let i = 0; i < Math.max(this.labelsRiders.length, this.labelsProviders.length); i++) {
+                    ridersList.push({
+                        label: this.labelsRiders[i] || this.labelsProviders[i],
+                        data: this.riders[i] || (ridersList[i - 1] ? ridersList[i - 1].data : 0),
+                    });
+
+                    providersList.push({
+                        label: this.labelsProviders[i] || this.labelRiders[i],
+                        data: this.providers[i] || (providersList[i - 1] ? providersList[i - 1].data : 0),
+                    });
+                }
+
+
+                this.chartDataEvolutionUsers = {
+                    labels: providersList.map((item) => item.label),
+                    datasets: [
+                        {
+                            label: 'Riders',
+                            data: ridersList.map((item) => item.data),
+                            fill: false,
+                            borderColor: '#B48753',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Providers',
+                            data: providersList.map((item) => item.data),
+                            fill: false,
+                            borderColor: '#984EAE',
+                            tension: 0.4
+                        }
+                    ]
+                };
+            });
         }
     }
 };

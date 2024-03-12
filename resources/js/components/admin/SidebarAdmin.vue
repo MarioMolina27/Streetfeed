@@ -27,7 +27,7 @@
                                             class="logo-nav-admin ms-2"
                                         />
                                         <p class="mb-0 ms-3 title-nav-admin">
-                                            STADISTICS
+                                            STATS
                                         </p>
                                     </div>
                                 </template>
