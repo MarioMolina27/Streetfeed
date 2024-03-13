@@ -41,7 +41,7 @@ export default {
             menuItems: [
                 {name: 'Tus Repartos', href: '/'},
                 {name: 'Explorar', href: '../delivery'},
-                {name: 'Favoritos', href: '/reservations'},
+                {name: 'Favoritos', href: '../favorite'},
                 {name: 'Perfil', href: '/profile'}
             ],
             map: null,

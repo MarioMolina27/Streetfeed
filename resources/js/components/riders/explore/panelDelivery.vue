@@ -2,7 +2,7 @@
   <div class="container-fluid ps-0 pe-0">
     <Navbar :menuItems = 'menuItems'></Navbar>
     <div class="delivery-container">
-      <div class="provider-container">
+      <div v-if="nearProviders.length != 0" class="provider-container">
         <h2>Descubre a tus proveedores más cercanos</h2>
         <div class="card-container d-flex flex-nowrap">
           <template v-for="(provider) in nearProviders">
@@ -10,7 +10,7 @@
           </template>
         </div>
       </div>
-      <div class="provider-container">
+      <div v-if="hasMoreFavoritesPrvoviders.length != 0" class="provider-container">
         <h2>Los proveedores más queridos</h2>
         <div class="card-container d-flex flex-nowrap">
           <template v-for="(provider) in hasMoreFavoritesPrvoviders">
@@ -18,7 +18,7 @@
           </template>
         </div>
       </div>
-      <div class="provider-container">
+      <div v-if="favouriteProviders.length != 0" class="provider-container">
         <h2>Favoritos</h2>
         <div class="card-container d-flex flex-nowrap">
           <template v-for="(provider) in favouriteProviders">
@@ -42,7 +42,7 @@ export default{
         menuItems: [
                 {name: 'Tus Repartos', href: '/'},
                 {name: 'Explorar', href: './delivery'},
-                {name: 'Favoritos', href: '/reservations'},
+                {name: 'Favoritos', href: './favorite'},
                 {name: 'Perfil', href: '/profile'}
             ]
       }
