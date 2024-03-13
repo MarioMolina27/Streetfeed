@@ -48,3 +48,7 @@ Route::get('admin/stadistics/providers', function () {
 Route::get('admin/stadistics/riders', function () {
     return view('admin.stadisticsRiders');
 });
+
+Route::get('admin/map', function () {
+    return view('admin.mapAdmin');
+});

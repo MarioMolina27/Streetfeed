@@ -11,6 +11,7 @@ import assignLocation from './components/riders/reserve/assignLocation.vue';
 import adminHome from './components/admin/adminHome.vue';
 import providerStats from './components/admin/providerStats.vue';
 import riderStats from './components/admin/riderStats.vue';
+import mapAdmin from './components/admin/mapAdmin.vue';
 import ConfirmationService from 'primevue/confirmationservice';
 
 
@@ -25,6 +26,7 @@ app.component('assignlocation', assignLocation)
 app.component('adminhome', adminHome)
 app.component('providerstats', providerStats)
 app.component('riderstats', riderStats)
+app.component('mapadmin', mapAdmin)
 
 
 app.mount(appDOM);
