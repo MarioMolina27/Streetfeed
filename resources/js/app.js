@@ -12,6 +12,7 @@ import adminHome from './components/admin/adminHome.vue';
 import providerStats from './components/admin/providerStats.vue';
 import riderStats from './components/admin/riderStats.vue';
 import ConfirmationService from 'primevue/confirmationservice';
+import reserveConfirmation from './components/riders/reserve/reserveConfirmation.vue';
 
 
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
@@ -26,5 +27,6 @@ app.component('adminhome', adminHome)
 app.component('providerstats', providerStats)
 app.component('riderstats', riderStats)
 
+app.component('reserveconfirmation', reserveConfirmation)
 
 app.mount(appDOM);
