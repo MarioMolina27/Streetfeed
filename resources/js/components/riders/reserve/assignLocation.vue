@@ -267,12 +267,14 @@ export default {
                     assignMarkers: this.homelessInformation
                 })
                 .then(response => {
-                    console.log(response);
                     const encodedHomelessData = btoa(JSON.stringify(this.homelessInformation));
+                    console.log('Datos enviados al servidor:', this.homelessInformation);
+                    console.log('Encoded Homeless Data:', encodedHomelessData);
                     window.location.href = '../confirmation/' + encodeURIComponent(encodedHomelessData);
                 })
                 .catch(error => {
-                    window.location.href = '../confirmation/' + encodeURIComponent(btoa(JSON.stringify("null")));
+                    const encodedHomelessData = btoa(JSON.stringify(null));
+                    window.location.href = '../confirmation/' + encodeURIComponent(encodedHomelessData);
                 });
             }
         }

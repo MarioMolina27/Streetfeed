@@ -23,8 +23,11 @@ Route::get('assignreserve/{encodedMenuId}', function ($encodedMenuId) {
     $menusjson = json_decode(base64_decode($encodedMenuId));
     return view('riders.assignreserve', ['menusjson' => $menusjson]);
 });
-Route::get('confirmation/{dataReserve}', function ($dataReserve) {
-    $datareserve = json_decode(base64_decode($dataReserve));
+Route::get('confirmation/{encodedHomelessData}', function ($encodedHomelessData) {
+    $decodedData = base64_decode($encodedHomelessData);
+    $decodedData = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $decodedData);
+    $datareserve = json_decode($decodedData);
+    $datareserve;
     return view('riders.reserveconfirm', ['datareserve' => $datareserve]);
 });
 Route::get('riderlanding', function () {

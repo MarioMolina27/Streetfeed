@@ -106,7 +106,9 @@ class DeliveryController extends Controller
         
                     if ($marker['num_people_not_eat'] == 0) {
                         $markerIndex++;
-                        $assignMarker = $assignMarkers[$markerIndex];
+                        if (isset($assignMarkers[$markerIndex])) {
+                            $assignMarker = $assignMarkers[$markerIndex];
+                        }
                     }
                 }
                 
