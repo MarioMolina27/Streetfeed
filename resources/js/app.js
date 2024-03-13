@@ -13,7 +13,8 @@ import providerStats from './components/admin/providerStats.vue';
 import riderStats from './components/admin/riderStats.vue';
 import ConfirmationService from 'primevue/confirmationservice';
 import reserveConfirmation from './components/riders/reserve/reserveConfirmation.vue';
-
+import panelFavorite from './components/riders/explore/panelFavorite.vue';
+import login from './components/auth/login.vue';
 
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
 const appDOM = document.getElementById('app');
@@ -26,7 +27,8 @@ app.component('assignlocation', assignLocation)
 app.component('adminhome', adminHome)
 app.component('providerstats', providerStats)
 app.component('riderstats', riderStats)
-
 app.component('reserveconfirmation', reserveConfirmation)
+app.component('panelfavorite', panelFavorite)
+app.component('login', login)
 
 app.mount(appDOM);

@@ -28,8 +28,10 @@ Route::get('confirmation/{encodedHomelessData}', function ($encodedHomelessData)
     $decodedData = base64_decode($encodedHomelessData);
     $decodedData = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $decodedData);
     $datareserve = json_decode($decodedData);
-    $datareserve;
     return view('riders.reserveconfirm', ['datareserve' => $datareserve]);
+});
+Route::get('favorite', function () {
+    return view('riders.favorite.favorite');
 });
 Route::get('riderlanding', function () {
     return view('landings.riderlanding');

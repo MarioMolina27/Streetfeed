@@ -103,7 +103,6 @@ export default {
         align-items: center;
         justify-content: center;
         text-align: center;
-        margin-top: 10vh;
     }
     .button-pdf {
         margin-top: 20px;
@@ -159,7 +158,7 @@ export default {
     svg {
         width: 250px;
         display: block;
-        margin: 40px auto 100px;
+        margin: 15vh auto 100px;
     }
     .path {
         stroke-dasharray: 1000;
