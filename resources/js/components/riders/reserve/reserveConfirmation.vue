@@ -19,7 +19,7 @@
                 <h2 style="text-align: center;">Ha ocurrido un error al reservar y asignar el reparto</h2>
             </div>
         </div>
-        <button class="button-confirm">{{ !this.reserve ? 'Vuelve a realizar tu pedido' : 'Mira tu entrega!'}}</button>
+        <button class="button-confirm" @click="redirectToRoute">{{ !this.reserve ? 'Vuelve a realizar tu pedido' : 'Mira tu entrega!'}}</button>
     </div>
 </template>
 
@@ -91,6 +91,13 @@ export default {
                 callback(canvas.toDataURL('image/png'));
             };
             img.src = url;
+        },
+        redirectToRoute() {
+            if (!this.reserve) {
+                window.location.href = '../explore';
+            } else {
+                window.location.href = '../delivery';
+            }
         }
     }
 }
