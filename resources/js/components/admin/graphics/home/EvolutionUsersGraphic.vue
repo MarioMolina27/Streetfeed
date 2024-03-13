@@ -16,10 +16,6 @@ export default {
         return {
             chartDataEvolutionUsers: null,
             chartOptionsEvolutionUsers: null,
-            labelsRiders: [],
-            riders: [],
-            labelsProviders: [],
-            providers: []
         };
     },
     mounted() {
@@ -65,16 +61,22 @@ export default {
         },
 
         loadData() {
+
+            let labelsRiders
+            let riders
+            let labelsProviders
+            let providers
+
             let promises = [
                 getEvolutionUsers(1).then((response) => {
                     let keys = Object.keys(response[0]);
-                    this.labelsRiders = keys;
-                    this.riders = Object.values(response[0]);
+                    labelsRiders = keys;
+                    riders = Object.values(response[0]);
                 }),
                 getEvolutionUsers(2).then((response) => {
                     let keys = Object.keys(response[0]);
-                    this.labelsProviders = keys;
-                    this.providers = Object.values(response[0]);
+                    labelsProviders = keys;
+                    providers = Object.values(response[0]);
                 })
             ];
 
@@ -83,15 +85,15 @@ export default {
                 let ridersList = [];
                 let providersList = [];
 
-                for (let i = 0; i < Math.max(this.labelsRiders.length, this.labelsProviders.length); i++) {
+                for (let i = 0; i < Math.max(labelsRiders.length, labelsProviders.length); i++) {
                     ridersList.push({
-                        label: this.labelsRiders[i] || this.labelsProviders[i],
-                        data: this.riders[i] || (ridersList[i - 1] ? ridersList[i - 1].data : 0),
+                        label: labelsRiders[i] || labelsProviders[i],
+                        data: riders[i] || (ridersList[i - 1] ? ridersList[i - 1].data : 0),
                     });
 
                     providersList.push({
-                        label: this.labelsProviders[i] || this.labelRiders[i],
-                        data: this.providers[i] || (providersList[i - 1] ? providersList[i - 1].data : 0),
+                        label: labelsProviders[i] || labelRiders[i],
+                        data: providers[i] || (providersList[i - 1] ? providersList[i - 1].data : 0),
                     });
                 }
 

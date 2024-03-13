@@ -17,8 +17,6 @@ export default {
         return {
             chartData: null,
             chartOptions: null,
-            labels: [],
-            deliveries: []
         };
     },
     mounted() {
@@ -29,16 +27,16 @@ export default {
         loadData() {
             getDeliveriesByMonth().then((response) => {
                 let keys = Object.keys(response[0])
-                this.labels = keys
-                this.deliveries = Object.values(response[0])
+                let labels = keys
+                let deliveries = Object.values(response[0])
                 this.chartData = {
-                    labels: this.labels,
+                    labels: labels,
                     datasets: [
                         {
                             label: 'Deliveries',
                             backgroundColor: '#081733dd',
                             borderColor: '#081733',
-                            data: this.deliveries
+                            data: deliveries
                         }
                     ]
                 };

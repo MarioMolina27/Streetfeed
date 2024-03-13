@@ -4,6 +4,8 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getEvolutionUsers } from '../../../../services/users.js'
+
 export default {
     name: "EvolutionRidersGraphic",
 
@@ -18,25 +20,29 @@ export default {
         };
     },
     mounted() {
-        this.chartDataEvolutionUsers = this.setchartDataEvolutionUsers();
+        this.loadData();
         this.chartOptionsEvolutionUsers = this.setchartOptionsEvolutionUsers();
     },
     methods: {
-        setchartDataEvolutionUsers() {
-            const documentStyle = getComputedStyle(document.documentElement);
-
-            return {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                    {
-                        label: 'Riders',
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        fill: false,
-                        borderColor: '#b48753',
-                        tension: 0.4
-                    }
-                ]
-            };
+        loadData(){
+            getEvolutionUsers(1).then(response => {
+                console.log(response);
+                let keys = Object.keys(response[0]);
+                let labels = keys;
+                let riders = Object.values(response[0]);
+                this.chartDataEvolutionUsers = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Riders',
+                            data: riders,
+                            fill: false,
+                            borderColor: '#b48753',
+                            tension: 0.4
+                        }
+                    ]
+                };
+            });
         },
         setchartOptionsEvolutionUsers() {
             const documentStyle = getComputedStyle(document.documentElement);

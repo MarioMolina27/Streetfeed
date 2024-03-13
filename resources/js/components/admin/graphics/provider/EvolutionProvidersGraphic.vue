@@ -17,8 +17,6 @@ export default {
         return {
             chartDataEvolutionUsers: null,
             chartOptionsEvolutionUsers: null,
-            labels: [],
-            providers: []
         };
     },
     mounted() {
@@ -30,14 +28,14 @@ export default {
             getEvolutionUsers(2).then(response => {
                 console.log(response);
                 let keys = Object.keys(response[0]);
-                    this.labels = keys;
-                    this.providers = Object.values(response[0]);
+                let labels = keys;
+                let providers = Object.values(response[0]);
                 this.chartDataEvolutionUsers = {
-                    labels: this.labels,
+                    labels: labels,
                     datasets: [
                         {
                             label: 'Providers',
-                            data: this.providers,
+                            data: providers,
                             fill: false,
                             borderColor: '#984EAE',
                             tension: 0.4
@@ -45,22 +43,6 @@ export default {
                     ]
                 };
             });
-        },
-        setchartDataEvolutionUsers() {
-            const documentStyle = getComputedStyle(document.documentElement);
-
-            return {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                    {
-                        label: 'Providers',
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        fill: false,
-                        borderColor: '#984EAE',
-                        tension: 0.4
-                    }
-                ]
-            };
         },
         setchartOptionsEvolutionUsers() {
             const documentStyle = getComputedStyle(document.documentElement);

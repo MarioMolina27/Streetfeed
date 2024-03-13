@@ -4,6 +4,7 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getCitiesNumbers } from '../../../../services/adress.js'
 
 export default {
     name: "LocationProvidersGraphic",
@@ -19,23 +20,28 @@ export default {
         };
     },
     mounted() {
-        this.chartData = this.setChartData();
         this.chartOptions = this.setChartOptions();
+        this.loadData();
     },
     methods: {
-        setChartData() {
+        loadData(){
+            getCitiesNumbers(2).then(response => {
+                let keys = Object.keys(response);
+                let labels = keys;
+                let values = Object.values(response);
 
-            return {
-                labels: ['Barcelona', 'Madrid', 'Sevilla', 'Bilbao', 'Malaga', 'Girona', 'Lleida'],
-                datasets: [
-                    {
-                        label: 'Locations Providers',
-                        backgroundColor: '#984EAEdd',
-                        borderColor: '#081733',
-                        data: [48, 48, 40, 19, 86, 27, 90]
-                    }
-                ]
-            };
+                this.chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Locations Providers',
+                            data: values,
+                            backgroundColor: '#984EAEdd',
+                            borderColor: '#081733'
+                        }
+                    ]
+                };
+            });
         },
         setChartOptions() {
             const documentStyle = getComputedStyle(document.documentElement);

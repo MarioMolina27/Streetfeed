@@ -147,4 +147,9 @@ class DeliveryController extends Controller
 
         return response()->json([$deliveries]);
     }
+
+    public function getTotalDeliveries() {
+        $deliveries = Delivery::all()->count();
+        return response()->json(['deliveries' => $deliveries]);
+    }
 }

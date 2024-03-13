@@ -67,3 +67,15 @@ export const getEvolutionUsers = async (typeUsers) => {
         console.log('Error:', error);
     }
 }
+
+export const getNumUsersByType = async (typeUser) => {
+    const url = `api/users/numberUsersByType/${typeUser}`;
+    try{
+        const response = await axios.get(url);
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log('Error:', error);
+    }
+}
