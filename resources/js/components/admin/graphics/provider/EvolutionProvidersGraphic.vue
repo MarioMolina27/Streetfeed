@@ -4,6 +4,8 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getEvolutionUsers } from '../../../../services/users.js'
+
 export default {
     name: "EvolutionProvidersGraphic",
 
@@ -14,29 +16,33 @@ export default {
     data() {
         return {
             chartDataEvolutionUsers: null,
-            chartOptionsEvolutionUsers: null
+            chartOptionsEvolutionUsers: null,
         };
     },
     mounted() {
-        this.chartDataEvolutionUsers = this.setchartDataEvolutionUsers();
         this.chartOptionsEvolutionUsers = this.setchartOptionsEvolutionUsers();
+        this.loadData();
     },
     methods: {
-        setchartDataEvolutionUsers() {
-            const documentStyle = getComputedStyle(document.documentElement);
-
-            return {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                    {
-                        label: 'Providers',
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        fill: false,
-                        borderColor: '#984EAE',
-                        tension: 0.4
-                    }
-                ]
-            };
+        loadData(){
+            getEvolutionUsers(2).then(response => {
+                console.log(response);
+                let keys = Object.keys(response[0]);
+                let labels = keys;
+                let providers = Object.values(response[0]);
+                this.chartDataEvolutionUsers = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Providers',
+                            data: providers,
+                            fill: false,
+                            borderColor: '#984EAE',
+                            tension: 0.4
+                        }
+                    ]
+                };
+            });
         },
         setchartOptionsEvolutionUsers() {
             const documentStyle = getComputedStyle(document.documentElement);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Marker;
 use App\Models\Menu;
+use App\Models\Type_User;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -276,7 +277,7 @@ class UserController extends Controller
         $ridersNum = 0;
         $providersNum = 0;
 
-        $users = User::with('typeUsers')->get();  
+        $users = User::with('typeUsers')->where('active', 1)->get();  
 
         foreach ($users as $user) {
             if ($user->typeUsers->contains('id_type_user', 1)) {
@@ -290,6 +291,36 @@ class UserController extends Controller
             'riders' => $ridersNum,
             'providers' => $providersNum
         ]);
+    }
+
+    public function getNumUsersByMonth(Request $request, $idUser) {
+
+        $riders = User::with('typeUsers')->where('active', 1)->whereHas('typeUsers', function ($query) use ($idUser){
+            $query->where('user_type_user.id_type_user', $idUser);
+        })->get();
+
+        $riders = $riders->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('Y-m');
+        })->map(function ($group) {
+            return $group->count();
+        })->sortBy(function ($value, $key) {
+            return $key;
+        });
+
+        $totalUsers = 0;
+        foreach ($riders as $key => $value) {
+            $riders[$key] = $totalUsers += $value;
+        }
+       
+        return response()->json([$riders]);
+    }
+
+    public function getNumUsersByType(Type_User $typeUser) {
+        $users = User::with('typeUsers')->where('active', 1)->whereHas('typeUsers', function ($query) use ($typeUser){
+            $query->where('user_type_user.id_type_user', $typeUser->id_type_user);
+        })->get();
+
+        return $users->count();
     }
 }
 

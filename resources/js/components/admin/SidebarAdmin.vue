@@ -27,7 +27,7 @@
                                             class="logo-nav-admin ms-2"
                                         />
                                         <p class="mb-0 ms-3 title-nav-admin">
-                                            STADISTICS
+                                            STATS
                                         </p>
                                     </div>
                                 </template>
@@ -52,7 +52,7 @@
                         <p class="mb-0 ms-3 title-nav-admin">USERS</p>
                     </a>
 
-                    <a class="d-flex flex-row align-items-center mt-5" href="https://es.stackoverflow.com/questions/154052/como-se-pone-un-link-a-un-div">
+                    <a class="d-flex flex-row align-items-center mt-5" :href="mapAdminRoute">
                         <img
                             :src="sideNavFourthImg"
                             alt="Home Logo Nav"
@@ -71,7 +71,7 @@
 import Sidebar from "primevue/sidebar";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
-import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg, homeRouteAdmin, usersRouteAdmin , statisticsProviderRouteAdmin, statisticsRiderRouteAdmin} from '../../utilities/constant.js';
+import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg, homeRouteAdmin, usersRouteAdmin , statisticsProviderRouteAdmin, statisticsRiderRouteAdmin, mapAdminRoute} from '../../utilities/constant.js';
 
  
 
@@ -94,7 +94,8 @@ export default {
             homeRouteAdmin: homeRouteAdmin,
             usersRouteAdmin: usersRouteAdmin,
             statisticsProviderRouteAdmin: statisticsProviderRouteAdmin,
-            statisticsRiderRouteAdmin: statisticsRiderRouteAdmin
+            statisticsRiderRouteAdmin: statisticsRiderRouteAdmin,
+            mapAdminRoute: mapAdminRoute
         }
     }
 };

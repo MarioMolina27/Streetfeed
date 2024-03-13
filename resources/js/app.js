@@ -11,6 +11,7 @@ import assignLocation from './components/riders/reserve/assignLocation.vue';
 import adminHome from './components/admin/adminHome.vue';
 import providerStats from './components/admin/providerStats.vue';
 import riderStats from './components/admin/riderStats.vue';
+import mapAdmin from './components/admin/mapAdmin.vue';
 import ConfirmationService from 'primevue/confirmationservice';
 import reserveConfirmation from './components/riders/reserve/reserveConfirmation.vue';
 import panelFavorite from './components/riders/explore/panelFavorite.vue';
@@ -30,5 +31,7 @@ app.component('riderstats', riderStats)
 app.component('reserveconfirmation', reserveConfirmation)
 app.component('panelfavorite', panelFavorite)
 app.component('login', login)
+app.component('mapadmin', mapAdmin)
+
 
 app.mount(appDOM);

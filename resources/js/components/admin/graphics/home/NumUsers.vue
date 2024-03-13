@@ -42,8 +42,6 @@ export default {
         },
         getNums() {
             getUsersTypesNumbers().then((response) => {
-                console.log(response);
-
                 this.chartDataNumUsers = {
                     labels: ['Riders', 'Providers'],
                     datasets: [

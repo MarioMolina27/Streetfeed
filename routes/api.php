@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AdressController;
 use App\Http\Controllers\Api\DeliveryController;
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,12 @@ use App\Http\Controllers\Api\DeliveryController;
 |
 */
 Route::get('users/getUsersNums', [UserController::class, 'getUsersNums']);
+Route::get('delivery/totalKg', [DeliveryController::class, 'calculateDeliveryKg']);
+Route::get('users/evolutionUsers/{idUser}', [UserController::class, 'getNumUsersByMonth']);
+Route::get('delivery/deliveryNumbers', [DeliveryController::class, 'getDeliveriesByMonth']);
+Route::get('adress/numberAdress/{type_user}', [AdressController::class, 'getAdreesNumbers']);
+Route::get('users/numberUsersByType/{typeUser}', [UserController::class, 'getNumUsersByType']);
+Route::get('delivery/getTotalDeliveries', [DeliveryController::class, 'getTotalDeliveries']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
