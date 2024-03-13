@@ -4,6 +4,8 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getEvolutionUsers } from '../../../../services/users.js'
+
 export default {
     name: "EvolutionProvidersGraphic",
 
@@ -14,14 +16,36 @@ export default {
     data() {
         return {
             chartDataEvolutionUsers: null,
-            chartOptionsEvolutionUsers: null
+            chartOptionsEvolutionUsers: null,
+            labels: [],
+            providers: []
         };
     },
     mounted() {
-        this.chartDataEvolutionUsers = this.setchartDataEvolutionUsers();
         this.chartOptionsEvolutionUsers = this.setchartOptionsEvolutionUsers();
+        this.loadData();
     },
     methods: {
+        loadData(){
+            getEvolutionUsers(2).then(response => {
+                console.log(response);
+                let keys = Object.keys(response[0]);
+                    this.labels = keys;
+                    this.providers = Object.values(response[0]);
+                this.chartDataEvolutionUsers = {
+                    labels: this.labels,
+                    datasets: [
+                        {
+                            label: 'Providers',
+                            data: this.providers,
+                            fill: false,
+                            borderColor: '#984EAE',
+                            tension: 0.4
+                        }
+                    ]
+                };
+            });
+        },
         setchartDataEvolutionUsers() {
             const documentStyle = getComputedStyle(document.documentElement);
 
