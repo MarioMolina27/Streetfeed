@@ -37,7 +37,7 @@ export default {
                             label: 'Riders',
                             data: riders,
                             fill: false,
-                            borderColor: '#b48753',
+                            borderColor: '#984EAE',
                             tension: 0.4
                         }
                     ]

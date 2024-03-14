@@ -36,8 +36,8 @@ export default {
                         {
                             label: 'Locations Riders',
                             data: values,
-                            backgroundColor: '#b48753dd',
-                            borderColor: '#b48753',
+                            backgroundColor: '#984EAEdd',
+                            borderColor: '#984EAE',
                         }
                     ]
                 };

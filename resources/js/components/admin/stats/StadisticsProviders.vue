@@ -66,10 +66,10 @@
 
 <script>
 import Card from "primevue/card";
-import EvolutionProvidersGraphic from "./graphics/provider/EvolutionProvidersGraphic.vue";
-import LocationProvidersGraphic from "./graphics/provider/LocationProvidersGraphic.vue";
-import { getNumUsersByType } from "../../services/users.js";
-import { getTotalDeliveries } from "../../services/delivery.js";
+import EvolutionProvidersGraphic from "../graphics/provider/EvolutionProvidersGraphic.vue";
+import LocationProvidersGraphic from "../graphics/provider/LocationProvidersGraphic.vue";
+import { getNumUsersByType } from "../../../services/users.js";
+import { getTotalDeliveries } from "../../../services/delivery.js";
 
 export default {
     name: "StadisticsProviders",
@@ -123,6 +123,6 @@ export default {
     }
 
     .title-stadistics-providers-2{
-        color: #984EAE;
+        color: #b48753;
     }
 </style>

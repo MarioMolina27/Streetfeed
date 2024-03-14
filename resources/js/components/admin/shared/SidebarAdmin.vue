@@ -71,7 +71,7 @@
 import Sidebar from "primevue/sidebar";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
-import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg, homeRouteAdmin, usersRouteAdmin , statisticsProviderRouteAdmin, statisticsRiderRouteAdmin, mapAdminRoute} from '../../utilities/constant.js';
+import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFourthImg, homeRouteAdmin, usersRouteAdmin , statisticsProviderRouteAdmin, statisticsRiderRouteAdmin, mapAdminRoute} from '../../../utilities/constant.js';
 
  
 
@@ -142,4 +142,4 @@ a{
     padding: 0;
 }
 
-</style>
+</style>../../../utilities/constant.js./SidebarAdmin.vue/index.js
