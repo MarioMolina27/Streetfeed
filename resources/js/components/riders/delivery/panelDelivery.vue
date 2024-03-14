@@ -69,11 +69,10 @@ export default{
     .delivery-call-action {
         width: 80%;
     }
-    #map {
-        width: 80%; 
-        flex: 1;
-        margin: 0 auto;
-        padding: 10px;
+    @media (max-width: 691px) {
+        .delivery-call-action {
+            width: 95%;
+        }
     }
     .button-suggest {
         margin: 0 auto;
