@@ -252,6 +252,11 @@ export default{
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: 0.3s ease;
+    }
+    .button-profile-route:not(.selected):hover {
+        background-color: #b17a3b;
+        transform: scale(1.01);
     }
     .duration-route {
         position: absolute;
@@ -284,6 +289,11 @@ export default{
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: ease 0.3s;
+    }
+    .button-center-map:hover {
+        background-color: #b17a3b;
+        transform: scale(1.01);
     }
     .button-suggest {
         margin: 0 auto;
