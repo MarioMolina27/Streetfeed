@@ -6,6 +6,7 @@ use App\Models\Delivery;
 use App\Models\Marker;
 use App\Models\Marker_History;
 use App\Models\Launch_Pack;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryResource;
@@ -153,5 +154,13 @@ class DeliveryController extends Controller
     public function getTotalDeliveries() {
         $deliveries = Delivery::all()->count();
         return response()->json(['deliveries' => $deliveries]);
+    }
+
+    public function getUserDeliveries(User $user) {
+        $deliveries = Delivery::where('id_user', $user->id_user)
+                            ->where('id_state', '!=', 3)
+                            ->get();
+
+        return $deliveries;
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
        
 @section('content')
-    <delivery></delivery>
+    <paneldelivery></paneldelivery>
 @endsection
