@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SidebarAdmin from "./SidebarAdmin.vue";
+import SidebarAdmin from "../shared/SidebarAdmin.vue";
 import StadisticsHome from "./StadisticsHome.vue";
 
 

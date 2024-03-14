@@ -1,12 +1,25 @@
 <template>
     <div class="d-flex justify-content-center align-items-center h-100">
         <div id="map"></div>
+        <div class="map-legend">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center" style="margin: 10px;">
+                    <i class="fa-solid fa-shop fs-4 me-2" style="color: #b48753;"></i>
+                    <strong class="fs-4" style="color: #b48753;">Provider</strong>
+                </div>
+                <div class="d-flex justify-content-center align-items-center" style="margin: 10px;">
+                    <i class="fa-solid fa-user fs-4 me-2" style="color: #984EAE;"></i>
+                    <strong class="fs-4" style="color: #984EAE;">Homeless</strong>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { getAllMarkers } from '../../../services/markers.js';
 
 export default {
     name: "AdminMap",
@@ -22,7 +35,7 @@ export default {
     },
 
     beforeDestroy() {
-            this.map.remove();
+        this.map.remove();
     },
 
     mounted() {
@@ -33,6 +46,19 @@ export default {
             center: this.defaultLocation,
             zoom: 16
         });
+
+        getAllMarkers().then(response => {
+            response.data.forEach(marker => {
+                let color;
+                if(marker.id_user) {
+                    color = '#b48753';
+                }
+                else {
+                    color = '#984EAE';
+                }
+                this.createMarker([marker.longitude, marker.latitude], color, marker);
+            });
+        });
     },
     
     methods: {
@@ -41,26 +67,25 @@ export default {
                 .setLngLat(coordinates)
                 .addTo(this.map);
             if (data !== null) {
-                const popupContent = `
+                let popupContent;
+                if(data.id_user) {
+                    popupContent= ` 
                     <div class="mb-2" style="text-align: center;">
-                        <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people_not_eat}</strong>
+                        <i class="fa-solid fa-shop fs-4 me-2"></i>
+                        <strong class="fs-4" style="color: #b48753; margin-right: 10px;">${data.nickname}</strong>
+                        <p class="mb-0">${data.type_users[0].pivot.type_of_provider.toUpperCase()}</p>
+                    </div>`
+                }
+                else{
+                    popupContent = `
+                    <div class="mb-2" style="text-align: center;">
+                        <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people}</strong>
                         <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
                     </div>
-                    <button id="popup-button-${data.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
                 `;
-                
+                }
+                 
                 marker.setPopup(new mapboxgl.Popup({ closeButton: false }).setHTML(popupContent));
-
-                marker.getPopup().once('open', () => {
-                    const popupButton = document.getElementById(`popup-button-${data.id_marker}`);
-                    if (popupButton) {
-                        popupButton.addEventListener('click', e => { 
-                            this.handleButtonClick(data, marker) });
-                    } else {
-                        console.error('Elemento con ID popup-button no encontrado.');
-                    }
-                });
-            
             }
             
             marker.getElement().addEventListener('mouseenter', () => {
@@ -72,9 +97,7 @@ export default {
                 marker.getElement().style.cursor ="default";
             });
 
-            this.map.on('click', () => {
-                
-            });
+            
         }
     }
 }
@@ -86,6 +109,7 @@ export default {
         width: 85vw;
         height: 90vh;
         border-radius: 10px;
+        border: 2px solid #081733;
     }
     .mapboxgl-ctrl-bottom-left{
         display: none !important;
@@ -145,25 +169,27 @@ export default {
         color: #000;
         cursor: not-allowed;
     }
-    button.p-carousel-prev.p-link.p-disabled, button.p-carousel-next.p-link.p-disabled, button.p-carousel-prev.p-link, button.p-carousel-next.p-link {
-        color: #984EAE;
-        opacity: 1;
+    
+    .map-legend{
+        position: absolute; 
+        z-index: 3;
+        right: 15px;
+        bottom: 15px;
         background-color: #FDF8EB;
-        border: #B48753 1px solid;
+        border: 2px solid #081733;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0px 0px 2px #081733;
+        margin-left: 5px;
     }
-    button.p-carousel-prev.p-link.p-disabled, button.p-carousel-next.p-link.p-disabled {
-        color: #c4accc;
 
-    }
-    button.p-carousel-prev.p-link.p-disabled, button.p-carousel-prev.p-link {
-        border-right: 0;
-        border-radius: 5px 0 0 5px;
-    }
-    button.p-carousel-next.p-link.p-disabled, button.p-carousel-next.p-link {
-        border-left: 0;
-        border-radius: 0 5px 5px 0;
-    }
-    button.p-carousel-prev.p-link:hover, button.p-carousel-next:hover {
-        background-color: #ffe9b2;
+    @media screen and (max-width: 992px){
+        .map-legend{
+            bottom: 0;
+            right: 1px;
+            left: 1px;
+            margin: 0;
+            padding: 5px;
+        }
     }
 </style>

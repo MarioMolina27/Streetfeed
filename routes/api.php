@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\MarkerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -22,6 +23,7 @@ Route::get('delivery/deliveryNumbers', [DeliveryController::class, 'getDeliverie
 Route::get('adress/numberAdress/{type_user}', [AdressController::class, 'getAdreesNumbers']);
 Route::get('users/numberUsersByType/{typeUser}', [UserController::class, 'getNumUsersByType']);
 Route::get('delivery/getTotalDeliveries', [DeliveryController::class, 'getTotalDeliveries']);
+Route::get('markers/all', [MarkerController::class, 'getAllMarkers']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);

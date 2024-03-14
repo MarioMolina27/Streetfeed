@@ -37,7 +37,7 @@ export default {
                             label: 'Providers',
                             data: providers,
                             fill: false,
-                            borderColor: '#984EAE',
+                            borderColor: '#b48753',
                             tension: 0.4
                         }
                     ]

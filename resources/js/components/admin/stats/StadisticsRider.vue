@@ -67,10 +67,10 @@
 
 <script>
 import Card from "primevue/card";
-import EvolutionRidersGraphic from "./graphics/rider/EvolutionRidersGraphic.vue";
-import LocationRidersGraphic from "./graphics/rider/LocationRidersGraphic.vue";
-import { getNumUsersByType } from "../../services/users.js";
-import { getTotalDeliveries } from "../../services/delivery.js";
+import EvolutionRidersGraphic from "../graphics/rider/EvolutionRidersGraphic.vue";
+import LocationRidersGraphic from "../graphics/rider/LocationRidersGraphic.vue";
+import { getNumUsersByType } from "../../../services/users.js";
+import { getTotalDeliveries } from "../../../services/delivery.js";
 
 export default {
   name: "StadisticsRider",
@@ -134,6 +134,6 @@ export default {
     }
 
     .title-stadistics-riders-2{
-        color: #b48753;
+        color: #984EAE;
     }
-</style>
+</style>../../../services/users.js../../../services/delivery.js./StadisticsRider.vue/index.js

@@ -65,10 +65,10 @@
 
 <script>
 import Card from "primevue/card";
-import NumUsersGraphic from "./graphics/home/NumUsers.vue";
-import EvolutionUsersGraphic from "./graphics/home/EvolutionUsersGraphic.vue";
-import DeliveryHistoryGraphic from "./graphics/home/DeliveryHistoryGraphic.vue";
-import { getDeliveriesKg } from "../../services/delivery.js";
+import NumUsersGraphic from "../graphics/home/NumUsers.vue";
+import EvolutionUsersGraphic from "../graphics/home/EvolutionUsersGraphic.vue";
+import DeliveryHistoryGraphic from "../graphics/home/DeliveryHistoryGraphic.vue";
+import { getDeliveriesKg } from "../../../services/delivery.js";
 
 
 
@@ -118,4 +118,4 @@ export default {
         border: 2px solid #081733;
         margin: 0 ;
     }
-</style>./graphics/home/DeliveryHistoryGraphic.vue./graphics/home/NumUsers.vue./graphics/home/EvolutionUsersGraphic.vue
+</style>./graphics/home/DeliveryHistoryGraphic.vue./graphics/home/NumUsers.vue./graphics/home/EvolutionUsersGraphic.vue../../../services/delivery.js./StadisticsHome.vue/index.js

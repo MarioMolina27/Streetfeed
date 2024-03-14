@@ -36,7 +36,7 @@ export default {
                         {
                             label: 'Locations Providers',
                             data: values,
-                            backgroundColor: '#984EAEdd',
+                            backgroundColor: '#b48753dd',
                             borderColor: '#081733'
                         }
                     ]
