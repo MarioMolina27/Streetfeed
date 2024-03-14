@@ -199,12 +199,12 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import { userNotActiveImg } from "../../utilities/constant.js";
+import { userNotActiveImg } from "../../../utilities/constant.js";
 import {
     deleteUser,
     reactivateUser,
     fecthAllUsers,
-} from "../../services/users.js";
+} from "../../../services/users.js";
 
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";

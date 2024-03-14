@@ -129,12 +129,12 @@ class DeliveryController extends Controller
 
     public function calculateDeliveryKg(Request $request) {
         $deliveryKg = 0.5; 
-        $deliveryCount = Delivery::all()->count();
+        $deliveryCount = Delivery::get()->where('id_state', 3)->count();
         $kg = $deliveryCount * $deliveryKg;
         return response()->json(['kg' => $kg]);
     }
 
-    public function getDeliveriesByMonth(Request $request ) {
+    public function getDeliveriesByMonth(Request $request) {
         $deliveries = Delivery::all();
        
         $deliveries = $deliveries->groupBy(function ($date) {
@@ -151,7 +151,7 @@ class DeliveryController extends Controller
     }
 
     public function getTotalDeliveries() {
-        $deliveries = Delivery::all()->count();
+        $deliveries = Delivery::get()->where('id_state', 3)->count();
         return response()->json(['deliveries' => $deliveries]);
     }
 }
