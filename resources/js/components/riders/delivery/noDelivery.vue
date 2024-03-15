@@ -37,6 +37,7 @@
 </template>
     
 <script>
+import axios from 'axios';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 export default{
@@ -47,6 +48,7 @@ export default{
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
             mapStyle: "mapbox://styles/mapbox/light-v11",
             defaultLocation: { lat: 41.388752, lng: 2.17271 },
+            userId: 4,
             userCurrentLocation: { latitude: null, longitude: null },
             selectedProfile: 'walking',
             routeDuration: null,
@@ -137,7 +139,6 @@ export default{
                 .then(response => {
                     const route = response.data.routes[0].geometry;
                     const duration = response.data.routes[0].duration;
-                    console.log('Duración de la ruta:', duration);
                     this.routeDuration = this.formatDuration(duration);
                     const existingRoute = this.map.getSource('route');
                     if (existingRoute) {
@@ -176,8 +177,43 @@ export default{
         centerMap() {
             this.map.setCenter([this.userCurrentLocation.longitude, this.userCurrentLocation.latitude]);
         },
-        doReserve(){
-            console.log('Hacer reserva');
+        doReserve() {
+            axios.post('/api/delivery/do-suggest-reserve', {
+                userId: this.userId,
+                providerId: this.provider.id_user,
+                markerId: this.homeless.id_marker
+            })
+                .then(response => {
+                    fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${this.homeless.longitude},${this.homeless.latitude}.json?access_token=${this.accessToken}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                const encodedHomelessData = btoa(JSON.stringify(null));
+                                window.location.href = './confirmation/' + encodeURIComponent(encodedHomelessData);
+                                throw new Error('No se pudo obtener la información');
+                            }
+                            return response.json();
+                        })
+                        .then(markerInfo => {
+                            const features = markerInfo.features;
+                            const location = features[0].place_name || 'No se ha encontrado la ubicación';
+                            const homelessInformation = [{
+                                id_marker: this.homeless.id_marker,
+                                location: location,
+                                people_eat: 1
+                            }];
+                            const encodedHomelessData = btoa(JSON.stringify(homelessInformation));
+                            window.location.href = './confirmation/' + encodeURIComponent(encodedHomelessData);
+                        })
+                        .catch(error => {
+                            console.error('Error al obtener la información:', error);
+                            const encodedHomelessData = btoa(JSON.stringify(null));
+                            window.location.href = './confirmation/' + encodeURIComponent(encodedHomelessData);
+                        });
+                })
+                .catch(error => {
+                    const encodedHomelessData = btoa(JSON.stringify(null));
+                    window.location.href = './confirmation/' + encodeURIComponent(encodedHomelessData);
+                });
         }
     },
     mounted(){

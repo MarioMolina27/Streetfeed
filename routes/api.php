@@ -36,6 +36,7 @@ Route::post('users/reactivate/{user}', [UserController::class, 'reactivate']);
 Route::post('delivery/do-reserve', [DeliveryController::class, 'doReserve']);
 Route::get('users/do-suggest/{latitude}/{longitude}', [UserController::class, 'doSuggest']);
 Route::get('delivery/get-user-deliveries/{user}', [DeliveryController::class, 'getUserDeliveries']);
+Route::post('delivery/do-suggest-reserve', [DeliveryController::class, 'doSuggestReserve']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
