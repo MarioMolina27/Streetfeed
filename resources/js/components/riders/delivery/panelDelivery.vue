@@ -6,13 +6,7 @@
                 Cargando...
         </div>
         <div v-else-if="deliveries.length === 0" class="delivery-call-action">
-            <h1 class="mt-5 mb-4 font-weight-bold">¿A que esperas para hacer un reparto?</h1>
-            <p class="fs-4 mb-4">Te podemos proporcionar una sugerencia... </p>
-            <div class="d-flex justify-content-center">
-                <button class="button-suggest mb-2 fs-5" @click="doSuggest">Sugiereme!</button>
-            </div>
-
-            <button class="button-explore mb-2 fs-5" @click="goExplore">Explora proveedores</button>
+            <noDelivery></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
                 
@@ -23,7 +17,7 @@
 
 <script>
 import Navbar from '../../shared/Navbar.vue';
-import Skeleton from 'primevue/skeleton';
+import noDelivery from './noDelivery.vue';
 export default{
     data(){
       return {
@@ -33,18 +27,31 @@ export default{
                 {name: 'Favoritos', href: './favorite'},
                 {name: 'Perfil', href: './profile'}
             ],
-        loading: true,
+        loading: false,
         deliveries: []
       }
     },
+    methods: {
+        getDeliveries() {
+            this.loading = true;
+            axios.get('/api/delivery/get-user-deliveries/4')
+                .then(response => {
+                    this.deliveries = response.data;
+                    console.log('Repartos:', this.deliveries);
+                    this.loading = false;
+                })
+                .catch(error => {
+                    console.error('Error al obtener los repartos:', error);
+                    this.loading = false;
+                });
+        },
+    },
     mounted(){
-        setTimeout(() => {
-            this.loading = false;
-        }, 2000);
+        this.getDeliveries();
     },
     components: {
         Navbar,
-        Skeleton    
+        noDelivery
     }
 }
 </script>
@@ -57,14 +64,20 @@ export default{
         display: flex;
         justify-content: center;
         padding: 20px;
+        height: calc(100vh - 18vh);
     }
     .delivery-call-action {
         width: 80%;
     }
+    @media (max-width: 691px) {
+        .delivery-call-action {
+            width: 95%;
+        }
+    }
     .button-suggest {
         margin: 0 auto;
         width: 20vw;
-        max-width: 20vw;
+        min-width: 250px;
         height: 50px;
         background-color: #984EAE;
         color: white;
@@ -76,36 +89,5 @@ export default{
     .button-suggest:hover {
         background-color: #7a3a81;
         transform: scale(1.01);
-    }
-    .button-explore {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        width: 20vw;
-        max-width: 20vw;
-        height: 50px;
-        background-color: #ad8a62;
-        color: #FDF8EB;
-        border: none;
-        border-radius: 5px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .button-explore::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0));
-        transition: left 0.5s ease;
-        z-index: 1;
-    }
-
-    .button-explore:hover::before {
-        left: 100%;
     }
 </style>

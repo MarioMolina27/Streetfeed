@@ -6,6 +6,7 @@ use App\Models\Delivery;
 use App\Models\Marker;
 use App\Models\Marker_History;
 use App\Models\Launch_Pack;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryResource;
@@ -127,6 +128,46 @@ class DeliveryController extends Controller
         }
     }
 
+    public function doSuggestReserve(Request $request) {
+        $userId = $request->input('userId');
+        $providerId = $request->input('providerId');
+        $markerId = $request->input('markerId');
+
+        DB::beginTransaction();
+        try {
+            $menuId = User::find($providerId)->menus()
+            ->whereHas('launchpack')
+            ->value('id_menu');
+
+            $delivery = new Delivery();
+            $delivery->start_time = now();
+            $delivery->id_state = 1;
+            $delivery->id_user = $userId;
+            $delivery->id_marker = $markerId;
+            $delivery->id_menu = $menuId;
+            $delivery->save();
+
+            $marker = Marker::find($markerId);
+            $marker->num_people_not_eat -= 1;
+            $marker->save();
+
+            $markerHistory = new Marker_History();
+            $markerHistory->id_state = 2;
+            $markerHistory->id_marker = $marker['id_marker'];
+            $markerHistory->timestamp = now();
+            $markerHistory->save();
+
+            $launchPack = Launch_Pack::where('id_menu', $menuId)->first();
+            $launchPack->delete();
+
+            DB::commit();
+            return response()->json(['message' => 'Reserva realizada correctamente'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Error al realizar la reserva'], 500);
+        }
+    }
+
     public function calculateDeliveryKg(Request $request) {
         $deliveryKg = 0.5; 
         $deliveryCount = Delivery::get()->where('id_state', 3)->count();
@@ -153,5 +194,13 @@ class DeliveryController extends Controller
     public function getTotalDeliveries() {
         $deliveries = Delivery::get()->where('id_state', 3)->count();
         return response()->json(['deliveries' => $deliveries]);
+    }
+
+    public function getUserDeliveries(User $user) {
+        $deliveries = Delivery::where('id_user', $user->id_user)
+                            ->where('id_state', '!=', 3)
+                            ->get();
+
+        return $deliveries;
     }
 }

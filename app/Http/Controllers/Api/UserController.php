@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\MarkerResource;
 use Illuminate\Support\Carbon;
 
 class UserController extends Controller
@@ -123,8 +124,6 @@ class UserController extends Controller
     }
     public function getMoreNearProviders(User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
-        $currentUserLat = $user->latitude;
-        $currentUserLng = $user->longitude;
 
         $providers = User::with([
             'addresses.roadType', 
@@ -145,8 +144,8 @@ class UserController extends Controller
         })
         ->get();
 
-        $providers->each(function ($provider) use ($currentUserLat, $currentUserLng, $user) {
-            $provider->distance = $this->haversineDistance($currentUserLat, $currentUserLng, $provider->latitude, $provider->longitude);
+        $providers->each(function ($provider) use ($user) {
+            $provider->distance = $this->haversineDistance($user->latitude, $user->longitude, $provider->latitude, $provider->longitude);
             $provider->is_favorite = $user->favoriteProviders->contains($provider->id_user);
         });
 
@@ -321,6 +320,43 @@ class UserController extends Controller
         })->get();
 
         return $users->count();
+    }
+
+    public function doSuggest($latitude, $longitude) {
+        $providers = User::where('active', 1)
+        ->whereHas('menus', function ($query) {
+            $query->has('launchpack');
+        })
+        ->whereHas('typeUsers', function($query){
+            $query->where('user_type_user.id_type_user', 2);
+        })
+        ->get();
+        $nearestProvider = null;
+        $nearestProviderDistance = PHP_INT_MAX;
+        foreach ($providers as $provider) {
+            $distance = $this->haversineDistance($latitude, $longitude, $provider->latitude, $provider->longitude);
+
+            if ($distance < $nearestProviderDistance) {
+                $nearestProvider = $provider;
+                $nearestProviderDistance = $distance;
+            }
+        }
+        $markers = Marker::where('num_people_not_eat', '>', 0)->get();
+        $nearest_homeless = null;
+        $nearestMarkerDistance = PHP_INT_MAX;
+        foreach ($markers as $marker) {
+            $distance = $this->haversineDistance($nearestProvider->latitude, $nearestProvider->longitude, $marker->latitude, $marker->longitude);
+    
+            if ($distance < $nearestMarkerDistance) {
+                $nearest_homeless = $marker;
+                $nearestMarkerDistance = $distance;
+            }
+        }
+
+        return [
+            'nearest_provider' => new UserResource($nearestProvider),
+            'nearest_marker' => new MarkerResource($nearest_homeless)
+        ];
     }
 }
 

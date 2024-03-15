@@ -16,7 +16,7 @@ import ConfirmationService from 'primevue/confirmationservice';
 import reserveConfirmation from './components/riders/reserve/reserveConfirmation.vue';
 import panelFavorite from './components/riders/explore/panelFavorite.vue';
 import login from './components/auth/login.vue';
-import delivery from './components/riders/delivery/delivery.vue';
+import panelDelivery from './components/riders/delivery/panelDelivery.vue';
 import profile from './components/shared/profile.vue';
 
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
@@ -34,7 +34,7 @@ app.component('reserveconfirmation', reserveConfirmation)
 app.component('panelfavorite', panelFavorite)
 app.component('login', login)
 app.component('mapadmin', mapAdmin)
-app.component('delivery', delivery)
+app.component('paneldelivery', panelDelivery)
 app.component('profile', profile)
 
 app.mount(appDOM);

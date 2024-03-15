@@ -61,7 +61,6 @@ export default {
   mounted() {
     window.addEventListener('resize', this.checkScreenWidth);
     this.checkScreenWidth();
-    console.log(this.menuItems);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.checkScreenWidth);

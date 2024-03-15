@@ -93,4 +93,4 @@ body {
   white-space: nowrap;
   scrollbar-width: none;
 }
-</style>../../shared/Navbar.vue
+</style>
