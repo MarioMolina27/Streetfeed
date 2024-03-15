@@ -11,7 +11,7 @@
         </div>
         </div>
     </div>
-    <mapDelivery v-if="selectedOption === 'Map'" :delivery="delivery"></mapDelivery>
+    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="deliveries"></mapDelivery>
     <listDelivery v-else :deliveries="deliveries" @getDelivery="getDelivery"></listDelivery>
 </template>
 
