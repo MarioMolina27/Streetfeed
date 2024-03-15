@@ -1,6 +1,9 @@
 <template>
     <div class="d-flex justify-content-center align-items-center h-100">
-        <div id="map"></div>
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="relocate" @click="relocate()"><i class="fa-solid fa-location-crosshairs" style="color: #081733;"></i></div>
+        </div>
         <div class="map-legend">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="d-flex justify-content-center align-items-center" style="margin: 10px;">
@@ -20,6 +23,7 @@
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { getAllMarkers } from '../../../services/markers.js';
+import { logoUrl } from '../../../utilities/constant.js';
 
 export default {
     name: "AdminMap",
@@ -46,6 +50,8 @@ export default {
             center: this.defaultLocation,
             zoom: 16
         });
+
+        this.createMainMarker(this.defaultLocation);
 
         getAllMarkers().then(response => {
             response.data.forEach(marker => {
@@ -95,21 +101,86 @@ export default {
 
             marker.getElement().addEventListener('mouseleave', () => {
                 marker.getElement().style.cursor ="default";
+            }); 
+        },
+
+        createMainMarker(coordinates) {
+            const homeMarker = document.createElement('img');
+            homeMarker.src = logoUrl;
+            homeMarker.style.height = '5vh';
+            let marker = new mapboxgl.Marker({ element: homeMarker })
+                .setLngLat(coordinates)
+                .addTo(this.map);
+
+            let popupContent= ` 
+                    <div class="mb-2" style="text-align: center;">
+                        <strong class="fs-4" style="color: #081733; margin-right: 10px;">STREETFEED HOME</strong>
+                        <p class="mb-0">Sede Central</p>
+                    </div>`
+
+            marker.setPopup(new mapboxgl.Popup({ closeButton: false }).setHTML(popupContent));
+
+            marker.getElement().addEventListener('mouseenter', () => {
+                marker.getElement().style.cursor ="pointer";
+                marker.togglePopup();
             });
 
-            
+            marker.getElement().addEventListener('mouseleave', () => {
+                marker.getElement().style.cursor ="default";
+            }); 
+        },
+
+        relocate() {
+            // navigator.geolocation.getCurrentPosition((position) => {
+            //     this.map.flyTo({
+            //         center: [position.coords.longitude, position.coords.latitude],
+            //         essential: true
+            //     });
+            // });
+            this.map.setCenter(this.defaultLocation);
+            this.map.setZoom(18);
+
         }
     }
 }
 </script>
 
 <style scoped>
-    #map {
+    .map-container {
         position: relative;
+    }
+
+    .relocate{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        background-color: #FDF8EB;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: ease 0.3s;
+        border: 2px solid #081733;
+        box-shadow: 0px 0px 10px #b487537a;
+
+    }
+
+    .relocate:hover{
+        background-color: #FDF8EB;
+        transform: scale(1.01);    
+    }
+
+    #map {
         width: 85vw;
         height: 90vh;
         border-radius: 10px;
         border: 2px solid #081733;
+        position: relative;
     }
     .mapboxgl-ctrl-bottom-left{
         display: none !important;
