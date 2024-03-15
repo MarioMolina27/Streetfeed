@@ -199,6 +199,10 @@ class DeliveryController extends Controller
     public function getUserDeliveries(User $user) {
         $deliveries = Delivery::where('id_user', $user->id_user)
                             ->where('id_state', '!=', 3)
+                            ->with('marker')
+                            ->with('state')
+                            ->with('user')
+                            ->with('menu.user')
                             ->get();
 
         return $deliveries;

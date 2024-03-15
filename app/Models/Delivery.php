@@ -16,11 +16,21 @@ class Delivery extends Model
 
     public function state()
     {
-        return $this->belongsTo('App\DeliveryState', 'id_state');
+        return $this->belongsTo(Delivery_State::class, 'id_state');
     }
 
     public function marker()
     {
-        return $this->belongsTo('App\Marker', 'id_marker');
+        return $this->belongsTo(Marker::class, 'id_marker');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'id_menu');
     }
 }

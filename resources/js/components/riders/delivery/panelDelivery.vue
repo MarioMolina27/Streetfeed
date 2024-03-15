@@ -9,7 +9,7 @@
             <noDelivery></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-                
+            <hasDelivery :deliveries = deliveries></hasDelivery>
         </div>
     </div>
 </div>
@@ -18,6 +18,7 @@
 <script>
 import Navbar from '../../shared/Navbar.vue';
 import noDelivery from './noDelivery.vue';
+import hasDelivery from './hasDelivery.vue';
 export default{
     data(){
       return {
@@ -51,7 +52,8 @@ export default{
     },
     components: {
         Navbar,
-        noDelivery
+        noDelivery,
+        hasDelivery
     }
 }
 </script>
