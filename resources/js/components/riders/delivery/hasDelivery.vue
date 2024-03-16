@@ -11,8 +11,8 @@
         </div>
         </div>
     </div>
-    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="deliveries"></mapDelivery>
-    <listDelivery v-else :deliveries="deliveries" @getDelivery="getDelivery"></listDelivery>
+    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery"></mapDelivery>
+    <listDelivery v-else :deliveries="asosiationDelivery" @getDelivery="getDelivery"></listDelivery>
 </template>
 
 <script>
@@ -20,7 +20,7 @@ import mapDelivery from './mapDelivery.vue';
 import listDelivery from './listDelivery.vue';
 export default {
     props: {
-        deliveries: Object 
+        asosiationDelivery: Object 
     },
     data(){
         return {
@@ -29,12 +29,8 @@ export default {
         }
     },
     mounted(){
-        console.log('Deliveries:', this.deliveries);
     },
     methods: {
-        getDelivery(delivery){
-            this.delivery = delivery;
-        }
     },
     components: {
         mapDelivery,

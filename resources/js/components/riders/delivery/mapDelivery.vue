@@ -30,10 +30,7 @@ export default{
             center: this.defaultLocation,
             zoom: 16
         });
-        this.deliveries.forEach(delivery => {
-            this.addMarker([delivery.marker.longitude, delivery.marker.latitude], 'blue', false);
-            this.addMarker([delivery.user.longitude, delivery.user.latitude], 'green', false);
-        });
+        this.creatingMarkers();
         this.askForLocation();
     },
     methods: {
@@ -51,26 +48,46 @@ export default{
                     .addTo(this.map);
             }
         },
+        creatingMarkers() {
+            const processedProviders = {};
+
+            for (const provider in this.deliveries) {
+                if (this.deliveries.hasOwnProperty(provider)) {
+                    if (!processedProviders.hasOwnProperty(provider)) {
+                        const providerInfo = this.deliveries[provider][0].provider;
+
+                        this.addMarker([providerInfo.longitude, providerInfo.latitude], 'blue', false);
+
+                        processedProviders[provider] = true;
+                    }
+
+                    this.deliveries[provider].forEach(delivery => {
+                        const deliveryLocation = delivery.homeless;
+
+                        this.addMarker([deliveryLocation.longitude, deliveryLocation.latitude], 'green', false);
+                    });
+                }
+            }
+        },
         askForLocation() {
             return new Promise((resolve, reject) => {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         position => {
-                            const handleOrientation = event => {
-                                // Acceder a los ángulos de inclinación, balanceo y orientación
-                                const alpha = event.alpha; // Orientación alrededor del eje z
-                                const beta = event.beta;   // Inclinación hacia adelante y hacia atrás
-                                const gamma = event.gamma; // Inclinación hacia la izquierda y hacia la derecha
+                            // const handleOrientation = event => {
+                            //     // Acceder a los ángulos de inclinación, balanceo y orientación
+                            //     const alpha = event.alpha; // Orientación alrededor del eje z
+                            //     const beta = event.beta;   // Inclinación hacia adelante y hacia atrás
+                            //     const gamma = event.gamma; // Inclinación hacia la izquierda y hacia la derecha
 
-                                // Hacer algo con los ángulos obtenidos
-                                console.log('alpha (orientación): ' + alpha);
-                                console.log('beta (inclinación hacia adelante/atrás): ' + beta);
-                                console.log('gamma (inclinación hacia izquierda/derecha): ' + gamma);
-                            };
-                            if (window.DeviceOrientationEvent) {
-                                window.addEventListener('deviceorientation', handleOrientation, false);
-                            }
-                            console.log(position)
+                            //     // Hacer algo con los ángulos obtenidos
+                            //     console.log('alpha (orientación): ' + alpha);
+                            //     console.log('beta (inclinación hacia adelante/atrás): ' + beta);
+                            //     console.log('gamma (inclinación hacia izquierda/derecha): ' + gamma);
+                            // };
+                            // if (window.DeviceOrientationEvent) {
+                            //     window.addEventListener('deviceorientation', handleOrientation, false);
+                            // }
                             if (position && position.coords) {
                                 this.userCurrentLocation.latitude = position.coords.latitude;
                                 this.userCurrentLocation.longitude = position.coords.longitude;

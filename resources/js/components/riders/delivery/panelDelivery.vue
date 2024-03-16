@@ -9,7 +9,7 @@
             <noDelivery></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-            <hasDelivery :deliveries = deliveries></hasDelivery>
+            <hasDelivery :asosiationDelivery = asosiationDelivery></hasDelivery>
         </div>
     </div>
 </div>
@@ -29,7 +29,8 @@ export default{
                 {name: 'Perfil', href: './profile'}
             ],
         loading: false,
-        deliveries: []
+        deliveries: [],
+        asosiationDelivery: {}
       }
     },
     methods: {
@@ -38,13 +39,29 @@ export default{
             axios.get('/api/delivery/get-user-deliveries/4')
                 .then(response => {
                     this.deliveries = response.data;
-                    console.log('Repartos:', this.deliveries);
+                    this.doAssosiations(this.deliveries);
                     this.loading = false;
                 })
                 .catch(error => {
                     console.error('Error al obtener los repartos:', error);
                     this.loading = false;
                 });
+        },
+        doAssosiations(deliveries) {
+            deliveries.forEach(delivery => {
+                const provider = delivery.menu.user;
+
+                if (this.asosiationDelivery.hasOwnProperty(provider.nickname)) {
+                    this.asosiationDelivery[provider.nickname].push({
+                        homeless: delivery.marker
+                    });
+                } else {
+                    this.asosiationDelivery[provider.nickname] = [{
+                        provider: provider,
+                        homeless: delivery.marker
+                    }];
+                }
+            });
         },
     },
     mounted(){
