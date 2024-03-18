@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Delivery;
-use App\Models\Marker;
-use App\Models\Marker_History;
-use App\Models\Launch_Pack;
 use App\Models\User;
+use App\Models\Marker;
+use App\Models\Delivery;
+use App\Models\Launch_Pack;
 use Illuminate\Http\Request;
+use App\Models\Marker_History;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeliveryResource;
-use Illuminate\Support\Facades\DB;
 
 
 class DeliveryController extends Controller
@@ -202,7 +203,12 @@ class DeliveryController extends Controller
                             ->with('marker')
                             ->with('state')
                             ->with('user')
-                            ->with('menu.user')
+                            ->with(['menu.user'=> function ($query) {
+                                $currentDay = Carbon::now()->dayOfWeek;
+                                $query->with(['schedules' => function ($query) use ($currentDay) {
+                                    $query->where('day', $currentDay);
+                                }]);
+                            }])
                             ->get();
 
         return $deliveries;

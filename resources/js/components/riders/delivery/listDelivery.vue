@@ -1,19 +1,19 @@
 <template>
     <div class="list-container">
-        <template v-for="(delivery) in deliveries">
-            <deliveryCard :delivery = delivery></deliveryCard>
+        <template v-for="delivery in deliveries">
+            <providerCard :delivery="delivery"></providerCard>
         </template>
     </div>
 </template>
 
 <script>
-import deliveryCard from './deliveryCard.vue';
+import providerCard from './providerCard.vue';
 export default {
     props: {
         deliveries: Object
     },
     components: {
-        deliveryCard
+        providerCard
     }
 }
 </script>

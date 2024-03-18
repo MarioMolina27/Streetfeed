@@ -12,7 +12,7 @@
         </div>
     </div>
     <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery"></mapDelivery>
-    <listDelivery v-else :deliveries="asosiationDelivery" @getDelivery="getDelivery"></listDelivery>
+    <listDelivery v-else :deliveries="asosiationDelivery"></listDelivery>
 </template>
 
 <script>
@@ -51,7 +51,7 @@ export default {
         padding: 0;
         position: relative;
         background: #FDF8EB;
-        border: 2px solid #B48753;
+        border: 2px solid #081733;
         line-height: 3rem;
         border-radius: 0.5rem;
         margin-left: auto;
@@ -71,7 +71,7 @@ export default {
         margin: 0;
         text-align: center;
         cursor: pointer;
-        color: white;
+        color: #FDF8EB;
         font-size: 1.15rem;
         font-weight: bold;
     }
@@ -88,7 +88,7 @@ export default {
 
     .switch {
         border-radius: 0.5rem;
-        background: #B48753;
+        background: #081733;
         height: 100%;
     }
 
@@ -97,7 +97,7 @@ export default {
         text-align: center;
         opacity: 0;
         display: block;
-        color: white;
+        color: #FDF8EB;
         font-size: 1.15rem;
         font-weight: bold;
         transition: opacity 0.2s cubic-bezier(0.77, 0, 0.175, 1) 0.125s;
@@ -107,7 +107,7 @@ export default {
         left: 0;
     }
     .notSelected {
-        color: #B48753 !important;
+        color: #081733 !important;
     }
     .switches-container input:nth-of-type(1):checked~.switch-wrapper {
         transform: translateX(0%);
