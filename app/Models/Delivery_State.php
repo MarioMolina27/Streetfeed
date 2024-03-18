@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Delivery_Sate extends Model
+class Delivery_State extends Model
 {
     use HasFactory;
     protected $table = 'delivery_state';
@@ -16,6 +16,6 @@ class Delivery_Sate extends Model
 
     public function deliveries()
     {
-        return $this->hasMany(Delivery::class, 'id_state');
+        return $this->hasMany(Delivery::class, 'id');
     }
 }

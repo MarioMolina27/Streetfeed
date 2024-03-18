@@ -18,4 +18,8 @@ class Marker extends Model
     {
         return $this->hasMany(Marker_History::class, 'id_marker');
     }
+    public function delivery()
+    {
+        return $this->hasMany(Delivery::class, 'id');
+    }
 }
