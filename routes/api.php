@@ -37,7 +37,8 @@ Route::post('delivery/do-reserve', [DeliveryController::class, 'doReserve']);
 Route::get('users/do-suggest/{latitude}/{longitude}', [UserController::class, 'doSuggest']);
 Route::get('delivery/get-user-deliveries/{user}', [DeliveryController::class, 'getUserDeliveries']);
 Route::post('delivery/do-suggest-reserve', [DeliveryController::class, 'doSuggestReserve']);
-
+Route::post('delivery/do-collect', [DeliveryController::class, 'doCollect']);
+Route::post('delivery/do-deliver', [DeliveryController::class, 'doDeliver']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

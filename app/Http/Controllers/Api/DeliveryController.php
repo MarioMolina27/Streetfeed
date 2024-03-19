@@ -213,4 +213,31 @@ class DeliveryController extends Controller
 
         return $deliveries;
     }
+
+    public function doCollect(Request $request) {
+        $deliveryIds = $request->input('deliveryIds');
+        try {
+            foreach ($deliveryIds as $deliveryId) {
+                $delivery = Delivery::find($deliveryId);
+                $delivery->id_state = 2;
+                $delivery->save();
+            }
+            return response()->json(['message' => 'Recogida realizada correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al realizar la recogida'], 500);
+        }
+    }
+    public function doDeliver(Request $request) {
+        $deliveryId = $request->input('deliveryId');
+
+        try {
+            $delivery = Delivery::find($deliveryId);
+            $delivery->id_state = 3;
+            $delivery->end_time = now();
+            $delivery->save();
+            return response()->json(['message' => 'Entrega realizada correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al realizar la entrega'], 500);
+        }
+    }
 }

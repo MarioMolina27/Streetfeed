@@ -284,7 +284,6 @@ export default{
         border: none;
         border-radius: 50%;
         cursor: pointer;
-        transition: 0.3s ease;
         display: flex;
         justify-content: center;
         align-items: center;

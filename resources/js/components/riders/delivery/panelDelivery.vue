@@ -62,7 +62,7 @@ export default{
 
                 const markerAddressPromise = this.getAddressFromCoordinates(delivery.marker.latitude, delivery.marker.longitude)
                     .then(markerLocation => ({
-                        homeless: { ...delivery.marker, location: markerLocation, idDelivery: delivery.id }
+                        homeless: { ...delivery.marker, location: markerLocation, idDelivery: delivery.id, status: delivery.id_state}
                     }))
                     .catch(error => {
                         console.error('Error al obtener la dirección del marcador:', error);
