@@ -2,18 +2,87 @@
     <div class="mt-5">
         <Card>
             <template #content>
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <h3 class="mb-0 label-name-user">{{user.name}}</h3>
-                        <Tag>Rider</Tag>
+                <form>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <h3 class="mb-0 label-name-user">{{user.name}}</h3>
+                            <Tag>Rider</Tag>
+                        </div>
+                        <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
+                        <div v-else class="d-flex flex-row-reverse" >
+                            <div @click="editingProfile=false" class="ms-2">
+                                <i class="fa fa-check save-button"></i>
+                            </div>
+                            <div @click="cancelEditing()">
+                                <i class="fa fa-xmark save-button"></i>
+                            </div>
+                        </div>
                     </div>
-                    <img src="img/edit-profile.svg" alt="Card" height="35" />
-                </div>
-                <p>{{user.username}}</p>
-                <p class="label-card-profile">Email</p>
-                <p>{{user.email}}</p>
-                <p class="label-card-profile">Direcciones</p>
-                <p v-for="direction in directions" :key="direction">{{direction}}</p>
+                    <p>{{user.username}}</p>
+                    <div v-if="!editingProfile">
+                        <p class="label-card-profile">Email</p>
+                        <p>{{user.email}}</p>
+                        <p class="label-card-profile">Direcciones</p>
+                        <p v-for="direction in directions" :key="direction">{{direction.direction}}</p>
+                    </div>
+                    <div v-else>
+                        <p class="label-card-profile">Email</p>
+                        <input type="text" class="form-custom" v-model="user.email">
+                        <p class="label-card-profile">Direcciones</p>
+                        <input type="text" class="form-custom" v-for="direction in directions" :key="direction.id" v-model="direction.direction">
+                    </div>
+
+                    <div v-if="user.id_type_user === 2" class=" mb-2">
+                        <Accordion class="w-100" @tab-open="displayShifts=true" @tab-close="displayShifts=false">
+                            <AccordionTab>
+                                <template #header>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <p class="mb-0 title-schedules-profile">
+                                            Horario
+                                        </p>
+                                        <i v-if="!displayShifts" class="pi pi-eye ms-3 eye-schedule"></i>
+                                        <i v-else class="pi pi-eye-slash ms-3 eye-schedule"></i>
+                                    </div>
+                                </template>
+                                <template v-for="(day, index) in daysOfWeek" :key="index">
+                                    <div class="row mt-3">
+                                        <div class="d-flex flex-row justify-content-center align-items-center">
+                                            <div class="col-4 d-flex flex-row align-items-center">
+                                                <img src="img/Alarmclock.svg" alt="img-first-category-game" class="img-profile-stats" />
+                                                <p class="text-profile-schedule mb-0">{{ day }}</p>
+                                            </div>
+                                            <div class="col-7 d-flex flex-row ms-4">
+                                                <template v-if="editingProfile">
+                                                    <div class="d-flex flex-column gap-2">
+                                                        <template v-for="(shift, shiftIndex) in getNumberShifts(index + 1)">
+                                                            <div class="d-flex flex-row">
+                                                                <Calendar :id="'calendar-timeonly-' + index + '-morning'" v-model="getShift(index + 1, shift).start_time" class="ms-2" timeOnly />
+                                                                <Calendar :id="'calendar-timeonly-' + index + '-afternoon'" v-model="getShift(index + 1, shift).finish_time" class="ms-2" timeOnly />
+                                                                <div class="d-flex justify-content-center align-items-center delete-shift-btn" @click="deleteShift(index + 1, shift)"><i class="fa fa-trash"></i></div>
+                                                                <div v-if="shiftIndex === getNumberShifts(index + 1) - 1 && getNumberShifts(index + 1) === 1" @click="addShift(index+1)" class="d-flex justify-content-center align-items-center add-shift-btn"><i class="fa fa-add"></i></div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                                <template v-else>
+                                                    <div class="d-flex flex-column gap-2">
+                                                        <template v-for="shift in getNumberShifts(index + 1)">
+                                                            <div class="d-flex flex-row">
+                                                                <Calendar disabled :id="'calendar-timeonly-' + index + '-morning'" v-model="getShift(index + 1, shift).start_time" class="ms-2" timeOnly />
+                                                                <Calendar disabled :id="'calendar-timeonly-' + index + '-afternoon'" v-model="getShift(index + 1, shift).finish_time" class="ms-2" timeOnly />
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
+                                </template>
+                            </AccordionTab>
+                        </Accordion>
+                    </div>
+                </form>
             </template>
         </Card>
     </div>
@@ -23,28 +92,115 @@
 import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import Tooltip from 'primevue/tooltip';
+import Calendar from 'primevue/calendar';
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
+
 
 
 export default {
+    originalSchedules: null, //Variable no reactiva
     components: {
         Card,
         Tag,
-        Tooltip
+        Tooltip, 
+        Calendar,
+        Accordion,
+        AccordionTab
+    },
+
+    mounted() {
+        this.$options.originalSchedules = [...[
+                        { id_schedule: 2, day: 1, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
+                        { id_schedule: 3, day: 2, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
+                        { id_schedule: 4, day: 2, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 5, day: 3, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 6, day: 3, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 7, day: 4, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 8, day: 4, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 9, day: 5, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 10, day: 5, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 11, day: 6, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 12, day: 6, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 13, day: 7, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 14, day: 7, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 }
+            ]]
     },
 
     data(){
         return{
             user: {
+                id: 4,
                 name: 'Pol Crespo',
                 username: '@pcrespo',
                 email: 'pcrespo@politecnics.barcelona',
+                id_type_user: 2,
             },
 
             directions: [
-                'Pl. d\'Urquinaona, 10, Ciutat Vella, 08010 Barcelona',
+               {
+                id: 1,
+                direction: 'Carrer de la Llacuna, 162, 08018 Barcelona, España'
+               },
+            ],
+            editingProfile: false,
+            daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+            displayShifts: false,
+
+            shifts : [
+                        { id_schedule: 2, day: 1, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
+                        { id_schedule: 3, day: 2, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
+                        { id_schedule: 4, day: 2, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 5, day: 3, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 6, day: 3, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 7, day: 4, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 8, day: 4, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 9, day: 5, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 10, day: 5, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 11, day: 6, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 12, day: 6, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
+                        { id_schedule: 13, day: 7, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
+                        { id_schedule: 14, day: 7, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 }
             ]
         }
-    }
+    },
+    methods: {
+        getShift(day, shift) {
+            return this.shifts.find(s => s.day === day && s.shift === shift);
+        },
+
+        cancelEditing() {
+            console.log(this.$options.originalSchedules);
+            this.shifts = this.$options.originalSchedules;
+            this.editingProfile = false;
+        },
+
+        deleteShift(day, shift) {
+            const index = this.shifts.findIndex(s => s.day === day && s.shift === shift);
+            if (index !== -1) {
+                const otherShift = this.shifts.find(s => s.day === day && s.shift !== shift);
+                if (otherShift) {
+                    this.shifts.splice(index, 1);
+                    otherShift.shift = 1;
+                }
+            }
+        },
+
+        getNumberShifts(day) {
+            return this.shifts.filter(s => s.day === day).length;
+        },
+
+        addShift(day) {
+            this.shifts.push({
+                id_schedule: '',
+                day: day,
+                shift: 2,
+                start_time: "",
+                finish_time: "",
+                id_user: this.user.id
+            });
+        }
+    },
 }
 </script>
 
@@ -73,9 +229,84 @@ export default {
     padding: 5px 15px;
 }
 
-@media screen and (max-width: 768px) { /* Define estilos específicos para pantallas pequeñas */
+.form-custom{
+    width: 100%;
+    padding: 10px;
+    border: none;
+}
+
+.save-button{
+    color: #984eae;
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+.form-custom:focus{
+    outline: none;
+    border-bottom: 1px solid #b48753;
+}
+
+.text-profile-schedule{
+    color: #081733;
+    font-weight: 600;
+    font-family: 'Rubik', sans-serif;
+    margin-left: 10px;
+}
+
+.title-business-info{
+    font-size: 2rem;
+    color: #081733;
+    font-weight: 600;
+    font-family: 'Rubik', sans-serif;
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.delete-shift-btn{
+    cursor: pointer;
+}
+.delete-shift-btn i{
+    color: #b52a2a;
+    font-size: 1.5rem;
+    margin-left: 10px;
+}
+
+.add-shift-btn{
+    cursor: pointer;
+}
+.add-shift-btn i{
+    color: #2ab52a;
+    font-size: 1.5rem;
+    margin-left: 20px;
+}
+
+.divider-schedule{
+    border-top: 1px solid #c6cfc9;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.eye-schedule{
+    color: #081733;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.p-icon{
+    display: none !important;
+}
+
+.title-schedules-profile{
+    color: #081733;
+    font-weight: 500;
+    font-family: 'Rubik', sans-serif;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 768px) { 
     .label-name-user {
-        max-width: 150px; /* Define el ancho máximo del label */
+        max-width: 150px; 
     }
 }
 </style>

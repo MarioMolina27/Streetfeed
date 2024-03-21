@@ -39,7 +39,7 @@
                 <profile-card></profile-card>
 
                 <h3 class="mt-5 ms-3 danger-btn">Cerrar Sessión</h3>
-                <h3 class="mt-4 ms-3 danger-btn fw-bold">Eliminar Cuenta</h3>
+                <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold">Eliminar Cuenta</h3>
             </div>
         </div>
     </div>
