@@ -73,8 +73,12 @@ class MarkerController extends Controller
 
         $mergedList = array_merge($markers->toArray(), $providers->toArray());
 
-        return response()->json( $mergedList
-        );
+        return response()->json($mergedList);
+    }
+
+    public function getMarkersCreatedByUser($id) {
+        $markers = Marker::where('id_user', $id)->get()->count();
+        return response()->json($markers);
     }
 }
 

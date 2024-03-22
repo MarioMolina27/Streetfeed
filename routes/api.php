@@ -24,6 +24,9 @@ Route::get('adress/numberAdress/{type_user}', [AdressController::class, 'getAdre
 Route::get('users/numberUsersByType/{typeUser}', [UserController::class, 'getNumUsersByType']);
 Route::get('delivery/getTotalDeliveries', [DeliveryController::class, 'getTotalDeliveries']);
 Route::get('markers/all', [MarkerController::class, 'getAllMarkers']);
+Route::get('markers/markersByUser/{id}', [MarkerController::class, 'getMarkersCreatedByUser']);
+Route::get('delivery/getDeliveriesByUser/{id}', [DeliveryController::class, 'getNumDeliveriesByUser']);
+Route::get('delivery/getDeliveriesByKgUser/{id}', [DeliveryController::class, 'getDeliveriesByKgUser']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);

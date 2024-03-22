@@ -17,6 +17,7 @@ class DeliveryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public const DELIVERY_KG = 0.5;
     public function index(Request $request)
     {
         
@@ -128,7 +129,7 @@ class DeliveryController extends Controller
     }
 
     public function calculateDeliveryKg(Request $request) {
-        $deliveryKg = 0.5; 
+        $deliveryKg = self::DELIVERY_KG; 
         $deliveryCount = Delivery::get()->where('id_state', 3)->count();
         $kg = $deliveryCount * $deliveryKg;
         return response()->json(['kg' => $kg]);
@@ -153,5 +154,16 @@ class DeliveryController extends Controller
     public function getTotalDeliveries() {
         $deliveries = Delivery::get()->where('id_state', 3)->count();
         return response()->json(['deliveries' => $deliveries]);
+    }
+
+    public function getNumDeliveriesByUser($id) {
+        $deliveries = Delivery::get()->where('id_user', $id)->where('id_state', 3)->count();
+        return response()->json($deliveries);
+    }
+
+    public function getDeliveriesByKgUser($id) {
+        $deliveries = Delivery::get()->where('id_user', $id)->where('id_state', 3)->count();
+        $kg = $deliveries * self::DELIVERY_KG;
+        return response()->json(['kg' => $kg]);
     }
 }

@@ -45,13 +45,12 @@
                                     </div>
                                 </template>
                                 <template v-for="(day, index) in daysOfWeek" :key="index">
-                                    <div class="row mt-3">
-                                        <div class="d-flex flex-row justify-content-center align-items-center">
-                                            <div class="col-4 d-flex flex-row align-items-center">
+                                    <div class="row mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-lg-4 col-12 d-flex flex-row align-items-center">
                                                 <img src="img/Alarmclock.svg" alt="img-first-category-game" class="img-profile-stats" />
                                                 <p class="text-profile-schedule mb-0">{{ day }}</p>
                                             </div>
-                                            <div class="col-7 d-flex flex-row ms-4">
+                                            <div class="col-lg-7 col-12 d-flex flex-row ms-4">
                                                 <template v-if="editingProfile">
                                                     <div class="d-flex flex-column gap-2">
                                                         <template v-for="(shift, shiftIndex) in getNumberShifts(index + 1)">
@@ -75,7 +74,6 @@
                                                     </div>
                                                 </template>
                                             </div>
-                                        </div>
                                     </div>
                                     <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
                                 </template>
@@ -170,7 +168,6 @@ export default {
         },
 
         cancelEditing() {
-            console.log(this.$options.originalSchedules);
             this.shifts = this.$options.originalSchedules;
             this.editingProfile = false;
         },
