@@ -4,7 +4,7 @@
         <div class="provider-card-header mb-4">
           <h2 class="mb-0"><strong>{{delivery[0].provider.nickname}}</strong></h2>
           <div class="d-flex flex-column align-items-end">
-            <button class="collect-delivery-btn" :disabled="!isCollectButtonActive" @click="doCollect">Recoger</button>
+            <button v-if="isCollectButtonActive" class="collect-delivery-btn" :disabled="!isCollectButtonActive" @click="doCollect">Recoger</button>
             <span v-if="areAllDeliveriesHomeless" class="not-open" style="font-size: 12px;">Ya tienes todos los menús recogidos</span> 
           </div>
         </div>
@@ -109,17 +109,7 @@ export default {
     },
     methods: {
         doCollect() {
-          let deliveryIds = this.getIdDeliveriesWithStatusOne();
-          axios.post('api/delivery/do-collect', {
-                deliveryIds: deliveryIds
-            })
-            .then(response => {
-                console.log(response);
-                
-            })
-            .catch(error => {
-                console.log(error);
-            });
+          this.$emit('collectDelivery', this.getIdDeliveriesWithStatusOne());
         },
         getIdDeliveriesWithStatusOne() {
           console.log(this.delivery);
@@ -144,6 +134,7 @@ export default {
     width: 90%;
     border: 2px solid #B48753;
     border-radius: 5px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   }
 
   .provider-card-content {

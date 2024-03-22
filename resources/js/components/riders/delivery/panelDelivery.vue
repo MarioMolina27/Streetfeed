@@ -9,7 +9,7 @@
             <noDelivery></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-            <hasDelivery :asosiationDelivery = asosiationDelivery></hasDelivery>
+            <hasDelivery :asosiationDelivery = asosiationDelivery @isChanging="getDeliveries"></hasDelivery>
         </div>
     </div>
 </div>
@@ -38,6 +38,7 @@ export default{
             this.loading = true;
             axios.get('/api/delivery/get-user-deliveries/4')
                 .then(response => {
+                    this.deliveries = [];
                     this.deliveries = response.data;
                     this.doAssosiations(this.deliveries);
                     this.loading = false;
@@ -48,6 +49,7 @@ export default{
                 });
         },
         doAssosiations(deliveries) {
+            this.asosiationDelivery = {};
             Promise.all(deliveries.map(delivery => {
                 const provider = delivery.menu.user;
 

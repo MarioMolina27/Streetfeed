@@ -12,7 +12,7 @@
         </div>
     </div>
     <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery"></mapDelivery>
-    <listDelivery v-else :deliveries="asosiationDelivery"></listDelivery>
+    <listDelivery v-else :deliveries="asosiationDelivery" @isChanging="this.$emit('isChanging')"></listDelivery>
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
     },
     data(){
         return {
-            selectedOption: 'Map',
+            selectedOption: 'List',
             delivery: {}
         }
     },

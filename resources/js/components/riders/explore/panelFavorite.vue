@@ -2,9 +2,9 @@
     <div class="container-fluid ps-0 pe-0">
         <Navbar :menuItems = 'menuItems'></Navbar>
         <div class="favorite-container">
-            <div v-if="loading">
-                Cargando...
-            </div>
+            <template v-if="loading ||!loadingFinished">
+                <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
+            </template>
             <div v-else-if="favoriteProviders.length === 0" class="favorite-call-action">
                 <h1 class="mt-5 mb-4 font-weight-bold">¿Ningún favorito todavía?</h1>
                 <p class="fs-5">Haz clic en el corazón para añadir tus favoritos y tenerlos siempre a mano en esta sección.</p>
@@ -44,12 +44,14 @@
 
 <script>
 import Navbar from '../../shared/Navbar.vue';
+import loader from '../../shared/loader.vue';
 import favoriteCard from './favoriteCard.vue';
 import Skeleton from 'primevue/skeleton';
 export default{
     data(){
       return {
         loading: true,
+        loadingFinished: false,
         favoriteProviders: [],
         menuItems: [
                 {name: 'Tus Repartos', href: './delivery'},
@@ -76,10 +78,14 @@ export default{
         },
         goExplore() {
             window.location.href = './delivery';
-        }
+        },
+        handleLoadingFinished() {
+           this.loadingFinished = true;
+        } 
     },
     components: {
         Navbar,
+        loader,
         favoriteCard,
         Skeleton
     }
