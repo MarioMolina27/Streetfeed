@@ -77,7 +77,7 @@ export default{
                 });
         },
         goExplore() {
-            window.location.href = './delivery';
+            window.location.href = './explore';
         },
         handleLoadingFinished() {
            this.loadingFinished = true;

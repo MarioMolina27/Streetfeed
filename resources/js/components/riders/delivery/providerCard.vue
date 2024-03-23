@@ -3,10 +3,8 @@
       <div class="provider-card-content" style="flex: 1;">
         <div class="provider-card-header mb-4">
           <h2 class="mb-0"><strong>{{delivery[0].provider.nickname}}</strong></h2>
-          <div class="d-flex flex-column align-items-end">
-            <button v-if="isCollectButtonActive" class="collect-delivery-btn" :disabled="!isCollectButtonActive" @click="doCollect">Recoger</button>
-            <span v-if="areAllDeliveriesHomeless" class="not-open" style="font-size: 12px;">Ya tienes todos los menús recogidos</span> 
-          </div>
+          <button v-if="isCollectButtonActive" class="collect-delivery-btn" :disabled="!isCollectButtonActive" @click="doCollect">Recoger</button>
+          <span v-if="!isWithinSchedule" class="not-open ms-5" style="font-size: 15px; text-align: end;">El recinto se encuentra cerrado</span> 
         </div>
         <div class="provider-card-body row gx-3 ps-0">
           <div class="col-lg-6 col-sm-12">
@@ -27,14 +25,14 @@
               </div>
           </div>
           <div class="col-lg-1 col-4 d-flex justify-content-end">
-              <div class="button-chat ">
+              <div v-if="isChatAvailable" class="button-chat ">
                 <i class="fa-solid fa-comment" style="color: #FDF8EB;"></i>
               </div>
           </div>
         </div>
         <div class="d-flex justify-content-center flex-column">
             <template v-for="homeless in delivery">
-                <markerCard :homeless="homeless.homeless"></markerCard>
+                <markerCard :homeless="homeless.homeless" @notifyDeliver="notifyDeliver"></markerCard>
             </template>
         </div>
         
@@ -103,16 +101,21 @@ export default {
             return currentTime >= startTime && currentTime <= finishTime;
         }
         return false;
+      },
+      isChatAvailable() {
+        for (let i = 0; i < this.delivery.length; i++) {
+            if (this.delivery[i].homeless.status === 1) {
+                return true;
+            }
+        }
       }
-    },
-    mounted(){
+      
     },
     methods: {
         doCollect() {
           this.$emit('collectDelivery', this.getIdDeliveriesWithStatusOne());
         },
         getIdDeliveriesWithStatusOne() {
-          console.log(this.delivery);
             let ids = [];
             for (let i = 0; i < this.delivery.length; i++) {
                 if (this.delivery[i].homeless.status === 1) {
@@ -120,6 +123,9 @@ export default {
                 }
             }
             return ids;
+        },
+        notifyDeliver(idDelivery) {
+          this.$emit('notifyDeliver', idDelivery);
         }
     },
     components: {

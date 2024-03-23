@@ -1,18 +1,18 @@
 <template>
     <div class="switches-container">
-        <input type="radio" id="switchMap" name="switchPlan" value="Map" v-model="selectedOption" />
         <input type="radio" id="switchList" name="switchPlan" value="List" v-model="selectedOption" />
-        <label for="switchMap" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'List' }">Mapa</label>
+        <input type="radio" id="switchMap" name="switchPlan" value="Map" v-model="selectedOption" />
         <label for="switchList" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'Map' }">Lista</label>
+        <label for="switchMap" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'List' }">Rutas</label>
         <div class="switch-wrapper">
         <div class="switch">
-            <div>Mapa</div>
             <div>Lista</div>
+            <div>Rutas</div>
         </div>
         </div>
     </div>
     <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery"></mapDelivery>
-    <listDelivery v-else :deliveries="asosiationDelivery" @isChanging="this.$emit('isChanging')"></listDelivery>
+    <listDelivery v-else :deliveries="asosiationDelivery" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></listDelivery>
 </template>
 
 <script>
@@ -31,7 +31,14 @@ export default {
     mounted(){
     },
     methods: {
+        emitIsChanging(deliveryIds) {
+            this.$emit('isChanging', deliveryIds);
+        },
+        notifyDeliver(deliveryId) {
+            this.$emit('notifyDeliver', deliveryId);
+        }
     },
+    emits: ['isChanging', 'notifyDeliver'],
     components: {
         mapDelivery,
         listDelivery
@@ -49,7 +56,6 @@ export default {
         position: relative;
         display: flex;
         padding: 0;
-        position: relative;
         background: #FDF8EB;
         border: 2px solid #081733;
         line-height: 3rem;

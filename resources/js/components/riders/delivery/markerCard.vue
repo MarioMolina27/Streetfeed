@@ -1,16 +1,13 @@
 <template>
-    <div class="homeless-card" style="margin-top: 10px; display: flex;">
+    <div class="homeless-card" :class="{ 'collapsed': isCollapsed }">
       <div class="homeless-card-content" style="flex: 1;">
         <div class="homeless-card-sections">
           <div>
             <span>Reparto</span>
             <p class="p-border-bottom"><strong>{{homeless.idDelivery}}</strong></p>
           </div>
-          <div class="d-flex flex-column align-items-end">
-              <button class="deliver-btn" :disabled="!isDeliverButtonActive" @click="doDeliver">Entregar</button>
-              <span v-if="!isDeliverButtonActive" class="info not-active-info">Antes recoge el menú</span>
-              <span v-if="isDeliverButtonActive" class="info active-info">Listo para repartir</span>
-          </div>
+          <button v-if="isDeliverButtonActive" class="deliver-btn" :disabled="!isDeliverButtonActive" @click="doDeliver">Entregar</button>
+          <p v-else class="info not-active-info ms-5" style="font-size: 13px; text-align: end;">Antes recoge el menú</p>
         </div>
         <div class="homeless-card-sections">
           <div>
@@ -30,6 +27,11 @@ export default {
     props: {
       homeless: Object
     },
+    data() {
+      return {
+        isCollapsed: false
+      }
+    },
     computed: {
       isDeliverButtonActive() {
         return this.homeless.status === 2;
@@ -38,11 +40,16 @@ export default {
     methods: {
       doDeliver() {
         axios.post('api/delivery/do-deliver', {
-                deliveryId: this.homeless.idDelivery
+              deliveryId: this.homeless.idDelivery
             })
             .then(response => {
-                console.log(response);
-                
+                if (response.status == 200) {
+                  this.isCollapsed = true;
+                  setTimeout(() => {
+                    this.$emit('notifyDeliver', this.homeless.idDelivery);
+                    this.isCollapsed = false;
+                  }, 1000);
+                }
             })
             .catch(error => {
                 console.log(error);
@@ -63,8 +70,13 @@ export default {
     background-color: #984eae3d;
     border-radius: 5px;
     overflow: hidden;
+    margin-top: 10px; 
+    display: flex;
+    transition: all 0.5s ease;
   }
-
+  .collapsed {
+    opacity: 0;
+  }
   .homeless-card-content {
       padding: 10px;
   }

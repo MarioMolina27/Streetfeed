@@ -1,7 +1,7 @@
 <template>
     <div class="list-container">
         <template v-for="delivery in deliveries">
-            <providerCard :delivery="delivery" @collectDelivery="doCollect"></providerCard>
+            <providerCard :delivery="delivery" @collectDelivery="doCollect" @notifyDeliver="notifyDeliver"></providerCard>
             <div v-if="isScanning" class="scanner-container">
                 <qrScanner :deliveryIds="deliveryIds" @closeFrame="closeFrame"></qrScanner>
             </div>
@@ -32,8 +32,11 @@ export default {
         closeFrame(isChanging) {
             this.isScanning = false;
             if (isChanging) {
-                this.$emit('isChanging');
+                this.$emit('isChanging', this.deliveryIds);
             }
+        },
+        notifyDeliver(deliveryId) {
+            this.$emit('notifyDeliver', deliveryId);
         }
     },
     components: {

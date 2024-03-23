@@ -1,10 +1,10 @@
 <template>
   <div class="container-fluid ps-0 pe-0">
     <Navbar :menuItems = 'menuItems'></Navbar>
-    <div class="explore-container">
-      <template v-if="loading ||!loadingFinished">
+    <template v-if="loading ||!loadingFinished">
         <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
-      </template>
+    </template>
+    <div v-else class="explore-container">
       <div v-if="nearProviders.length != 0" class="provider-container">
         <h2>Descubre a tus proveedores más cercanos</h2>
         <div class="card-container d-flex flex-nowrap">
@@ -90,6 +90,7 @@ export default{
 body {
   background-color: #FDF8EB;
 }
+
 .explore-container {
   display: flex;
   flex-direction: column;

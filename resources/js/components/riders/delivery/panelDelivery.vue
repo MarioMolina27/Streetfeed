@@ -1,15 +1,15 @@
 <template>
 <div class="container-fluid ps-0 pe-0">
     <Navbar :menuItems = 'menuItems'></Navbar>
-    <div class="delivery-container">
-        <div v-if="loading">
-                Cargando...
-        </div>
-        <div v-else-if="deliveries.length === 0" class="delivery-call-action">
+    <template v-if="loading ||!loadingFinished">
+        <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
+    </template>
+    <div v-else class="delivery-container">
+        <div v-if="deliveries.length === 0" class="delivery-call-action">
             <noDelivery></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-            <hasDelivery :asosiationDelivery = asosiationDelivery @isChanging="getDeliveries"></hasDelivery>
+            <hasDelivery :asosiationDelivery = asosiationDelivery @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
         </div>
     </div>
 </div>
@@ -19,6 +19,7 @@
 import Navbar from '../../shared/Navbar.vue';
 import noDelivery from './noDelivery.vue';
 import hasDelivery from './hasDelivery.vue';
+import loader from '../../shared/loader.vue';
 export default{
     data(){
       return {
@@ -28,7 +29,8 @@ export default{
                 {name: 'Favoritos', href: './favorite'},
                 {name: 'Perfil', href: './profile'}
             ],
-        loading: false,
+        loading: true,
+        loadingFinished: false,
         deliveries: [],
         asosiationDelivery: {}
       }
@@ -116,6 +118,40 @@ export default{
                         reject(error);
                     });
             });
+        },
+        handleLoadingFinished() {
+           this.loadingFinished = true;
+        },
+        onChangeDeliveries(deliveryIds) {
+            for (const assosiation in this.asosiationDelivery) {
+                if (this.asosiationDelivery.hasOwnProperty(assosiation)) {
+                    const providers = this.asosiationDelivery[assosiation];
+                    for (const provider of providers) {
+                        if (deliveryIds.includes(provider.homeless.idDelivery)) {
+                            provider.homeless.status = 2;
+                        }
+                    }
+                }
+            }
+        },
+        notifyDeliver(deliveryId) {
+            for (const assosiation in this.asosiationDelivery) {
+                if (this.asosiationDelivery.hasOwnProperty(assosiation)) {
+                    const providers = this.asosiationDelivery[assosiation];
+                    const remainingProviders = providers.filter(provider => {
+                        return provider.homeless.idDelivery !== deliveryId;
+                    });
+
+                    if (remainingProviders.length === 0) {
+                        delete this.asosiationDelivery[assosiation];
+                    } else {
+                        this.asosiationDelivery[assosiation] = remainingProviders;
+                    }
+                }
+            }
+            if (Object.keys(this.asosiationDelivery).length === 0) {
+                this.deliveries = [];
+            }
         }
     },
     mounted(){
@@ -124,7 +160,8 @@ export default{
     components: {
         Navbar,
         noDelivery,
-        hasDelivery
+        hasDelivery,
+        loader
     }
 }
 </script>

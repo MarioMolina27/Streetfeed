@@ -1,7 +1,6 @@
 <template>
     <div class="map-container">
         <div id="map" style="position: relative;"></div>
-
     </div>
 </template>
 
@@ -19,10 +18,10 @@ export default{
             mapStyle: "mapbox://styles/mapbox/light-v11",
             defaultLocation: { lat: 41.388752, lng: 2.17271 },
             userCurrentLocation: { latitude: null, longitude: null },
+            userMarker: null,
         }
     },
     mounted(){
-        console.log('Deliveries:', this.deliveries);
         mapboxgl.accessToken = this.accessToken;
         this.map = new mapboxgl.Map({
             container: 'map',
@@ -34,18 +33,25 @@ export default{
         this.askForLocation();
     },
     methods: {
-        addMarker(coordinates, color, isUser) {
-            if (isUser) {
-                const userMarker = document.createElement('i');
-                userMarker.className = 'fa-solid fa-location-arrow';
-                userMarker.style.fontSize = '2.5rem';
-                new mapboxgl.Marker({ element: userMarker  })
-                    .setLngLat(coordinates)
-                    .addTo(this.map);
+        addMarker(coordinates, color) {
+            new mapboxgl.Marker({ color })
+                .setLngLat(coordinates)
+                .addTo(this.map);
+        },
+        addUserMarker(coordinates) {
+            const el = document.createElement('div');
+            el.className = 'pulse';
+            this.userMarker = new mapboxgl.Marker({element : el})
+                .setLngLat(coordinates)
+                .addTo(this.map);
+            el.style.animation = 'pulseAnimation 2s infinite';
+        },
+
+        updateUserMarker(coordinates) {
+            if (!this.userMarker) {
+                this.addUserMarker(coordinates);                
             } else {
-                new mapboxgl.Marker({ color })
-                    .setLngLat(coordinates)
-                    .addTo(this.map);
+                this.userMarker.setLngLat(coordinates);
             }
         },
         creatingMarkers() {
@@ -72,26 +78,12 @@ export default{
         askForLocation() {
             return new Promise((resolve, reject) => {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
+                    navigator.geolocation.watchPosition(
                         position => {
-                            // const handleOrientation = event => {
-                            //     // Acceder a los ángulos de inclinación, balanceo y orientación
-                            //     const alpha = event.alpha; // Orientación alrededor del eje z
-                            //     const beta = event.beta;   // Inclinación hacia adelante y hacia atrás
-                            //     const gamma = event.gamma; // Inclinación hacia la izquierda y hacia la derecha
-
-                            //     // Hacer algo con los ángulos obtenidos
-                            //     console.log('alpha (orientación): ' + alpha);
-                            //     console.log('beta (inclinación hacia adelante/atrás): ' + beta);
-                            //     console.log('gamma (inclinación hacia izquierda/derecha): ' + gamma);
-                            // };
-                            // if (window.DeviceOrientationEvent) {
-                            //     window.addEventListener('deviceorientation', handleOrientation, false);
-                            // }
                             if (position && position.coords) {
                                 this.userCurrentLocation.latitude = position.coords.latitude;
                                 this.userCurrentLocation.longitude = position.coords.longitude;
-                                this.addMarker([this.userCurrentLocation.longitude, this.userCurrentLocation.latitude], 'red', true);
+                                this.updateUserMarker([this.userCurrentLocation.longitude, this.userCurrentLocation.latitude]);
                                 resolve();
                             } else {
                                 console.error('No se pudo obtener la ubicación del usuario');
@@ -113,7 +105,7 @@ export default{
 }
 </script>
 
-<style scoped>
+<style>
     .map-container {
         position: absolute;
         top: 10vh;
@@ -125,4 +117,24 @@ export default{
         width: 100%;
         height: 100%;
     }
+    .pulse {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #4381ee;
+        opacity: 0.5;
+    }
+    @keyframes pulseAnimation {
+    0% { opacity: 0.5; border: 2px solid rgba(142, 202, 230, 0.3); }
+    10% { opacity: 0.6; border: 2px solid rgba(142, 202, 230, 0.3); }
+    20% { opacity: 0.7; border: 2px solid rgba(142, 202, 230, 0.3); }
+    30% { opacity: 0.8; border: 2px solid rgba(142, 202, 230, 0.3); }
+    40% { opacity: 0.9; border: 2px solid rgba(142, 202, 230, 0.3); }
+    50% { opacity: 1; border: 4px solid rgba(142, 202, 230, 0.7); }
+    60% { opacity: 0.9; border: 4px solid rgba(142, 202, 230, 0.7); }
+    70% { opacity: 0.8; border: 4px solid rgba(142, 202, 230, 0.7); }
+    80% { opacity: 0.7; border: 4px solid rgba(142, 202, 230, 0.7); }
+    90% { opacity: 0.6; border: 4px solid rgba(142, 202, 230, 0.7); }
+    100% { opacity: 0.5; border: 2px solid rgba(142, 202, 230, 0.3); }
+}
 </style>

@@ -229,11 +229,10 @@ class DeliveryController extends Controller
     }
     public function doDeliver(Request $request) {
         $deliveryId = $request->input('deliveryId');
-
         try {
             $delivery = Delivery::find($deliveryId);
             $delivery->id_state = 3;
-            $delivery->end_time = now();
+            $delivery->finish_time = now();
             $delivery->save();
             return response()->json(['message' => 'Entrega realizada correctamente'], 200);
         } catch (\Exception $e) {

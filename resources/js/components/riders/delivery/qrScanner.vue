@@ -46,13 +46,18 @@
                     deliveryIds: this.deliveryIds
                 })
                 .then(response => {
-                    this.animateConfirm();
+                    if (response.status == 200) {
+                        this.animateConfirm();
+                    } else {
+                        this.animateError();
+                    }
                     setTimeout(() => {
                         this.stopAnimation();
                         this.notifyToCloseFrame(true);
                     }, 2000);
                 })
                 .catch(error => {
+                    console.error('Error al recoger el reparto:', error);
                     this.animateError();
                     setTimeout(() => {
                         this.stopAnimation();
