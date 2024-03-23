@@ -1,7 +1,7 @@
 <template>
     <div class="switches-container">
-        <input type="radio" id="switchList" name="switchPlan" value="List" v-model="selectedOption" />
-        <input type="radio" id="switchMap" name="switchPlan" value="Map" v-model="selectedOption" />
+        <input type="radio" id="switchList" name="switchPlan" value="List" v-model="selectedOption"/>
+        <input type="radio" id="switchMap" name="switchPlan" value="Map" v-model="selectedOption"/>
         <label for="switchList" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'Map' }">Lista</label>
         <label for="switchMap" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'List' }">Rutas</label>
         <div class="switch-wrapper">
@@ -36,7 +36,7 @@ export default {
         },
         notifyDeliver(deliveryId) {
             this.$emit('notifyDeliver', deliveryId);
-        }
+        },
     },
     emits: ['isChanging', 'notifyDeliver'],
     components: {

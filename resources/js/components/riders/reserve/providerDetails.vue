@@ -71,10 +71,10 @@ export default{
         provider: [],
         menus: [],
         menuItems: [
-            {name: 'Tus Repartos', href: '/'},
-            {name: 'Explorar', href: '../delivery'},
+            {name: 'Tus Repartos', href: '../delivery'},
+            {name: 'Explorar', href: '../explore'},
             {name: 'Favoritos', href: '../favorite'},
-            {name: 'Perfil', href: '/profile'}
+            {name: 'Perfil', href: '../profile'}
         ],
         loading: true,
         loadingFinished: false,
