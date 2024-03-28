@@ -16,15 +16,19 @@
         <div class="button-center-map" @click="centerMap">
             <i class="fa-solid fa-location-crosshairs" style="color: #FDF8EB;"></i>
         </div>
+        <div v-if="isScanning" class="scanner-container">
+            <qrScanner :deliveryIds="deliveryIds" @closeFrame="closeFrame"></qrScanner>
+        </div>
     </div>
 </template>
 
 <script>
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import qrScanner from './qrScanner.vue';
 export default{
     props: {
-        deliveries: Object
+        deliveries: Object,
     },
     data(){
         return {
@@ -38,6 +42,68 @@ export default{
             selectedProfile: 'walking',
             routeDuration: null,
             coordinates: [],
+            isScanning: false,
+            deliveryIds: [],
+            isDelivered: false,
+            delivery: [],
+            collectMarkerButton: null
+        }
+    },
+    computed: {
+        isCollectButtonActive() {
+            if (!this.areAllDeliveriesHomeless && this.isWithinSchedule) {
+                return true;
+            }
+            return false;
+        },
+        areAllDeliveriesHomeless() {
+            let allDeliveriesHomeless = true;
+            let i = 0;
+            while (i < this.delivery.length && allDeliveriesHomeless) {
+                if (this.delivery[i].homeless.status !== 2) {
+                    allDeliveriesHomeless = false;
+                }
+                i++;
+            }
+            return allDeliveriesHomeless;
+        },
+        isWithinSchedule() {
+            if (this.delivery.length > 0 && this.delivery[0].provider.schedules.length > 0) {
+                const currentDate = new Date();
+                const [startHours, startMinutes, startSeconds] = this.closestSchedule.start_time.split(':');
+                currentDate.setHours(parseInt(startHours));
+                currentDate.setMinutes(parseInt(startMinutes));
+                currentDate.setSeconds(parseInt(startSeconds));
+                const startTime = currentDate.getTime();
+
+                const [finishHours, finishMinutes, finishSeconds] = this.closestSchedule.finish_time.split(':');
+                currentDate.setHours(parseInt(finishHours));
+                currentDate.setMinutes(parseInt(finishMinutes));
+                currentDate.setSeconds(parseInt(finishSeconds));
+                const finishTime = currentDate.getTime();
+
+                const currentTime = new Date().getTime();
+                return currentTime >= startTime && currentTime <= finishTime;
+            }
+            return false;
+        },
+        closestSchedule() {
+            if (this.delivery[0].provider.schedules.length === 0) return null;
+
+            let currentTime = new Date().getTime();
+            let closest = this.delivery[0].provider.schedules[0];
+            let closestDiff = Math.abs(currentTime - new Date("1970-01-01T" + closest.start_time).getTime());
+
+            for (let i = 1; i < this.delivery[0].provider.schedules.length; i++) {
+            let scheduleTime = new Date("1970-01-01T" + this.delivery[0].provider.schedules[i].start_time).getTime();
+            let diff = Math.abs(currentTime - scheduleTime);
+
+            if (diff < closestDiff) {
+                closest = this.delivery[0].provider.schedules[i];
+                closestDiff = diff;
+            }
+            }
+            return closest;
         }
     },
     mounted(){
@@ -55,10 +121,98 @@ export default{
         this.stopWatchingLocation();
     },
     methods: {
-        addMarker(coordinates, color) {
-            new mapboxgl.Marker({ color })
+        addMarker(coordinates, color, info, type) {
+            const marker = new mapboxgl.Marker({ color })
                 .setLngLat(coordinates)
                 .addTo(this.map);
+            if (info !== null) {
+                if (type === 'provider') {
+                    const popupContent = `
+                        <div class="mb-2" style="text-align: center;">
+                            <strong class="fs-3" style="color: #B48753; margin-right: 10px;">${info.nickname}</strong>
+                            <i class="fa-solid fa-store fs-4"></i>
+                        </div>
+                        ${this.isCollectButtonActive ? `<button id="popup-button-${info.id_user}" class="btn" style="background-color:#B48753; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Recoger</button>` : ''}
+                    `;
+                    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false }).setHTML(popupContent);
+                    marker.setPopup(popup);
+                    popup.once('open', () => {
+                        const popupButton = document.getElementById(`popup-button-${info.id_user}`);
+                        if (popupButton) {
+                            popupButton.addEventListener('click', e => { 
+                                this.collectMenus(info.id_user) });
+                                console.log('Click en el botón:', info);
+                        } else {
+                            console.error('Elemento con ID popup-button no encontrado.');
+                        }
+                    });
+                    marker.togglePopup();
+                } else {
+                    const popupContent = `
+                        <div class="mb-2" style="text-align: center;">
+                            <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${info.numDeliveries}</strong>
+                            <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
+                        </div>
+                        <button id="popup-button-${info.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Entrega</button>
+                    `;
+                    
+                    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false }).setHTML(popupContent);
+                    marker.setPopup(popup);
+                    popup.once('open', () => {
+                        const popupButton = document.getElementById(`popup-button-${info.id_marker}`);
+                        if (popupButton) {
+                            popupButton.addEventListener('click', e => { 
+                                this.deliverMenus(info) });
+                                console.log('Click en el botón:', info);
+                        } else {
+                            console.error('Elemento con ID popup-button no encontrado.');
+                        }
+                    });
+                    marker.togglePopup();
+                }   
+            }
+            marker.getElement().addEventListener('mouseenter', () => {
+                marker.getElement().style.cursor ="pointer";
+            });
+
+            marker.getElement().addEventListener('mouseleave', () => {
+                marker.getElement().style.cursor ="default";
+            });            
+        },
+        collectMenus(idProvider) {
+            this.isScanning = true;
+            this.collectMarkerButton = document.getElementById(`popup-button-${idProvider}`);
+        },
+        closeFrame(isChanging) {
+            this.isScanning = false;
+            if (isChanging) {
+                this.$emit('isChanging', this.deliveryIds);
+                this.collectMarkerButton.style.display = 'none';
+            }
+            this.collectMarkerButton = null;
+        },
+        deliverMenus(homelessMarker) {            
+            const relatedDeliveries = Object.values(this.deliveries).flat().filter(delivery => {
+                return delivery.homeless.id_marker === homelessMarker.id_marker;
+            });
+
+            relatedDeliveries.forEach(delivery => {
+                if(delivery.homeless.status === 2) {
+                    const idDelivery = delivery.homeless.idDelivery;
+                    axios.post('api/delivery/do-deliver', {
+                        deliveryId: idDelivery
+                    })
+                    .then(response => {
+                        if (response.status == 200) {
+                            this.isDelivered = true;
+                            this.$emit('notifyDeliver', idDelivery);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                }
+            });
         },
         addUserMarker(coordinates) {
             const el = document.createElement('div');
@@ -78,21 +232,32 @@ export default{
         },
         creatingMarkers() {
             const processedProviders = {};
-
+            this.deliveryIds = [];
             for (const provider in this.deliveries) {
                 if (this.deliveries.hasOwnProperty(provider)) {
+                    this.delivery = this.deliveries[provider];
                     if (!processedProviders.hasOwnProperty(provider)) {
                         const providerInfo = this.deliveries[provider][0].provider;
 
-                        this.addMarker([providerInfo.longitude, providerInfo.latitude], '#B48753', false);
+                        this.addMarker([providerInfo.longitude, providerInfo.latitude], '#B48753', providerInfo, 'provider');
 
                         processedProviders[provider] = true;
                     }
-
+                    const processedMarkersDelivery = {};
                     this.deliveries[provider].forEach(delivery => {
-                        const deliveryLocation = delivery.homeless;
-
-                        this.addMarker([deliveryLocation.longitude, deliveryLocation.latitude], '#984EAE', false);
+                    
+                        const deliveryInfo = delivery.homeless;
+                        const idMarker = deliveryInfo.id_marker;
+                        if (deliveryInfo.status === 1) {
+                                this.deliveryIds.push(deliveryInfo.idDelivery);
+                            }
+                        if (!(idMarker in processedMarkersDelivery)) {
+                            const numDeliveries = this.deliveries[provider].filter(del => del.homeless.id_marker === idMarker).length;
+                            deliveryInfo.numDeliveries = numDeliveries;
+                            
+                            this.addMarker([deliveryInfo.longitude, deliveryInfo.latitude], '#984EAE', deliveryInfo, 'homeless');
+                            processedMarkersDelivery[idMarker] = true;
+                        }
                     });
                 }
             }
@@ -107,7 +272,6 @@ export default{
                                 this.userCurrentLocation.longitude = position.coords.longitude;
                                 this.updateUserMarker([this.userCurrentLocation.longitude, this.userCurrentLocation.latitude]);
                                 this.createRoute(this.selectedProfile);
-                                this.centerMap();
                                 resolve();
                             } else {
                                 console.error('No se pudo obtener la ubicación del usuario');
@@ -178,6 +342,9 @@ export default{
         centerMap() {
             this.map.setCenter([this.userCurrentLocation.longitude, this.userCurrentLocation.latitude]);
         },
+    },
+    components: {
+        qrScanner
     }
 }
 </script>
@@ -269,5 +436,12 @@ export default{
     .button-center-map:hover {
         background-color: #b17a3b;
         transform: scale(1.01);
+    }
+    .scanner-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
     }
 </style>

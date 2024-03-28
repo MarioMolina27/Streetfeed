@@ -11,7 +11,7 @@
         </div>
         </div>
     </div>
-    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery"></mapDelivery>
+    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></mapDelivery>
     <listDelivery v-else :deliveries="asosiationDelivery" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></listDelivery>
 </template>
 
