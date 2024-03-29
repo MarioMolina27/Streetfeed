@@ -39,10 +39,10 @@ export default {
     data() {
         return {
             menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
+                {name: 'Tus Repartos', href: '../delivery'},
+                {name: 'Explorar', href: '../explore'},
+                {name: 'Favoritos', href: '../favorite'},
+                {name: 'Perfil', href: '../profile'}
             ],
             map: null,
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
