@@ -66,7 +66,6 @@ export default {
         return closest;
       },
       isCollectButtonActive() {
-        console.log(this.delivery)
         if (!this.areAllDeliveriesHomeless && this.isWithinSchedule) {
             return true;
         }
