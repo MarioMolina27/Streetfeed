@@ -9,7 +9,7 @@
                             <template #content>
                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                     <img src="img/bag.svg" alt="Card" class="img-profile-stats"/>
-                                    <p class="mb-0 mt-1 text-profile-stats">23</p>
+                                    <p class="mb-0 mt-1 text-profile-stats">{{this.deliveriesUser}}</p>
                                 </div>
                             </template>
                         </Card>
@@ -19,7 +19,7 @@
                             <template #content>
                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                     <img src="img/cloud.png" alt="Card" class="img-profile-stats"/>
-                                    <p class="mb-0 mt-1 text-profile-stats">7kg</p>
+                                    <p class="mb-0 mt-1 text-profile-stats">{{this.kgUser}}kg</p>
                                 </div>
                             </template>
                         </Card>
@@ -29,7 +29,7 @@
                             <template #content>
                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                     <img src="img/marker.svg" alt="Card" class="img-profile-stats" />
-                                    <p class="mb-0 mt-1 text-profile-stats">23</p>
+                                    <p class="mb-0 mt-1 text-profile-stats">{{this.markersByUser}}</p>
                                 </div>
                             </template>
                         </Card>
@@ -50,6 +50,9 @@
     import Card from 'primevue/card';
     import topProfile from './topProfile.vue';
     import profileCard from './profileCard.vue';
+    import { getDeliveriesByUser, getDeliveriesByKgUser } from "../../../services/delivery.js"
+    import { markersByUser } from "../../../services/markers.js"
+
 
     export default{
         data(){
@@ -59,7 +62,13 @@
                     {name: 'Explorar', href: './explore'},
                     {name: 'Favoritos', href: './favorite'},
                     {name: 'Perfil', href: './profile'}
-                ]
+            ],
+            deliveriesUser: 0,
+            markersByUser: 0,
+            kgUser: 0,
+            user: {
+                id_user: 4
+            }
           }
         },
         components: {
@@ -67,7 +76,25 @@
             Card,
             topProfile,
             profileCard,
-        }
+        },
+        mounted() {
+            getDeliveriesByUser(this.user.id_user).
+            then((response) => {
+                this.deliveriesUser = response;
+            })
+
+            markersByUser(this.user.id_user).
+            then((response) => {
+                console.log(response)
+                this.markersByUser = response;
+            })
+
+            getDeliveriesByKgUser(this.user.id_user).
+            then((response) => {
+                this.kgUser = response.kg;
+            })
+
+        },
     }
     </script>
     

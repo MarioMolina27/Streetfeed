@@ -1,9 +1,10 @@
 <template>
     <div class="container">
         <div class="progressBar">
-        <div class="container-step active d-flex flex-column">
+        <div class="container-step d-flex flex-column" :class="{ 'active': deliveriesUser >= 0 && deliveriesUser <= 5 }">
             <div class="circle">
-                <img src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
+                <img v-if="this.deliveriesUser >= 0 && this.deliveriesUser <= 5" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
+                <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
             <p class="step-text">0-5 repartos</p> 
         </div>
@@ -12,9 +13,10 @@
             <div class="line mt-2"></div> 
         </div>
 
-        <div class="container-step d-flex flex-column">
+        <div class="container-step d-flex flex-column" :class="{ 'active': deliveriesUser >= 5 && deliveriesUser <= 20 }">
             <div class="circle">
-                <img src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
+                <img v-if="this.deliveriesUser >=5 && this.deliveriesUser <=20" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
+                <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
             <p class="step-text">5-20 repartos</p> 
         </div>
@@ -22,15 +24,38 @@
         <div>
             <div class="line mt-2"></div> 
         </div>
-        <div class="container-step d-flex flex-column">
+
+        <div class="container-step d-flex flex-column" :class="{ 'active': deliveriesUser > 20 }">
             <div class="circle">
-                <img src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
+                <img v-if="this.deliveriesUser >20" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
+                <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
             <p class="step-text">+20 repartos</p> 
         </div>
     </div>
     </div>
 </template>
+
+<script>
+import { getDeliveriesByUser } from "../../../services/delivery.js"
+
+export default {
+    data() {
+        return {
+            deliveriesUser: 0,
+            user: {
+                id_user: 4
+            }
+        }
+    },
+    mounted() {
+        getDeliveriesByUser(this.user.id_user).
+        then((response) => {
+            this.deliveriesUser = response;
+        })
+    }
+}
+</script>
 
 <style scoped>
 .progressBar {
@@ -56,7 +81,6 @@
     background: #b48753;
 }
 
-/* Styling for the circles */
 .circle {
     border-radius: 50%; 
     border: 2px solid #b48753;

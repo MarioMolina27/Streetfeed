@@ -77,7 +77,7 @@ class MarkerController extends Controller
     }
 
     public function getMarkersCreatedByUser($id) {
-        $markers = Marker::where('id_user', $id)->get()->count();
+        $markers = Marker::where('id_user_created', $id)->get()->count();
         return response()->json($markers);
     }
 }
