@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\Adress;
 use App\Models\Type_User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 
 class AdressController extends Controller
@@ -77,5 +78,10 @@ class AdressController extends Controller
             return $adress->count();
         });
        return response()->json($adress);
+    }
+
+    public function getAdressesByUser(Request $request, User $user){
+        $adresses = Adress::where('id_user', $user->id_user)->get();
+        return response()->json($adresses);
     }
 }

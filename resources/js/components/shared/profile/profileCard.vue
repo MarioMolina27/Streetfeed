@@ -2,7 +2,7 @@
     <div class="mt-5">
         <Card>
             <template #content>
-                <form>
+                <form ref="profileForm" @submit.prevent="handleSubmit">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
@@ -10,7 +10,7 @@
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
-                            <div @click="editingProfile=false" class="ms-2">
+                            <div @click="handleSubmitForm" class="ms-2">
                                 <i class="fa fa-check save-button"></i>
                             </div>
                             <div @click="cancelEditing()">
@@ -93,6 +93,8 @@ import Tooltip from 'primevue/tooltip';
 import Calendar from 'primevue/calendar';
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
+import { getScheduleByUser } from '../../../services/schedules.js';
+import { getAdressByUser } from '../../../services/adress.js';
 
 
 
@@ -108,58 +110,33 @@ export default {
     },
 
     mounted() {
-        this.$options.originalSchedules = [...[
-                        { id_schedule: 2, day: 1, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
-                        { id_schedule: 3, day: 2, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
-                        { id_schedule: 4, day: 2, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 5, day: 3, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 6, day: 3, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 7, day: 4, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 8, day: 4, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 9, day: 5, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 10, day: 5, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 11, day: 6, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 12, day: 6, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 13, day: 7, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 14, day: 7, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 }
-            ]]
+        getScheduleByUser(this.user.id).then((response) => {
+            this.$options.originalSchedules = [...response]
+            this.shifts = response;
+        });
+
+        getAdressByUser(this.user.id).then((response) => {
+            this.directions = response;
+        });
     },
 
     data(){
         return{
             user: {
-                id: 4,
+                id: 9,
                 name: 'Pol Crespo',
                 username: '@pcrespo',
                 email: 'pcrespo@politecnics.barcelona',
                 id_type_user: 2,
             },
 
-            directions: [
-               {
-                id: 1,
-                direction: 'Carrer de la Llacuna, 162, 08018 Barcelona, España'
-               },
-            ],
+            directions: [],
+
             editingProfile: false,
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
             displayShifts: false,
 
-            shifts : [
-                        { id_schedule: 2, day: 1, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
-                        { id_schedule: 3, day: 2, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4},
-                        { id_schedule: 4, day: 2, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 5, day: 3, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 6, day: 3, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 7, day: 4, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 8, day: 4, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 9, day: 5, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 10, day: 5, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 11, day: 6, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 12, day: 6, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 },
-                        { id_schedule: 13, day: 7, shift: 1, start_time: "08:00", finish_time: "12:00", id_user: 4 },
-                        { id_schedule: 14, day: 7, shift: 2, start_time: "14:00", finish_time: "18:00", id_user: 4 }
-            ]
+            shifts : []
         }
     },
     methods: {
@@ -196,7 +173,20 @@ export default {
                 finish_time: "",
                 id_user: this.user.id
             });
-        }
+        },
+
+        handleSubmit() {
+            console.log('Información del usuario:', this.user);
+            console.log('Direcciones:', this.directions);
+            console.log('Turnos:', this.shifts);
+
+            // Aquí podrías enviar los datos al servidor si es necesario
+        },
+
+        handleSubmitForm() {
+            this.editingProfile = false;
+            this.$refs.profileForm.submit();
+        },
     },
 }
 </script>

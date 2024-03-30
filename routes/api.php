@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\MarkerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AdressController;
+use App\Http\Controllers\Api\MarkerController;
 use App\Http\Controllers\Api\DeliveryController;
+use App\Http\Controllers\Api\ScheduleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,8 @@ Route::get('markers/all', [MarkerController::class, 'getAllMarkers']);
 Route::get('markers/markersByUser/{id}', [MarkerController::class, 'getMarkersCreatedByUser']);
 Route::get('delivery/getDeliveriesByUser/{id}', [DeliveryController::class, 'getNumDeliveriesByUser']);
 Route::get('delivery/getDeliveriesByKgUser/{id}', [DeliveryController::class, 'getDeliveriesByKgUser']);
+Route::get('schedule/getScheduleByUser/{user}', [ScheduleController::class, 'getScheduleByUser']);
+Route::get('adress/getAdressesByUser/{user}', [AdressController::class, 'getAdressesByUser']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
