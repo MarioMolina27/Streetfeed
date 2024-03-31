@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Marker;
 use App\Models\Menu;
-use App\Models\Type_User;
 use App\Models\User;
+use App\Models\Marker;
+use App\Models\Type_User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -321,6 +322,57 @@ class UserController extends Controller
         })->get();
 
         return $users->count();
+    }
+
+    public function updateUserData(Request $request) {
+        DB::beginTransaction();
+    
+        try {
+            $userInput = $request->input('user');
+            $directionsInput = $request->input('directions');
+            $schedulesInput = $request->input('schedules');
+    
+            $userDB = User::find($userInput['id_user']);
+            if (!$userDB) {
+                throw new \Exception('User not found');
+            }
+    
+            // Update user email
+            $userDB->email = $userInput['email'];
+            $userDB->save();
+            
+            // // Update or create addresses
+            // $userDB->addresses()->delete(); // Delete existing addresses
+            // foreach ($directionsInput as $direction) {
+            //     $userDB->addresses()->create($direction);
+            // }
+    
+            $userDB->schedules()->delete();
+            foreach ($schedulesInput as $schedule) {
+                $startTime = Carbon::parse($schedule['start_time'])->format('H:i:s');
+                // Convertir finish_time de datetime a time
+                $finishTime = Carbon::parse($schedule['finish_time'])->format('H:i:s');
+
+                // Crear un nuevo horario con los valores convertidos
+                $newSchedule = [
+                    'day' => $schedule['day'],
+                    'shift' => $schedule['shift'],
+                    'start_time' => $startTime,
+                    'finish_time' => $finishTime,
+                    'id_user' => $userDB->id,
+                ];
+
+                // Insertar el nuevo horario en la base de datos
+                $userDB->schedules()->create($newSchedule);
+            }
+    
+            DB::commit();
+    
+            return response()->json(['message' => 'User data updated successfully'], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
 

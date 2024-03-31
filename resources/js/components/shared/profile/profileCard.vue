@@ -2,7 +2,7 @@
     <div class="mt-5">
         <Card>
             <template #content>
-                <form ref="profileForm" @submit.prevent="handleSubmit">
+                <form @submit="handleSubmit">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
@@ -10,9 +10,9 @@
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
-                            <div @click="handleSubmitForm" class="ms-2">
+                            <button type="submit" class="ms-2" style="background-color: transparent; border: none;">
                                 <i class="fa fa-check save-button"></i>
-                            </div>
+                            </button>
                             <div @click="cancelEditing()">
                                 <i class="fa fa-xmark save-button"></i>
                             </div>
@@ -95,6 +95,7 @@ import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import { getScheduleByUser } from '../../../services/schedules.js';
 import { getAdressByUser } from '../../../services/adress.js';
+import { updateUserData } from '../../../services/users.js';
 
 
 
@@ -110,12 +111,12 @@ export default {
     },
 
     mounted() {
-        getScheduleByUser(this.user.id).then((response) => {
+        getScheduleByUser(this.user.id_user).then((response) => {
             this.$options.originalSchedules = [...response]
             this.shifts = response;
         });
 
-        getAdressByUser(this.user.id).then((response) => {
+        getAdressByUser(this.user.id_user).then((response) => {
             this.directions = response;
         });
     },
@@ -123,7 +124,7 @@ export default {
     data(){
         return{
             user: {
-                id: 9,
+                id_user: 9,
                 name: 'Pol Crespo',
                 username: '@pcrespo',
                 email: 'pcrespo@politecnics.barcelona',
@@ -175,18 +176,38 @@ export default {
             });
         },
 
-        handleSubmit() {
+        handleSubmit(event) {
+            event.preventDefault();
+            this.editingProfile = false;
             console.log('Información del usuario:', this.user);
             console.log('Direcciones:', this.directions);
             console.log('Turnos:', this.shifts);
 
-            // Aquí podrías enviar los datos al servidor si es necesario
+            const formattedShifts = this.shifts.map(shift => ({
+                ...shift,
+                start_time: this.formatTime(shift.start_time),
+                finish_time: this.formatTime(shift.finish_time)
+            }));
+
+
+            updateUserData(this.user, formattedShifts, this.directions).then((response) => {
+                console.log(response);
+            });
         },
 
-        handleSubmitForm() {
-            this.editingProfile = false;
-            this.$refs.profileForm.submit();
-        },
+        formatTime(dateTime) {
+
+            if (typeof dateTime === 'string' && /^\d{2}:\d{2}:\d{2}$/.test(dateTime)) {
+                return dateTime; // No hace falta formatear
+            }
+
+            const date = new Date(dateTime);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
     },
 }
 </script>

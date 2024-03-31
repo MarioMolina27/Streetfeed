@@ -30,6 +30,7 @@ Route::get('delivery/getDeliveriesByUser/{id}', [DeliveryController::class, 'get
 Route::get('delivery/getDeliveriesByKgUser/{id}', [DeliveryController::class, 'getDeliveriesByKgUser']);
 Route::get('schedule/getScheduleByUser/{user}', [ScheduleController::class, 'getScheduleByUser']);
 Route::get('adress/getAdressesByUser/{user}', [AdressController::class, 'getAdressesByUser']);
+Route::post('users/updateUser', [UserController::class, 'updateUserData']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);

@@ -79,3 +79,19 @@ export const getNumUsersByType = async (typeUser) => {
         console.log('Error:', error);
     }
 }
+
+export const updateUserData = async (user, schedules, adresses) => {
+    const url = `api/users/updateUser`;
+    try{
+        const response = await axios.post(url, {
+            user: user,
+            schedules: schedules,
+            adresses: adresses
+        });
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log('Error:', error);
+    }
+}
