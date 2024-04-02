@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-7 col-12">
+            <div class="col-lg-7 col-12 mb-3">
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
@@ -36,7 +36,7 @@
                     </template>
                 </Card>
             </div>
-            <div class="col-lg-5 col-12">
+            <div class="col-lg-5 col-12 mb-3">
                 <div class ="h-100 d-flex flex-column justify-content-between">
                     <Card class="p-3 h-50">
                         <template #header>
@@ -45,7 +45,7 @@
                             </div>
                         </template>
                         <template #content>
-                            <h3 class="title-stadistics-providers title-stadistics-providers-2  mt-0 mb-0">123</h3>
+                            <h3 class="title-stadistics-providers title-stadistics-providers-2  mt-0 mb-0">{{numProviders}}</h3>
                         </template>
                     </Card>
                     <Card class="p-3 h-50 mt-3">
@@ -55,7 +55,7 @@
                             </div>
                         </template>
                         <template #content>
-                            <h3 class="title-stadistics-providers title-stadistics-providers-2  mt-0 mb-0">703</h3>
+                            <h3 class="title-stadistics-providers title-stadistics-providers-2  mt-0 mb-0">{{numDeliveredOrders}}</h3>
                         </template>
                     </Card>
                 </div>
@@ -66,8 +66,10 @@
 
 <script>
 import Card from "primevue/card";
-import EvolutionProvidersGraphic from "./graphics/provider/EvolutionProvidersGraphic.vue";
-import LocationProvidersGraphic from "./graphics/provider/LocationProvidersGraphic.vue";
+import EvolutionProvidersGraphic from "../graphics/provider/EvolutionProvidersGraphic.vue";
+import LocationProvidersGraphic from "../graphics/provider/LocationProvidersGraphic.vue";
+import { getNumUsersByType } from "../../../services/users.js";
+import { getTotalDeliveries } from "../../../services/delivery.js";
 
 export default {
     name: "StadisticsProviders",
@@ -77,6 +79,23 @@ export default {
         EvolutionProvidersGraphic,
         LocationProvidersGraphic
      
+    },
+
+    data() {
+        return {
+            numProviders: 0,
+            numDeliveredOrders: 0,
+        };
+    },
+
+    mounted() {
+        getNumUsersByType(2).then((response) => {
+            console.log(response);
+            this.numProviders = response;
+        });
+        getTotalDeliveries().then((response) => {
+            this.numDeliveredOrders = response.deliveries;
+        });
     },
 }
 </script>
@@ -104,6 +123,6 @@ export default {
     }
 
     .title-stadistics-providers-2{
-        color: #984EAE;
+        color: #b48753;
     }
 </style>

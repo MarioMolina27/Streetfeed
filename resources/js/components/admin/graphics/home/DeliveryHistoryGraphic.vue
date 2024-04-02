@@ -4,6 +4,7 @@
 
 <script>
 import Chart from 'primevue/chart';
+import { getDeliveriesByMonth } from '../../../../services/delivery.js';
 
 export default {
     name: "DeliveryHistoryGraphic",
@@ -15,27 +16,31 @@ export default {
     data() {
         return {
             chartData: null,
-            chartOptions: null
+            chartOptions: null,
         };
     },
     mounted() {
-        this.chartData = this.setChartData();
-        this.chartOptions = this.setChartOptions();
+        this.chartOptions = this.setChartOptions()
+        this.loadData()
     },
     methods: {
-        setChartData() {
-
-            return {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [
-                    {
-                        label: 'Deliveries',
-                        backgroundColor: '#081733dd',
-                        borderColor: '#081733',
-                        data: [48, 48, 40, 19, 86, 27, 90]
-                    }
-                ]
-            };
+        loadData() {
+            getDeliveriesByMonth().then((response) => {
+                let keys = Object.keys(response[0])
+                let labels = keys
+                let deliveries = Object.values(response[0])
+                this.chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Deliveries',
+                            backgroundColor: '#081733dd',
+                            borderColor: '#081733',
+                            data: deliveries
+                        }
+                    ]
+                };
+            })   
         },
         setChartOptions() {
             const documentStyle = getComputedStyle(document.documentElement);

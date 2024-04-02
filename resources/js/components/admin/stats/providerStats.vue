@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import SidebarAdmin from "./SidebarAdmin.vue";
-import StadisticsProviders from "./StadisticsProviders.vue";
+import SidebarAdmin from "../shared/SidebarAdmin.vue";
+import StadisticsProviders from "./StadisticsProviders.vue"
 
 
 export default {

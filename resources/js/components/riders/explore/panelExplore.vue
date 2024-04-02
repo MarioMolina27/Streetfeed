@@ -1,7 +1,10 @@
 <template>
   <div class="container-fluid ps-0 pe-0">
     <Navbar :menuItems = 'menuItems'></Navbar>
-    <div class="delivery-container">
+    <template v-if="loading ||!loadingFinished">
+        <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
+    </template>
+    <div v-else class="explore-container">
       <div v-if="nearProviders.length != 0" class="provider-container">
         <h2>Descubre a tus proveedores más cercanos</h2>
         <div class="card-container d-flex flex-nowrap">
@@ -33,17 +36,20 @@
 <script>
 import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
+import loader from '../../shared/loader.vue';
 export default{
     data(){
       return {
+        loading: true,
+        loadingFinished: false,
         nearProviders: [],
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
         menuItems: [
-                {name: 'Tus Repartos', href: '/'},
-                {name: 'Explorar', href: './delivery'},
+                {name: 'Tus Repartos', href: './delivery'},
+                {name: 'Explorar', href: './explore'},
                 {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: '/profile'}
+                {name: 'Perfil', href: './profile'}
             ]
       }
     },
@@ -61,15 +67,21 @@ export default{
             this.nearProviders = nearProvidersResponse.data;
             this.hasMoreFavoritesPrvoviders = hasMoreFavoritesResponse.data;
             this.favouriteProviders = favoriteProvidersResponse.data;
+            this.loading = false;
         })
         .catch(error => {
             console.error('Error al obtener los datos:', error);
+            this.loading = false;
         });
+      },
+      handleLoadingFinished() {
+           this.loadingFinished = true;
       }
     },
     components: {
       providerCard,
-      Navbar
+      Navbar,
+      loader
     },
 }
 </script>
@@ -78,7 +90,8 @@ export default{
 body {
   background-color: #FDF8EB;
 }
-.delivery-container {
+
+.explore-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -93,4 +106,4 @@ body {
   white-space: nowrap;
   scrollbar-width: none;
 }
-</style>../../shared/Navbar.vue
+</style>

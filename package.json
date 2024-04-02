@@ -22,6 +22,7 @@
         "primeicons": "^6.0.1",
         "primevue": "^3.48.1",
         "vue": "^3.4.19",
-        "vue-loader": "^17.4.2"
+        "vue-loader": "^17.4.2",
+        "vue-qrcode-reader": "^5.5.3"
     }
 }

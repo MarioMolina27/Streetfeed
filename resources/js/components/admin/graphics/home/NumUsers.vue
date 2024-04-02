@@ -42,15 +42,13 @@ export default {
         },
         getNums() {
             getUsersTypesNumbers().then((response) => {
-                console.log(response);
-
                 this.chartDataNumUsers = {
                     labels: ['Riders', 'Providers'],
                     datasets: [
                         {
                             data: [response.riders, response.providers],
-                            backgroundColor: ['#B48753', '#984EAE' ],
-                            hoverBackgroundColor: ['#B48753', '#984EAE']
+                            backgroundColor: ['#984EAE', '#B48753' ],
+                            hoverBackgroundColor: ['#984EAE', '#B48753']
                         }
                     ]
                 };
