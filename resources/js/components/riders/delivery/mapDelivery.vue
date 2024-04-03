@@ -1,5 +1,6 @@
 <template>
     <div class="map-container">
+        <ConfirmDialog> </ConfirmDialog>
         <div id="map" style="position: relative;"></div>
         <div :class="{ 'selected': selectedProfile === 'walking' }" class="button-profile-route" style="left: calc(20px + 5%);" @click="createRoute('walking')">
             <i class="fa-solid fa-person-walking" style="color: #FDF8EB;"></i>
@@ -19,12 +20,10 @@
         <div v-if="isScanning" class="scanner-container">
             <qrScanner :deliveryIds="deliveryIds" @closeFrame="closeFrame"></qrScanner>
         </div>
-        <div class="provider-list">
-            <Carousel ref="providerCarrousel" v-if="providerInformation.length > 0" :value="providerInformation" :numVisible="1" :numScroll="1" :showIndicators="false">
-                <template #item="item">
-                    <providerItemCarrousel :information  = "item"></providerItemCarrousel>
-                </template>
-            </Carousel>
+        <div v-if="providerInformation != []" class="provider-list d-flex flex-nowrap">
+            <template v-for="information in providerInformation">
+                <providerItemCarrousel :information  = "information" :active="isActiveProvider(information)" @childClick="handleChildClick"></providerItemCarrousel>
+            </template>
         </div>
     </div>
 </template>
@@ -33,8 +32,11 @@
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import qrScanner from './qrScanner.vue';
-import Carousel from 'primevue/carousel';
 import providerItemCarrousel from './providerItemCarrousel.vue';
+import ConfirmDialog from "primevue/confirmdialog";
+import { ref } from "vue";
+const isVisible = ref(false);
+
 export default{
     props: {
         deliveries: Object,
@@ -50,19 +52,19 @@ export default{
             watchId: null,
             selectedProfile: 'walking',
             routeDuration: null,
-            coordinates: [],
+            waypoints: [],
             isScanning: false,
             deliveryIds: [],
             isDelivered: false,
             delivery: [],
             collectMarkerButton: null,
             providerInformation: [],
+            providerActive: null
         }
     },
     computed: {
         isCollectButtonActive() {
             if (!this.areAllDeliveriesHomeless && this.isWithinSchedule) {
-                
                 return true;
             }
             return false;
@@ -126,22 +128,29 @@ export default{
             zoom: 16
         });
         this.addProviders();
-        this.creatingMarkers(this.providerInformation[0].nickname);
+        this.providerActive = this.providerInformation[0];
+        this.creatingMarkers(this.providerActive.nickname);
         this.askForLocation();
     },
     beforeUnmount() {
         this.stopWatchingLocation();
     },
     methods: {
+        isActiveProvider(information) {
+            return this.providerActive.id_user === information.id_user;
+        },
         addProviders() {
+            this.providerInformation = [];
             for (const provider in this.deliveries) {
                 if (this.deliveries.hasOwnProperty(provider)) {
                     const deliveries = this.deliveries[provider];
                     const providerInfo = deliveries[0].provider;
-                    this.providerInformation.push(providerInfo);                }
+                    this.providerInformation.push(providerInfo);                
+                }
             }
         },
         addMarker(coordinates, color, info, type) {
+            this.waypoints.push(coordinates);
             const marker = new mapboxgl.Marker({ color })
                 .setLngLat(coordinates)
                 .addTo(this.map);
@@ -161,16 +170,14 @@ export default{
                         if (popupButton) {
                             popupButton.addEventListener('click', e => { 
                                 this.collectMenus(info.id_user) });
-                        } else {
-                            console.error('Elemento con ID popup-button no encontrado.');
-                        }
+                        } 
                     });
                     marker.togglePopup();
                 } else {
                     const popupContent = `
                         <div class="mb-2" style="text-align: center;">
                             <strong id="num-delivery-${info.id_marker}" class="fs-3" style="color: #984EAE; margin-right: 10px;">${this.numDeliveries(info.id_marker)}</strong>
-                            <i class="pi pi-shopping-bag fs-4"></i>
+                            <i class="fa-solid fa-utensils fs-4"></i>
                         </div>
                         ${this.numDeliveries(info.id_marker) != 0 ? 
                         `<button id="popup-button-homeless-${info.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Entrega</button>` 
@@ -185,8 +192,6 @@ export default{
                         if (popupButton) {
                             popupButton.addEventListener('click', e => { 
                                 this.deliverMenus(info, marker) });
-                        } else {
-                            console.error('Elemento con ID popup-button no encontrado.');
                         }
                     });
                     marker.togglePopup();
@@ -264,48 +269,84 @@ export default{
 
             return markerInfo;
         },
-        deliverMenus(homelessMarker, marker) {            
-            const relatedDeliveries = Object.values(this.deliveries).flat().filter(delivery => {
-                return delivery.homeless.id_marker === homelessMarker.id_marker;
-            });
-
-            relatedDeliveries.forEach(delivery => {
-                if(delivery.homeless.status === 2) {
-                    const idDelivery = delivery.homeless.idDelivery;
-                    axios.post('api/delivery/do-deliver', {
-                        deliveryId: idDelivery
-                    })
-                    .then(response => {
-                        if (response.status == 200) {
-                            const numDeliveries = document.getElementById(`num-delivery-${homelessMarker.id_marker}`);
-                            numDeliveries.textContent = parseInt(numDeliveries.textContent) - 1;
-                            if (parseInt(numDeliveries.textContent) === 0) {
-                                marker.remove();
-                            }
-                            this.isDelivered = true;
-                            this.$emit('notifyDeliver', idDelivery);
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                }
-            });
+        deliverMenus(homelessMarker, marker) {    
+            this.$confirm.require({
+                message: "Estás seguro que quieres entregar el pedido?",
+                header: "Entregar",
+                onShow: () => {
+                    isVisible.value = true;
+                },
+                onHide: () => {
+                    isVisible.value = false;
+                },
+                accept: () => {
+                    this.doDeliver(homelessMarker, marker);
+                    isVisible.value = false;
+                },
+            }); 
+            
         },
-        numDeliveries(homelessMarker) {
-            console.log(homelessMarker);
-            const relatedDeliveries = Object.values(this.deliveries).flat().filter(delivery => {
-                return delivery.homeless.id_marker === homelessMarker;
-            });
+        doDeliver(homelessMarker, marker) {
+            if (this.providerActive) {
+                const activeProvider = Object.values(this.deliveries).flat().find(delivery => {
+                    return delivery.provider.active === 1;
+                });
 
-            const numDeliveriesWithStatus2 = relatedDeliveries.filter(delivery => {
-                return delivery.homeless.status === 2;
-            }).length;
+                const relatedDeliveries = Object.values(this.deliveries[activeProvider.provider.nickname]).filter(delivery => {
+                    return delivery.homeless.id_marker === homelessMarker.id_marker;
+                });
+                relatedDeliveries.forEach(delivery => {
+                    if(delivery.homeless.status === 2) {
+                        const idDelivery = delivery.homeless.idDelivery;
+                        axios.post('api/delivery/do-deliver', {
+                            deliveryId: idDelivery
+                        })
+                        .then(response => {
+                            if (response.status == 200) {
+                                const numDeliveries = document.getElementById(`num-delivery-${homelessMarker.id_marker}`);
+                                numDeliveries.textContent = parseInt(numDeliveries.textContent) - 1;
+                                if (parseInt(numDeliveries.textContent) === 0) {
+                                    marker.remove();
+                                }
+                                this.$emit('notifyDeliver', idDelivery);
+                                this.addProviders();
+                                this.providerActive = this.providerInformation[0];
+                                this.creatingMarkers(this.providerActive.nickname);
+                                this.isDelivered = true;
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                    }
+                });
+            }
+        },
+        numDeliveries(homelessMarkerId) {
+            let numHomeless = 0;
+            if (this.providerActive) {
+                const activeProvider = Object.values(this.deliveries).find(delivery => {
+                    return delivery.some(item => {
+                        return item.provider.active === 1 && item.homeless.id_marker === homelessMarkerId;
+                    });
+                });
+                console.log(activeProvider);
+                if (activeProvider) {
+                    const relatedDeliveries = activeProvider.filter(delivery => {
+                        return delivery.homeless.id_marker === homelessMarkerId;
+                    });
 
-            return numDeliveriesWithStatus2;
+                    numHomeless = relatedDeliveries.filter(delivery => {
+                        return delivery.homeless.status === 2;
+                    }).length;
+                }
+            }
+
+            return numHomeless;
         },
         addUserMarker(coordinates) {
             const el = document.createElement('div');
+            el.id = 'user-marker';
             el.className = 'pulse';
             this.userMarker = new mapboxgl.Marker({element : el})
                 .setLngLat(coordinates)
@@ -315,12 +356,15 @@ export default{
 
         updateUserMarker(coordinates) {
             if (!this.userMarker) {
+                this.waypoints.unshift(coordinates);
                 this.addUserMarker(coordinates);                
             } else {
+                this.waypoints[0] = coordinates;
                 this.userMarker.setLngLat(coordinates);
             }
         },
         creatingMarkers(provider) {
+            this.clearMarkers();
             const providerData = this.deliveries[provider];
             this.delivery = this.deliveries[provider];
             if (providerData) {
@@ -331,7 +375,7 @@ export default{
                     const deliveryInfo = delivery.homeless;
                     const idMarker = deliveryInfo.id_marker;
                     if (deliveryInfo.status === 1) {
-                            this.deliveryIds.push(deliveryInfo.idDelivery);
+                        this.deliveryIds.push(deliveryInfo.idDelivery);
                     }
                     if (!(idMarker in processedMarkersDelivery)) {
                         const numDeliveries = this.deliveries[provider].filter(del => del.homeless.id_marker === idMarker).length;
@@ -344,6 +388,31 @@ export default{
             } else {
                 console.error(`No se encontraron datos para el proveedor ${provider}.`);
             }
+            this.createRoute(this.selectedProfile);
+        },
+        clearMarkers() {
+            if (this.waypoints.length > 0) {
+                this.waypoints = this.waypoints.slice(0, 1);
+            }
+            if (this.map.getLayer('route')) {
+                this.map.removeLayer('route');
+                this.map.removeSource('route');
+            }
+            const markers = document.querySelectorAll('.mapboxgl-marker');
+            const popup = document.querySelectorAll('.mapboxgl-popup');
+            markers.forEach(marker => {
+                if (marker.id !== 'user-marker') {
+                    marker.remove(); 
+                }
+            });
+            popup.forEach(popup => {
+                popup.remove();
+            });
+        },
+        handleChildClick(information) {
+            this.providerActive = information;
+            console.log(this.providerActive);
+            this.creatingMarkers(information.nickname);
         },
         askForLocation() {
             return new Promise((resolve, reject) => {
@@ -380,42 +449,44 @@ export default{
         },
         createRoute(profile) {
             this.selectedProfile = profile;
-            const waypoints = this.coordinates.map(coord => `${coord[0]},${coord[1]}`).join(';');
+            const waypoints = this.waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
             const url = `https://api.mapbox.com/directions/v5/mapbox/${this.selectedProfile}/${waypoints}?geometries=geojson&access_token=${this.accessToken}`;
 
             axios.get(url)
-                .then(response => {
-                    const route = response.data.routes[0].geometry;
-                    const duration = response.data.routes[0].duration;
-                    this.routeDuration = this.formatDuration(duration);
-                    const existingRoute = this.map.getSource('route');
-                    if (existingRoute) {
-                        this.map.removeLayer('route');
-                        this.map.removeSource('route');
-                    }
-                    this.map.addLayer({
-                        id: 'route',
-                        type: 'line',
-                        source: {
-                            type: 'geojson',
-                            data: {
-                                type: 'Feature',
-                                geometry: route
-                            }
-                        },
-                        layout: {
-                            'line-cap': 'round',
-                            'line-join': 'round'
-                        },
-                        paint: {
-                            'line-color': '#888',
-                            'line-width': 5
+                    .then(response => {
+                        const route = response.data.routes[0].geometry;
+                        const duration = response.data.routes[0].duration;
+                        this.routeDuration = this.formatDuration(duration);
+                        
+                        const existingRoute = this.map.getSource('route');
+                        if (existingRoute) {
+                            this.map.removeLayer('route');
+                            this.map.removeSource('route');
                         }
+                        this.map.addLayer({
+                            id: 'route',
+                            type: 'line',
+                            source: {
+                                type: 'geojson',
+                                data: {
+                                    type: 'Feature',
+                                    geometry: route
+                                }
+                            },
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round'
+                            },
+                            paint: {
+                                'line-color': '#888',
+                                'line-width': 5
+                            }
+                        });
+            
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener la ruta:', error);
                     });
-                })
-                .catch(error => {
-                    console.error('Error al obtener la ruta:', error);
-                });
         },
         formatDuration(durationInSeconds) {
             const minutes = Math.floor(durationInSeconds / 60);
@@ -428,8 +499,8 @@ export default{
     },
     components: {
         qrScanner,
-        Carousel,
-        providerItemCarrousel
+        providerItemCarrousel,
+        ConfirmDialog
     }
 }
 </script>
@@ -531,12 +602,16 @@ export default{
     }
     .provider-list {
         position: absolute;
-        bottom: 70px; 
+        bottom: 30px; 
         right: 0;
         left: 0;
         margin: 0 auto;
         width: 93%;
-        
+        height: 60px;
+        gap: 1rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
     }
     .provider-information {
         margin: 10px 0;

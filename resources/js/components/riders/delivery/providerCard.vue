@@ -35,7 +35,6 @@
                 <markerCard :homeless="homeless.homeless" @notifyDeliver="notifyDeliver"></markerCard>
             </template>
         </div>
-        
     </div>
   </div>
 </template>
@@ -129,7 +128,8 @@ export default {
         }
     },
     components: {
-        markerCard
+        markerCard,
+        
     }
 }
 </script>

@@ -1,30 +1,55 @@
 <template>
-<h1>AAA</h1>
+<div class="provider-card" :class="{ 'provider-active': active }" @click="handleClick">
+    <strong>{{ information.nickname }}</strong>
+</div>
 </template>
 
 <script>
 export default {
     props: {
-        provider: {
-            information: Object
-        }
+        information: Object,
+        active: Boolean
     },
     data() {
         return {
-            active: false
+            
         }
     },
+    computed: {
+      isActive() {
+          return this.active ? 'provider-active' : '';
+      }  
+    },
     methods: {
-        toggleActive() {
-            this.active = !this.active;
+        handleClick() {
+            if (!this.active) {
+                this.$emit('childClick', this.information);
+            }
         }
     },
     mounted() {
-        console.log(this.information);
-    }
+        
+    },
 }
 </script>
 
-<style>
-
+<style scoped>
+.provider-card {
+  width: 22rem;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #B48753;
+  background-color: #FDF8EB;
+  border-radius: 5px;
+  transition: transform 0.2s ease;
+}
+.provider-card:hover:not(.provider-active) {
+  cursor: pointer;
+}
+.provider-active {
+    background-color: #B48753;
+    color: #FDF8EB;
+}
 </style>
