@@ -142,4 +142,4 @@ a{
     padding: 0;
 }
 
-</style>../../../utilities/constant.js./SidebarAdmin.vue/index.js
+</style>

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Marker;
 use App\Models\User;
+use App\Models\Schedule;
+use App\Models\Type_User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 
-
-class MarkerController extends Controller
+class ScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,7 +39,7 @@ class MarkerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Schedule $user)
     {
         //
     }
@@ -46,39 +47,27 @@ class MarkerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $usuari)
+    public function edit(Schedule $usuari)
     {
         //
     }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Schedule $user)
     {
         //
     }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, Schedule $user)
     {
-       
+        //
     }
 
-    public function getAllMarkers() {
-        $markers = Marker::all();
-        $providers = User::with('typeUsers')->where('active', 1)->whereHas('typeUsers', function ($query) {
-            $query->where('user_type_user.id_type_user', 2);
-        })->get();
-
-        $mergedList = array_merge($markers->toArray(), $providers->toArray());
-
-        return response()->json($mergedList);
-    }
-
-    public function getMarkersCreatedByUser($id) {
-        $markers = Marker::where('id_user_created', $id)->get()->count();
-        return response()->json($markers);
+    public function getScheduleByUser(Request $request, User $user) {
+        $schedules = Schedule::where('id_user', $user->id_user)->get();
+        return response()->json($schedules);
     }
 }
-
