@@ -3,7 +3,6 @@ import 'primevue/resources/themes/aura-light-green/theme.css'
 import * as bootstrap from 'bootstrap';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
-import landing from './components/landing/landing.vue'; 
 import panelUser from './components/admin/users/panelUser.vue';
 import panelMenu from './components/providers/panelMenu.vue';
 import panelExplore from './components/riders/explore/panelExplore.vue';
@@ -23,7 +22,6 @@ import profile from './components/shared/profile/profile.vue';
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
 const appDOM = document.getElementById('app');
 
-app.component('landing', landing)
 app.component('paneluser', panelUser)
 app.component('panelmenu', panelMenu)
 app.component('panelexplore', panelExplore)
