@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('layouts.layout');
+    return view('landings.landing');
 });
 
 Route::get('admin/users', function () {
@@ -35,12 +35,6 @@ Route::get('confirmation/{encodedHomelessData}', function ($encodedHomelessData)
 });
 Route::get('favorite', function () {
     return view('riders.favorite.favorite');
-});
-Route::get('riderlanding', function () {
-    return view('landings.riderlanding');
-});
-Route::get('providerlanding', function () {
-    return view('landings.providerlanding');
 });
 Route::get('profile', function () {
     return view('shared.profile');
