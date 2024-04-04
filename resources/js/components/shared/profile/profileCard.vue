@@ -1,0 +1,337 @@
+<template>
+<dialogMap :modalVisible="this.modalVisible" @closeModal="closeModal"></dialogMap>
+    <div class="mt-5">
+        <Card>
+            <template #content>
+                <form @submit="handleSubmit">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <h3 class="mb-0 label-name-user">{{user.name}}</h3>
+                            <Tag>Rider</Tag>
+                        </div>
+                        <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
+                        <div v-else class="d-flex flex-row-reverse" >
+                            <button type="submit" class="ms-2" style="background-color: transparent; border: none;">
+                                <i class="fa fa-check save-button"></i>
+                            </button>
+                            <div @click="cancelEditing()">
+                                <i class="fa fa-xmark save-button"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>{{user.username}}</p>
+                    <div v-if="!editingProfile">
+                        <p class="label-card-profile">Email</p>
+                        <p>{{user.email}}</p>
+                        <p class="label-card-profile">Direcciones</p>
+                        <p v-for="direction in directions" :key="direction">{{direction.direction}}</p>
+                    </div>
+                    <div v-else>
+                        <p class="label-card-profile">Email</p>
+                        <input type="text" class="form-custom" v-model="user.email">
+                        <p class="label-card-profile">Direcciones</p>
+                        <input type="text" class="form-custom form-direction" @focus="openModal" v-for="direction in directions" :key="direction.id" v-model="direction.direction">
+                    </div>
+
+                    <div v-if="user.id_type_user === 2" class=" mb-2">
+                        <Accordion class="w-100" @tab-open="displayShifts=true" @tab-close="displayShifts=false">
+                            <AccordionTab>
+                                <template #header>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <p class="mb-0 title-schedules-profile">
+                                            Horario
+                                        </p>
+                                        <i v-if="!displayShifts" class="pi pi-eye ms-3 eye-schedule"></i>
+                                        <i v-else class="pi pi-eye-slash ms-3 eye-schedule"></i>
+                                    </div>
+                                </template>
+                                <template v-for="(day, index) in daysOfWeek" :key="index">
+                                    <div class="row mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-lg-4 col-12 d-flex flex-row align-items-center">
+                                                <img src="img/Alarmclock.svg" alt="img-first-category-game" class="img-profile-stats" />
+                                                <p class="text-profile-schedule mb-0">{{ day }}</p>
+                                            </div>
+                                            <div class="col-lg-7 col-12 d-flex flex-row ms-4">
+                                                <template v-if="editingProfile">
+                                                    <div class="d-flex flex-column gap-2">
+                                                        <template v-for="(shift, shiftIndex) in getNumberShifts(index + 1)">
+                                                            <div class="d-flex flex-row">
+                                                                <Calendar :id="'calendar-timeonly-' + index + '-morning'" v-model="getShift(index + 1, shift).start_time" class="ms-2" timeOnly />
+                                                                <Calendar :id="'calendar-timeonly-' + index + '-afternoon'" v-model="getShift(index + 1, shift).finish_time" class="ms-2" timeOnly />
+                                                                <div class="d-flex justify-content-center align-items-center delete-shift-btn" @click="deleteShift(index + 1, shift)"><i class="fa fa-trash"></i></div>
+                                                                <div v-if="shiftIndex === getNumberShifts(index + 1) - 1 && getNumberShifts(index + 1) === 1" @click="addShift(index+1)" class="d-flex justify-content-center align-items-center add-shift-btn"><i class="fa fa-add"></i></div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                                <template v-else>
+                                                    <div class="d-flex flex-column gap-2">
+                                                        <template v-for="shift in getNumberShifts(index + 1)">
+                                                            <div class="d-flex flex-row">
+                                                                <Calendar disabled :id="'calendar-timeonly-' + index + '-morning'" v-model="getShift(index + 1, shift).start_time" class="ms-2" timeOnly />
+                                                                <Calendar disabled :id="'calendar-timeonly-' + index + '-afternoon'" v-model="getShift(index + 1, shift).finish_time" class="ms-2" timeOnly />
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                    </div>
+                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
+                                </template>
+                            </AccordionTab>
+                        </Accordion>
+                    </div>
+                </form>
+            </template>
+        </Card>
+    </div>
+</template>
+
+<script>
+import Card from 'primevue/card';
+import Tag from 'primevue/tag';
+import Tooltip from 'primevue/tooltip';
+import Calendar from 'primevue/calendar';
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
+import dialogMap from './dialogMap.vue';
+import { getScheduleByUser } from '../../../services/schedules.js';
+import { getAdressByUser } from '../../../services/adress.js';
+import { updateUserData } from '../../../services/users.js';
+
+
+
+export default {
+    originalSchedules: null, //Variable no reactiva
+    components: {
+        Card,
+        Tag,
+        Tooltip, 
+        Calendar,
+        Accordion,
+        AccordionTab,
+        dialogMap
+    },
+
+    mounted() {
+        getScheduleByUser(this.user.id_user).then((response) => {
+            this.$options.originalSchedules = [...response]
+            this.shifts = response;
+        });
+
+        getAdressByUser(this.user.id_user).then((response) => {
+            this.directions = response;
+        });
+    },
+
+    data(){
+        return{
+            user: {
+                id_user: 9,
+                name: 'Pol Crespo',
+                username: '@pcrespo',
+                email: 'pcrespo@politecnics.barcelona',
+                id_type_user: 2,
+            },
+
+            directions: [],
+
+            editingProfile: false,
+            daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+            displayShifts: false,
+
+            shifts : [],
+            modalVisible: false,
+        }
+    },
+    methods: {
+        getShift(day, shift) {
+            return this.shifts.find(s => s.day === day && s.shift === shift);
+        },
+
+        cancelEditing() {
+            this.shifts = this.$options.originalSchedules;
+            this.editingProfile = false;
+        },
+
+        deleteShift(day, shift) {
+            const index = this.shifts.findIndex(s => s.day === day && s.shift === shift);
+            if (index !== -1) {
+                const otherShift = this.shifts.find(s => s.day === day && s.shift !== shift);
+                if (otherShift) {
+                    this.shifts.splice(index, 1);
+                    otherShift.shift = 1;
+                }
+            }
+        },
+
+        getNumberShifts(day) {
+            return this.shifts.filter(s => s.day === day).length;
+        },
+
+        addShift(day) {
+            this.shifts.push({
+                id_schedule: '',
+                day: day,
+                shift: 2,
+                start_time: "",
+                finish_time: "",
+                id_user: this.user.id
+            });
+        },
+
+        handleSubmit(event) {
+            event.preventDefault();
+            this.editingProfile = false;
+            console.log('Información del usuario:', this.user);
+            console.log('Direcciones:', this.directions);
+            console.log('Turnos:', this.shifts);
+
+            const formattedShifts = this.shifts.map(shift => ({
+                ...shift,
+                start_time: this.formatTime(shift.start_time),
+                finish_time: this.formatTime(shift.finish_time)
+            }));
+
+
+            updateUserData(this.user, formattedShifts, this.directions).then((response) => {
+                console.log(response);
+            });
+        },
+
+        formatTime(dateTime) {
+
+            if (typeof dateTime === 'string' && /^\d{2}:\d{2}:\d{2}$/.test(dateTime)) {
+                return dateTime; // No hace falta formatear
+            }
+
+            const date = new Date(dateTime);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        },
+
+        openModal(){
+            this.modalVisible = true;
+        },
+
+        closeModal(){
+            this.modalVisible = false;
+        }
+    },
+}
+</script>
+
+<style scoped>
+
+.p-card{
+    border: 1.5px solid #b48753;
+}
+
+.label-card-profile{
+    margin: 0;
+    color: #081733;
+    opacity: 0.7;
+}
+
+.label-name-user{
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.p-tag{
+    background-color: #081733;
+    color: white;
+    margin-left: 15px;
+    padding: 5px 15px;
+}
+
+.form-custom{
+    width: 100%;
+    padding: 10px;
+    border: none;
+}
+
+.save-button{
+    color: #984eae;
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+.form-custom::focus{
+    outline: none;
+    border-bottom: 1px solid #b48753;
+}
+
+.form-direction{
+    outline: none;
+    border-bottom: 1px solid #b48753;
+    margin-bottom: 10px;
+}
+
+.text-profile-schedule{
+    color: #081733;
+    font-weight: 600;
+    font-family: 'Rubik', sans-serif;
+    margin-left: 10px;
+}
+
+.title-business-info{
+    font-size: 2rem;
+    color: #081733;
+    font-weight: 600;
+    font-family: 'Rubik', sans-serif;
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.delete-shift-btn{
+    cursor: pointer;
+}
+.delete-shift-btn i{
+    color: #b52a2a;
+    font-size: 1.5rem;
+    margin-left: 10px;
+}
+
+.add-shift-btn{
+    cursor: pointer;
+}
+.add-shift-btn i{
+    color: #2ab52a;
+    font-size: 1.5rem;
+    margin-left: 20px;
+}
+
+.divider-schedule{
+    border-top: 1px solid #c6cfc9;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.eye-schedule{
+    color: #081733;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.p-icon{
+    display: none !important;
+}
+
+.title-schedules-profile{
+    color: #081733;
+    font-weight: 500;
+    font-family: 'Rubik', sans-serif;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 768px) { 
+    .label-name-user {
+        max-width: 150px; 
+    }
+}
+</style>

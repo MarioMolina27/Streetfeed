@@ -74,6 +74,7 @@ export default {
                 .addTo(this.map);
             if (data !== null) {
                 let popupContent;
+                console.log(data);
                 if(data.id_user) {
                     popupContent= ` 
                     <div class="mb-2" style="text-align: center;">

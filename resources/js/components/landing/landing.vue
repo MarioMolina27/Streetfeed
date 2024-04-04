@@ -1,12 +1,13 @@
 <template>
-    <div class="cursor-frame">
+    <div class="body">
+        <div class="cursor-frame">
         <div class="cursor"></div>
     </div>
     <div class="scrollbar-container">
         <div class="scrollbar-rail"></div>
         <div class="scrollbar-thumb"></div>
     </div>
-    <div class="entrance-scene">
+    <!-- <div class="entrance-scene">
         <div class="entrance-curtine"></div>
         <div class="entrance-curtine"></div>
         <div class="entrance-curtine"></div>
@@ -24,7 +25,7 @@
                 C450.7,440,451.8,440.7,452.9,441.5z M141,441.5c87.4-57,112-174,55-261.4c-0.7-1.1-1.5-2.3-2.2-3.4c-87.4,57-112,174-55,261.4
                 C139.5,439.2,140.2,440.3,141,441.5z"/>
         </svg>
-    </div>  
+    </div>   -->
       
     <div class="navbar-frame">
         <div class="navbar-container">
@@ -64,7 +65,7 @@
                 </div>
             </div>
 
-            <button class="nav-toggler-btn btn" type="button">
+            <button class="nav-toggler-btn btn-landing" type="button">
                 <div class="nav-toggler-line nav-toggler-line-top simple-line"></div>
                 <div class="nav-toggler-line nav-toggler-line-bottom simple-line"></div>
             </button>
@@ -493,8 +494,7 @@
             </div>
             <div class="footer-logo">STREETFEED</div>
         </div>
-    
-
+    </div>
 </template>
 
 <script>
@@ -597,7 +597,6 @@
 
             updateScroll() {
                 if (window.innerWidth > 1200){
-                    this.currentScrollY = this.lowPassFilter(this.targetScrollY, this.currentScrollY, 0.05);
                     window.scrollTo(0, this.currentScrollY);
                     document.querySelector('.scrollbar-thumb').style.top = `${(this.currentScrollY / (document.body.offsetHeight - window.innerHeight)) * 100}%`
                 }
@@ -638,21 +637,18 @@
             chatbotWritingAnimation(chatbotText) {
                 const container = document.querySelector('.message-waiting-response');
                 const tetxSpan = container.querySelector('.faq-chatbot-text');
-                // let i = 0;
+                let i = 0;
 
-                // addCharacter(i) {
-                //     if (i < chatbotText.length) {
-                //         tetxSpan.textContent += chatbotText.charAt(i++);
-                //         setTimeout(addCharacter, Math.round(Math.random()* 20 ));
-                //     } else {
-                //         container.querySelector('.chatbot-waiting-indicator').remove();
-                //         container.classList.remove('message-waiting-response');
-                //     }
-                // }
-                tetxSpan.textContent = chatbotText;
-
-
-                // this.addCharacter();
+                function addCharacter() {
+                    if (i < chatbotText.length) {
+                        tetxSpan.textContent += chatbotText.charAt(i++);
+                        setTimeout(addCharacter, Math.round(Math.random()* 20 ));
+                    } else {
+                        container.querySelector('.chatbot-waiting-indicator').remove();
+                        container.classList.remove('message-waiting-response');
+                    }
+                }
+                addCharacter();
             },
 
             createUserMessage(userMessage){
@@ -891,21 +887,21 @@
                     
             document.addEventListener('DOMContentLoaded',   () => {
                 this.initVariables();
-                this.entranceAnimation();
-                document.querySelector('.entrance-isotype').addEventListener('transitionend', this.entranceAnimation);
-                document.querySelector('.entrance-curtine').addEventListener('transitionend', this.landingPageIn);
+                // this.entranceAnimation();
+                // document.querySelector('.entrance-isotype').addEventListener('transitionend', this.entranceAnimation);
+                // document.querySelector('.entrance-curtine').addEventListener('transitionend', this.landingPageIn);
                 Array.from(document.querySelectorAll('.cursor-hoverable')).forEach(element => [{event: 'mouseenter', isHovering: true}, {event: 'mouseleave', isHovering: false}].forEach(obj => element.addEventListener(obj.event, () => document.querySelector('.cursor').classList.toggle('cursor-hover', obj.isHovering))));
                 Array.from(document.querySelectorAll('.mask-activator')).forEach(element => [{event: 'mouseenter', isHovering: true}, {event: 'mouseleave', isHovering: false}].forEach(obj => element.addEventListener(obj.event, () => this.maskSizeIsHovering = obj.isHovering)));
                 Array.from(document.querySelectorAll('.faq-question-aswer-container')).forEach(question => question.addEventListener('click', e => this.openFaqQuestion(e)))
                 document.querySelector('.nav-toggler-btn').addEventListener('click', this.toggleMovileNavContainer);
                 document.addEventListener('mousemove', e => this.updateMouseMove(e));
-                document.addEventListener('wheel', e => this.updateScrollTarget({event : e}), {passive: false});
-                document.addEventListener('scroll', e => window.innerWidth > 1200 && e.preventDefault(), {passive: false});
-                document.querySelector('.abr-nav-logotype').addEventListener('click', () => this.updateScrollTarget({target: 0}))
-                document.querySelector('.nav-what').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-what').offsetTop}))
-                document.querySelector('.nav-how').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-how').offsetTop}))
-                document.querySelector('.nav-who').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-who').offsetTop}))
-                document.querySelector('.scroll-down-container').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-what').offsetTop}));
+                // document.addEventListener('wheel', e => this.updateScrollTarget({event : e}), {passive: false});
+                // document.addEventListener('scroll', e => window.innerWidth > 1200 && e.preventDefault(), {passive: false});
+                // document.querySelector('.abr-nav-logotype').addEventListener('click', () => this.updateScrollTarget({target: 0}))
+                // document.querySelector('.nav-what').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-what').offsetTop}))
+                // document.querySelector('.nav-how').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-how').offsetTop}))
+                // document.querySelector('.nav-who').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-who').offsetTop}))
+                // document.querySelector('.scroll-down-container').addEventListener('click', () => this.updateScrollTarget({target: document.querySelector('.separator-what').offsetTop}));
                 document.querySelector('.chatbot-text-input').addEventListener('keydown', e => this.sendMessageController(e))
                 document.querySelector('.chatbot-send-message').addEventListener('click', e => this.sendMessageController(e))
                 document.querySelector('.faq-option-chatbot-container').addEventListener('click', () => {
@@ -919,18 +915,19 @@
 </script>
 
 
-<style>
+<style scoped>
 
     /*   ______________________   GENERAL   ______________________   */
 
-    * {
+   .body * {
         box-sizing: border-box;
         margin: 0;
         font-family: 'Rubik', 'sans-serif';
         cursor: none;
+        line-height: 1;
     }
-
-    body, html{
+    
+    .body{
         background-color: var(--background-color) !important;
     }
 
