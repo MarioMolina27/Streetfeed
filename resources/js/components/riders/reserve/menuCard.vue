@@ -131,11 +131,12 @@ export default{
   .p-inputnumber-button-down {
     border-radius: 5px 0 0 5px;
     border: 1px solid #984EAE;
-
+    background-color: #984EAE;
   }
   .p-inputnumber-button-up {
     border-radius: 0 5px 5px 0;
     border: 1px solid #984EAE;
+    background-color: #984EAE;
   }
   .p-inputtext:enabled:focus {
     outline: 1px solid #984EAE;

@@ -13,9 +13,7 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script> --}}
 </head>
-<body>
-    <main id="app">
-        @yield('content')
-    </main>
+<body id="app">
+    @yield('content')
 </body>
 </html>

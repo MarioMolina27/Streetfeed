@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.layout-land')
        
 @section('content')
     <landing></landing>
