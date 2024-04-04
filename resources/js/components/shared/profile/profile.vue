@@ -85,7 +85,6 @@
 
             markersByUser(this.user.id_user).
             then((response) => {
-                console.log(response)
                 this.markersByUser = response;
             })
 

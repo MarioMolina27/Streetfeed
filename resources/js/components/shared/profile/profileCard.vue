@@ -1,4 +1,5 @@
 <template>
+<dialogMap :modalVisible="this.modalVisible" @closeModal="closeModal"></dialogMap>
     <div class="mt-5">
         <Card>
             <template #content>
@@ -29,7 +30,7 @@
                         <p class="label-card-profile">Email</p>
                         <input type="text" class="form-custom" v-model="user.email">
                         <p class="label-card-profile">Direcciones</p>
-                        <input type="text" class="form-custom" v-for="direction in directions" :key="direction.id" v-model="direction.direction">
+                        <input type="text" class="form-custom form-direction" @focus="openModal" v-for="direction in directions" :key="direction.id" v-model="direction.direction">
                     </div>
 
                     <div v-if="user.id_type_user === 2" class=" mb-2">
@@ -93,6 +94,7 @@ import Tooltip from 'primevue/tooltip';
 import Calendar from 'primevue/calendar';
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
+import dialogMap from './dialogMap.vue';
 import { getScheduleByUser } from '../../../services/schedules.js';
 import { getAdressByUser } from '../../../services/adress.js';
 import { updateUserData } from '../../../services/users.js';
@@ -107,7 +109,8 @@ export default {
         Tooltip, 
         Calendar,
         Accordion,
-        AccordionTab
+        AccordionTab,
+        dialogMap
     },
 
     mounted() {
@@ -137,7 +140,8 @@ export default {
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
             displayShifts: false,
 
-            shifts : []
+            shifts : [],
+            modalVisible: false,
         }
     },
     methods: {
@@ -206,8 +210,15 @@ export default {
             const minutes = date.getMinutes().toString().padStart(2, '0');
             const seconds = date.getSeconds().toString().padStart(2, '0');
             return `${hours}:${minutes}:${seconds}`;
-        }
+        },
 
+        openModal(){
+            this.modalVisible = true;
+        },
+
+        closeModal(){
+            this.modalVisible = false;
+        }
     },
 }
 </script>
@@ -249,9 +260,15 @@ export default {
     cursor: pointer;
 }
 
-.form-custom:focus{
+.form-custom::focus{
     outline: none;
     border-bottom: 1px solid #b48753;
+}
+
+.form-direction{
+    outline: none;
+    border-bottom: 1px solid #b48753;
+    margin-bottom: 10px;
 }
 
 .text-profile-schedule{
