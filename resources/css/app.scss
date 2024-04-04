@@ -1,2 +1,11 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'primeicons/primeicons.css';
+
+:root {
+    --primary-font: "Rubik", sans-serif;
+    --secondary-font: "Poppins", sans-serif;
+    --primary-street-feed: #FDF8EB;
+    --secondary-color: #B48753;
+    --action-color: #984EAE;
+    --text-color: #081733;
+}

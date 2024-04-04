@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-       
+
 @section('content')
-    <login :nickname="'{{ "HOLA" }}'"></login>
+    <login></login>
 @endsection
