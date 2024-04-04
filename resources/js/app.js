@@ -18,7 +18,7 @@ import reserveConfirmation from './components/riders/reserve/reserveConfirmation
 import panelFavorite from './components/riders/explore/panelFavorite.vue';
 import login from './components/auth/login.vue';
 import panelDelivery from './components/riders/delivery/panelDelivery.vue';
-import profile from './components/shared/profile.vue';
+import profile from './components/shared/profile/profile.vue';
 
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
 const appDOM = document.getElementById('app');
