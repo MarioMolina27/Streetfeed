@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { ref } from "vue";
+const isVisible = ref(false);
 export default {
     props: {
       homeless: Object
@@ -39,21 +41,34 @@ export default {
     },
     methods: {
       doDeliver() {
-        axios.post('api/delivery/do-deliver', {
-              deliveryId: this.homeless.idDelivery
-            })
-            .then(response => {
-                if (response.status == 200) {
-                  this.isCollapsed = true;
-                  setTimeout(() => {
-                    this.$emit('notifyDeliver', this.homeless.idDelivery);
-                    this.isCollapsed = false;
-                  }, 1000);
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        this.$confirm.require({
+            message: "Estás seguro que quieres entregar el pedido?",
+            header: "Entregar",
+            onShow: () => {
+                isVisible.value = true;
+            },
+            onHide: () => {
+                isVisible.value = false;
+            },
+            accept: () => {
+              axios.post('api/delivery/do-deliver', {
+                deliveryId: this.homeless.idDelivery
+              })
+              .then(response => {
+                  if (response.status == 200) {
+                    this.isCollapsed = true;
+                    setTimeout(() => {
+                      this.$emit('notifyDeliver', this.homeless.idDelivery);
+                      this.isCollapsed = false;
+                    }, 1000);
+                  }
+              })
+              .catch(error => {
+                  console.log(error);
+              });
+              isVisible.value = false;
+            },
+        });
       }
     },
     mounted(){

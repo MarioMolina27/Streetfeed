@@ -1,4 +1,5 @@
 <template>
+    <ConfirmDialog></ConfirmDialog>
     <div class="list-container">
         <template v-for="delivery in deliveries">
             <providerCard :delivery="delivery" @collectDelivery="doCollect" @notifyDeliver="notifyDeliver"></providerCard>
@@ -12,6 +13,7 @@
 <script>
 import providerCard from './providerCard.vue';
 import qrScanner from './qrScanner.vue';
+import ConfirmDialog from "primevue/confirmdialog";
 export default {
     props: {
         deliveries: Object,
@@ -41,7 +43,8 @@ export default {
     },
     components: {
         providerCard,
-        qrScanner
+        qrScanner,
+        ConfirmDialog
     }
 }
 </script>

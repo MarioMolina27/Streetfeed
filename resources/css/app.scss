@@ -1,11 +1,33 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'primeicons/primeicons.css';
 
-:root {
-    --primary-font: "Rubik", sans-serif;
-    --secondary-font: "Poppins", sans-serif;
+:root{
+    /* Colors */
+    --background-color: #ffffff;
+    --website-color: #000000 ;
     --primary-street-feed: #FDF8EB;
     --secondary-color: #B48753;
     --action-color: #984EAE;
     --text-color: #081733;
+
+    /* Fonts */
+    --font-corporative: 'Bayon', 'sans-serif';
+    --font-primary: 'Rubik', 'sans-serif';
+    --font-secondary: 'Poppins', 'sans-serif';
+    --font-secondary: 'Onest', 'sans-serif';
+    --font-contrast: 'Rufina', 'serif';
+
+    --navbar-heigth: 75px;
+    --nav-option-font-size: 20px; 
+    --nav-icon-toggler-width: 50px;
+    --nav-icon-toggler-rotation-degs: 40deg;
+    --scroll-down-inner-circle-width: 60px;
+    --scroll-down-space-between-circles: 10px;
+    --font-corporative-adjust-ratio-top: 0.52;
+    --font-corporative-adjust-ratio-bottom: 0.59;
+    --header-title-font-size: 300px;
+    --header-subtitle-font-size: 30px;
+    --separator-text-font-size: 150px;
+    --separator-number-font-size: 250px;
+
 }
