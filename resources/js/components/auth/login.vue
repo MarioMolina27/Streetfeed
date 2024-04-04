@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <!-- divider line -->
-                    <div class="container-fluid my-3 divider ">
+                    <div class="container-fluid my-3 divider-login ">
                         <div class="line"></div>
                         <p class="m-0">OR</p>
                         <div class="line"></div>
@@ -89,7 +89,7 @@
                                     <div class="col d-flex justify-content-center align-items-center check-type-user">
                                         <div class="type-user-container">
                                             <!-- checkbox user -->
-                                            <input type="checkbox" class="checkbox-user" name="" id="">
+                                            <input type="checkbox" class="checkbox-user" name="" id="check-rider">
                                             <!-- image user -->
                                             <img src="" alt="" class="img-user">
                                         </div>
@@ -97,7 +97,7 @@
                                     <div class="col d-flex justify-content-center align-items-center check-type-user">
                                         <div class="type-user-container">
                                             <!-- checkbox user -->
-                                            <input type="checkbox" class="checkbox-user" name="" id="">
+                                            <input type="checkbox" class="checkbox-user" name="" id="check-provider">
                                             <!-- image user -->
                                             <img src="" alt="" class="img-user">
                                         </div>
@@ -185,21 +185,21 @@
                                     <label class="form-label label-day" for="">Sunday</label>
                                     <!-- <input type="time"  class="form-control" name="" id=""> -->
                                     <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
+                                    <!-- <Calendar id="calendar-timeonly" v-model="time" timeOnly /> -->
                                     <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                                 <div class="dia">
                                     <label class="form-label label-day" for="">Monday</label>
                                     <!-- <input type="time"  class="form-control" name="" id=""> -->
                                     <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
+                                    <!-- <Calendar id="calendar-timeonly" v-model="time" timeOnly /> -->
                                     <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                                 <div class="dia">
                                     <label class="form-label label-day" for="">Tuesday</label>
                                     <!-- <input type="time"  class="form-control" name="" id=""> -->
                                     <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
+                                    <!-- <Calendar id="calendar-timeonly" v-model="time" timeOnly /> -->
                                     <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
                                 </div>
                                 <div class="dia">
@@ -256,6 +256,9 @@
 </template>
 
 <script>
+import { gsap } from "gsap";
+import Calendar from 'primevue/calendar';
+
 export default {
     data() {
         return {
@@ -402,51 +405,38 @@ export default {
         }.bind(this));
 
         document.getElementById('loginLink').addEventListener('click', function(e) {
-    e.preventDefault();
-    mostrarLogin();
-});
+            e.preventDefault();
+            mostrarLogin();
+        });
         
 
         document.querySelectorAll('.next-step, .prev-step').forEach(button => {
-    button.addEventListener('click', (event) => {
-        event.preventDefault();
-        const currentStep = parseInt(button.closest('.step').id.replace('step-', ''));
-        const nextStep = button.classList.contains('next-step') ? currentStep + 1 : currentStep -1;
-        navigateToFormStep(nextStep);
-    })
-});
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                const currentStep = parseInt(button.closest('.step').id.replace('step-', ''));
+                const nextStep = button.classList.contains('next-step') ? currentStep + 1 : currentStep -1;
+                this.navigateToFormStep(nextStep);
+            })
+        });
 
-document.querySelectorAll('.prev-step').forEach(a => {
-    a.addEventListener('click', (event) => {
-        event.preventDefault();
-        const currentStep = parseInt(button.closest('.step').id.replace('step-', ''));
-        const prevStep = a.classList.contains('prev-step') ? currentStep - 1 : currentStep + 1;
-        navigateToFormStep(prevStep);
-    })
-})
+        document.querySelectorAll('.prev-step').forEach(a => {
+            a.addEventListener('click', (event) => {
+                event.preventDefault();
+                const currentStep = parseInt(button.closest('.step').id.replace('step-', ''));
+                const prevStep = a.classList.contains('prev-step') ? currentStep - 1 : currentStep + 1;
+                this.navigateToFormStep(prevStep);
+            })
+        });
             
+    },
+    components: {
+        Calendar
     }
 }
 
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-
-
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-}
-
-body {
-    background: var(--primary-street-feed);
-    font-family: var(--secondary-font);
-}
 
 a {
     text-decoration: none;
@@ -561,7 +551,7 @@ button {
 }
 
 /* Divider Login */
-.divider {
+.divider-login {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -582,7 +572,7 @@ button {
     margin-left: 10px;
 }
 
-.divider p {
+.divider-login p {
     font-family: var(--primary-font);
     font-weight: 500;
     font-size: 1.3rem;
