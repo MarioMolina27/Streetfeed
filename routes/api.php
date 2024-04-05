@@ -46,6 +46,7 @@ Route::get('delivery/get-user-deliveries/{user}', [DeliveryController::class, 'g
 Route::post('delivery/do-suggest-reserve', [DeliveryController::class, 'doSuggestReserve']);
 Route::post('delivery/do-collect', [DeliveryController::class, 'doCollect']);
 Route::post('delivery/do-deliver', [DeliveryController::class, 'doDeliver']);
+Route::get('delivery/get-provider-deliveries/{user}', [DeliveryController::class, 'getProviderDeliveries']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -11,8 +11,8 @@ export default{
     data(){
         return {
             menuItems: [
-                {name: 'Tus Menus', href: './menu'},
                 {name: 'Repartos', href: './managedelivery'},
+                {name: 'Tus Menus', href: './menu'},
                 {name: 'Perfil', href: './profile'}
             ]
         }
