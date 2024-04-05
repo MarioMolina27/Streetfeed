@@ -12,7 +12,10 @@ Route::get('admin/users', function () {
 });
 
 Route::get('menu', function () {
-    return view('providers.menu');
+    return view('providers.manage_menu.manage_menu');
+});
+Route::get('managedelivery', function () {
+    return view('providers.manage_delivery.manage_delivery');
 });
 Route::get('delivery', function () {
     return view('riders.delivery.delivery');
