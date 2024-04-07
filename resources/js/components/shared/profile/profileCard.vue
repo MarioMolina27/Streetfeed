@@ -105,7 +105,34 @@ import dialogMap from './dialogMap.vue';
 
 
 
+
 export default {
+    props: {
+        user: {
+            type: Object,
+            required: true
+        },
+        schedules: {
+            type: Array,
+            required: true
+        },
+        adress: {
+            type: Array,
+            required: true
+        },
+        roadTypes: {
+            type: Array,
+            required: true
+        },
+        user: {
+            type: Object,
+            required: true
+        },
+        type_user: {
+            type: Object,
+            required: true
+        }
+    },
     originalSchedules: null, //Variable no reactiva
     originalDirections: null, //Variable no reactiva
     components: {
@@ -119,41 +146,42 @@ export default {
     },
 
     mounted() {
-
-        if(this.type_user.id === 2){
-            getScheduleByUser(this.user.id_user).then((response) => {
-                this.$options.originalSchedules = [...response]
-                this.shifts = response;
-            });        
-        }
+        this.$options.originalSchedules = [...this.schedules]
+        this.shifts = this.schedules;
         
 
-        getAdressByUser(this.user.id_user).then((response) => {
-            this.directions = response;
-
-            this.directions = this.directions.map(address => {
-                const { id_adress, ...rest } =  address; 
-                const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
-                return { ...rest, full_address: fullAddress };
-            });
-            this.$options.originalDirections = [...response]
-
+        this.directions = this.adress.map(address => {
+            const { id_adress, ...rest } =  address; 
+            const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
+            return { ...rest, full_address: fullAddress };
         });
 
-        getTypeRoad().then((response) => {
-            this.typeRoads = response;
+        this.$options.originalDirections = this.adress.map(address => {
+            const { id_adress, ...rest } =  address; 
+            const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
+            return { ...rest, full_address: fullAddress };
         });
-    },
 
-    props: {
-        user: {
-            type: Object,
-            required: true
-        },
-        type_user: {
-            type: Object,
-            required: true
-        }
+        this.typeRoads = this.roadTypes;
+           
+        
+        
+
+        // getAdressByUser(this.user.id_user).then((response) => {
+        //     this.directions = response;
+
+        //     this.directions = this.directions.map(address => {
+        //         const { id_adress, ...rest } =  address; 
+        //         const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
+        //         return { ...rest, full_address: fullAddress };
+        //     });
+        //     this.$options.originalDirections = [...response]
+
+        // });
+
+        // getTypeRoad().then((response) => {
+        //     this.typeRoads = response;
+        // });
     },
 
     data(){

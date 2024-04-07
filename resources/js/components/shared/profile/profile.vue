@@ -1,7 +1,10 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
         <Navbar :menuItems = 'menuItems'></Navbar>
-        <div>
+        <template v-if="loading ||!loadingFinished">
+            <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
+        </template>
+        <div v-else>
             <div class="container mt-3">
                 <div class="row d-flex justify-content-around">
                     <div class="col-3 p-0">
@@ -36,7 +39,7 @@
                     </div>
                 </div>
                 <top-profile :user="this.user"></top-profile>
-                <profile-card :user="this.user" :type_user="this.type_user"></profile-card>
+                <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads"></profile-card>
 
                 <h3 class="mt-5 ms-3 danger-btn">Cerrar Sessión</h3>
                 <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold">Eliminar Cuenta</h3>
@@ -52,23 +55,19 @@
     import profileCard from './profileCard.vue';
     import { getDeliveriesByUser, getDeliveriesByKgUser } from "../../../services/delivery.js"
     import { markersByUser } from "../../../services/markers.js"
-    import { getScheduleByUser } from '../../../services/schedules.js';
     import { getAdressByUser, getTypeRoad } from '../../../services/adress.js';
-    import { updateUserData } from '../../../services/users.js';
+    import { getScheduleByUser } from '../../../services/schedules.js';
+    import loader from '../../shared/loader.vue';
 
 
     export default {
-        // props: {
-        //     id_user: {
-        //         type: Number,
-        //         required: true
-        //     }
-        // },
 
         data(){
           return {
+            loading: true,
+            loadingFinished: false,
             type_user: {
-                id: 2,
+                id: 1,
                 name: 'Rider'
             },
             menuItems: [
@@ -79,6 +78,9 @@
             ],
             deliveriesUser: 0,
             markersByUser: 0,
+            shifts: [],
+            address: [],
+            typeRoads: [],
             kgUser: 0,
             user: {
                 id_user: 9,
@@ -93,24 +95,34 @@
             Card,
             topProfile,
             profileCard,
+            loader
         },
         mounted() {
-            getDeliveriesByUser(this.user.id_user).
-            then((response) => {
-                this.deliveriesUser = response;
-            })
-
-            markersByUser(this.user.id_user).
-            then((response) => {
-                this.markersByUser = response;
-            })
-
-            getDeliveriesByKgUser(this.user.id_user).
-            then((response) => {
-                this.kgUser = response.kg;
-            })
-
+            Promise.all([
+                getDeliveriesByUser(this.user.id_user),
+                markersByUser(this.user.id_user),
+                getDeliveriesByKgUser(this.user.id_user),
+                getScheduleByUser(this.user.id_user),
+                getAdressByUser(this.user.id_user),
+                getTypeRoad()
+            ]).then(([deliveriesResponse, markersResponse, kgResponse, scheduleResponse, addressResponse, typeRoadResponse]) => {
+                this.deliveriesUser = deliveriesResponse;
+                this.markersByUser = markersResponse;
+                this.kgUser = kgResponse.kg;
+                this.shifts = scheduleResponse;
+                this.address = addressResponse;
+                this.typeRoads = typeRoadResponse;
+                this.loading = false;
+            }).catch(error => {
+                console.error("Hubo un error al obtener los datos:", error);
+            });
         },
+
+        methods: {
+            handleLoadingFinished(){
+                this.loadingFinished = true;
+            }
+        }
     }
     </script>
     
