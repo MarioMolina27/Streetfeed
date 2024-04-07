@@ -61,7 +61,7 @@
             </Dialog>
         </div>
         <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-            <Chat :user="userChat" />
+            <Chat :user="userChat" :loggedUser="userLogged"/>
         </Dialog>
     </div>
 </template>
@@ -92,7 +92,8 @@ export default{
             animationError: false,
             animationConfirm: false,
             showChatDialog: false,
-            userChat: {}
+            userChat: {},
+            userLogged: 9
         }
     },
     mounted() {

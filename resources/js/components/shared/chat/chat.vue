@@ -42,10 +42,10 @@ export default {
     inject: ['dialogRef'],
     props: {
         user: Object,
+        loggedUser: Number
     },
     data() {
         return {
-            loggedUser: 9,
             messages: []
         }
     },
