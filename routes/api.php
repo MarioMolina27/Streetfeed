@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\MarkerController;
 use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MenuController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,6 +52,9 @@ Route::get('delivery/get-provider-deliveries/{user}', [DeliveryController::class
 Route::get('message/get-messages/{loggedUser}/{otherUser}', [MessageController::class, 'getMessages']);
 Route::post('message/send-message', [MessageController::class, 'sendMessage']);
 Route::post('message/delete-message', [MessageController::class, 'deleteMessage']);
+Route::get('menu/get-menus/{user}', [MenuController::class, 'getMenusfromProvider']);
+Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
+Route::post('menu/update-menu', [MenuController::class, 'updateMenu']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
