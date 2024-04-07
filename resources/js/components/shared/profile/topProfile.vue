@@ -40,12 +40,16 @@
 import { getDeliveriesByUser } from "../../../services/delivery.js"
 
 export default {
+    props: {
+        user: {
+            type: Object,
+            required: true
+        }
+    },
+
     data() {
         return {
             deliveriesUser: 0,
-            user: {
-                id_user: 4
-            }
         }
     },
     mounted() {

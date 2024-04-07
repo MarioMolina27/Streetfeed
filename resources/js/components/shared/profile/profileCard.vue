@@ -7,7 +7,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
-                            <Tag>Rider</Tag>
+                            <Tag>{{this.type_user.name}}</Tag>
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
@@ -39,7 +39,7 @@
                         <div @click="openModal({})" class="d-flex justify-content-center align-items-center add-shift-btn mt-3" style="margin-left: 0;"><i class="fa fa-add"></i></div>
                     </div>
 
-                    <div v-if="user.id_type_user === 2" class=" mb-2">
+                    <div v-if="type_user.id === 2" class=" mb-2">
                         <Accordion class="w-100" @tab-open="displayShifts=true" @tab-close="displayShifts=false">
                             <AccordionTab>
                                 <template #header>
@@ -101,14 +101,13 @@ import Calendar from 'primevue/calendar';
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import dialogMap from './dialogMap.vue';
-import { getScheduleByUser } from '../../../services/schedules.js';
-import { getAdressByUser, getTypeRoad } from '../../../services/adress.js';
-import { updateUserData } from '../../../services/users.js';
+
 
 
 
 export default {
     originalSchedules: null, //Variable no reactiva
+    originalDirections: null, //Variable no reactiva
     components: {
         Card,
         Tag,
@@ -120,22 +119,25 @@ export default {
     },
 
     mounted() {
-        getScheduleByUser(this.user.id_user).then((response) => {
-            this.$options.originalSchedules = [...response]
-            this.shifts = response;
-        });
+
+        if(this.type_user.id === 2){
+            getScheduleByUser(this.user.id_user).then((response) => {
+                this.$options.originalSchedules = [...response]
+                this.shifts = response;
+            });        
+        }
+        
 
         getAdressByUser(this.user.id_user).then((response) => {
             this.directions = response;
-            console.log(this.directions);
 
             this.directions = this.directions.map(address => {
                 const { id_adress, ...rest } =  address; 
                 const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
                 return { ...rest, full_address: fullAddress };
             });
+            this.$options.originalDirections = [...response]
 
-            console.log(this.directions);
         });
 
         getTypeRoad().then((response) => {
@@ -143,16 +145,19 @@ export default {
         });
     },
 
+    props: {
+        user: {
+            type: Object,
+            required: true
+        },
+        type_user: {
+            type: Object,
+            required: true
+        }
+    },
+
     data(){
         return{
-            user: {
-                id_user: 3,
-                name: 'Pol Crespo',
-                username: '@pcrespo',
-                email: 'pcrespo@politecnics.barcelona',
-                id_type_user: 2,
-            },
-
             directions: [],
             selectedDirection: {},
 
@@ -172,6 +177,7 @@ export default {
 
         cancelEditing() {
             this.shifts = this.$options.originalSchedules;
+            this.directions = this.$options.originalDirections;
             this.editingProfile = false;
         },
 
@@ -240,9 +246,6 @@ export default {
         handleSubmit(event) {
             event.preventDefault();
             this.editingProfile = false;
-            console.log('Información del usuario:', this.user);
-            console.log('Direcciones:', this.directions);
-            console.log('Turnos:', this.shifts);
 
             const formattedShifts = this.shifts.map(shift => ({
                 ...shift,
@@ -252,7 +255,8 @@ export default {
 
 
             updateUserData(this.user, formattedShifts, this.directions).then((response) => {
-                console.log(response);
+                this.$options.originalSchedules = [...this.shifts];
+                this.$options.originalDirections = [...this.directions];
             });
         },
 

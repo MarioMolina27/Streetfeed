@@ -35,8 +35,8 @@
                         </Card>
                     </div>
                 </div>
-                <top-profile></top-profile>
-                <profile-card></profile-card>
+                <top-profile :user="this.user"></top-profile>
+                <profile-card :user="this.user" :type_user="this.type_user"></profile-card>
 
                 <h3 class="mt-5 ms-3 danger-btn">Cerrar Sessión</h3>
                 <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold">Eliminar Cuenta</h3>
@@ -52,11 +52,25 @@
     import profileCard from './profileCard.vue';
     import { getDeliveriesByUser, getDeliveriesByKgUser } from "../../../services/delivery.js"
     import { markersByUser } from "../../../services/markers.js"
+    import { getScheduleByUser } from '../../../services/schedules.js';
+    import { getAdressByUser, getTypeRoad } from '../../../services/adress.js';
+    import { updateUserData } from '../../../services/users.js';
 
 
-    export default{
+    export default {
+        // props: {
+        //     id_user: {
+        //         type: Number,
+        //         required: true
+        //     }
+        // },
+
         data(){
           return {
+            type_user: {
+                id: 2,
+                name: 'Rider'
+            },
             menuItems: [
                     {name: 'Tus Repartos', href: './delivery'},
                     {name: 'Explorar', href: './explore'},
@@ -67,7 +81,10 @@
             markersByUser: 0,
             kgUser: 0,
             user: {
-                id_user: 4
+                id_user: 9,
+                name: 'Pol Crespo',
+                username: '@pcrespo',
+                email: 'pcrespo@politecnics.barcelona',
             }
           }
         },
