@@ -250,4 +250,25 @@ class DeliveryController extends Controller
         $kg = $deliveries * self::DELIVERY_KG;
         return response()->json(['kg' => $kg]);
     }
+
+    public function getProviderDeliveries(User $user) {
+        $deliveries = Delivery::whereHas('menu', function ($query) use ($user) {
+            $query->where('id_user', $user->id_user);
+        })
+        ->where('id_state', '=', 1)
+        ->with('marker')
+        ->with('state')
+        ->with('user')
+        ->with(['menu.user'=> function ($query) {
+            $currentDay = Carbon::now()->dayOfWeek;
+            $query->with(['schedules' => function ($query) use ($currentDay) {
+                $query->where('day', $currentDay);
+            }]);
+        }])
+        ->get();
+        
+        $deliveriesGroupedByUser = $deliveries->groupBy('user.id_user');
+
+        return $deliveriesGroupedByUser;
+    }
 }

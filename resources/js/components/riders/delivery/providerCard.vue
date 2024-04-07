@@ -25,7 +25,7 @@
               </div>
           </div>
           <div class="col-lg-1 col-4 d-flex justify-content-end">
-              <div v-if="isChatAvailable" class="button-chat ">
+              <div v-if="isChatAvailable" class="button-chat" @click.stop="showChat(delivery[0].provider)">
                 <i class="fa-solid fa-comment" style="color: #FDF8EB;"></i>
               </div>
           </div>
@@ -37,13 +37,25 @@
         </div>
     </div>
   </div>
+  <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
+    <Chat :user="userChat" :loggedUser="userLogged"/>
+  </Dialog>
 </template>
 
 <script>
 import markerCard from './markerCard.vue';
+import Dialog from 'primevue/dialog';
+import Chat from '../../shared/chat/chat.vue';
 export default {
     props: {
         delivery: Object
+    },
+    data() {
+      return {
+        showChatDialog: false,
+        userChat: {},
+        userLogged: 4,
+      }
     },
     computed: {
       closestSchedule() {
@@ -107,8 +119,7 @@ export default {
                 return true;
             }
         }
-      }
-      
+      },
     },
     methods: {
         doCollect() {
@@ -125,11 +136,17 @@ export default {
         },
         notifyDeliver(idDelivery) {
           this.$emit('notifyDeliver', idDelivery);
+        },
+        showChat(user) {
+          console.log(user);
+          this.userChat = user;
+          this.showChatDialog = true;
         }
     },
     components: {
         markerCard,
-        
+        Dialog,
+        Chat,
     }
 }
 </script>

@@ -4,7 +4,8 @@ import * as bootstrap from 'bootstrap';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import panelUser from './components/admin/users/panelUser.vue';
-import panelMenu from './components/providers/panelMenu.vue';
+import panelMenu from './components/providers/manageMenu/panelMenu.vue';
+import manageDelivery from './components/providers/manageDelivery/manageDelivery.vue';
 import panelExplore from './components/riders/explore/panelExplore.vue';
 import providerDetails from './components/riders/reserve/providerDetails.vue';
 import assignLocation from './components/riders/reserve/assignLocation.vue';
@@ -24,6 +25,7 @@ const appDOM = document.getElementById('app');
 
 app.component('paneluser', panelUser)
 app.component('panelmenu', panelMenu)
+app.component('managedelivery', manageDelivery)
 app.component('panelexplore', panelExplore)
 app.component('providerdetails', providerDetails)
 app.component('assignlocation', assignLocation)
