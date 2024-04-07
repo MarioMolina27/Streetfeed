@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
-    protected $table = 'message';
+    protected $table = 'messages';
     protected $primaryKey = 'id_message';
     // protected $incrementing= true;
     // protected $keyType= 'string';

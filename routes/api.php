@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AdressController;
 use App\Http\Controllers\Api\MarkerController;
 use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\MessageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -47,6 +48,9 @@ Route::post('delivery/do-suggest-reserve', [DeliveryController::class, 'doSugges
 Route::post('delivery/do-collect', [DeliveryController::class, 'doCollect']);
 Route::post('delivery/do-deliver', [DeliveryController::class, 'doDeliver']);
 Route::get('delivery/get-provider-deliveries/{user}', [DeliveryController::class, 'getProviderDeliveries']);
+Route::get('message/get-messages/{loggedUser}/{otherUser}', [MessageController::class, 'getMessages']);
+Route::post('message/send-message', [MessageController::class, 'sendMessage']);
+Route::post('message/delete-message', [MessageController::class, 'deleteMessage']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
