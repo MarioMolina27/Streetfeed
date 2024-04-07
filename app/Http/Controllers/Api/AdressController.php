@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Type_Road;
 use App\Models\User;
 use App\Models\Adress;
 use App\Models\Type_User;
@@ -41,7 +42,7 @@ class AdressController extends Controller
      */
     public function show(Adress $user)
     {
-        //
+        
     }
 
     /**
@@ -81,7 +82,12 @@ class AdressController extends Controller
     }
 
     public function getAdressesByUser(Request $request, User $user){
-        $adresses = Adress::where('id_user', $user->id_user)->get();
+        $adresses = Adress::where('id_user', $user->id_user)->with('roadType')->get();
         return response()->json($adresses);
+    }
+
+    public function getTypeRoad(Request $request){
+        $typeRoad = Type_Road::all();
+        return response()->json($typeRoad);
     }
 }

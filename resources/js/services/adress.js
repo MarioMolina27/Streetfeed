@@ -21,3 +21,17 @@ export const getAdressByUser = async (id) => {
         console.log('Error:', error);
     }
 }
+
+export const getTypeRoad = async () => {
+    const url = `api/adress/getTypeRoad`;
+    console.log(url);
+    try{
+        const response = await axios.get(url);
+        console.log(response);
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log('Error:', error);
+    }
+}

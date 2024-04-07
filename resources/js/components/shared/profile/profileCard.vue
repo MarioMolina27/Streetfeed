@@ -1,5 +1,5 @@
 <template>
-<dialogMap :modalVisible="this.modalVisible" @closeModal="closeModal"></dialogMap>
+<dialogMap :selectedDirection="this.selectedDirection" :modalVisible="this.modalVisible" @closeModal="closeModal" @addDirection="addDirection"></dialogMap>
     <div class="mt-5">
         <Card>
             <template #content>
@@ -24,13 +24,19 @@
                         <p class="label-card-profile">Email</p>
                         <p>{{user.email}}</p>
                         <p class="label-card-profile">Direcciones</p>
-                        <p v-for="direction in directions" :key="direction">{{direction.direction}}</p>
+                        <p v-for="direction in directions" :key="direction">{{direction.full_address}}</p>
                     </div>
-                    <div v-else>
+                    <div v-else class="mb-4">
                         <p class="label-card-profile">Email</p>
                         <input type="text" class="form-custom" v-model="user.email">
                         <p class="label-card-profile">Direcciones</p>
-                        <input type="text" class="form-custom form-direction" @focus="openModal" v-for="direction in directions" :key="direction.id" v-model="direction.direction">
+                        <template v-if="this.directions.length > 0">
+                            <div v-for="(direction, index) in directions" :key="direction.id" class="d-flex flex-row" v-i>
+                                <input type="text" class="form-custom form-direction" disabled v-model="direction.full_address">
+                                <div class="d-flex justify-content-center align-items-center delete-shift-btn" @click="deleteDirection(index)"><i class="fa fa-trash"></i></div>
+                            </div>
+                        </template>
+                        <div @click="openModal({})" class="d-flex justify-content-center align-items-center add-shift-btn mt-3" style="margin-left: 0;"><i class="fa fa-add"></i></div>
                     </div>
 
                     <div v-if="user.id_type_user === 2" class=" mb-2">
@@ -48,7 +54,7 @@
                                 <template v-for="(day, index) in daysOfWeek" :key="index">
                                     <div class="row mt-3 d-flex align-items-center justify-content-center">
                                             <div class="col-lg-4 col-12 d-flex flex-row align-items-center">
-                                                <img src="img/Alarmclock.svg" alt="img-first-category-game" class="img-profile-stats" />
+                                                <i class="fa-regular fa-clock img-profile-stats" alt="img-first-category-game"></i>
                                                 <p class="text-profile-schedule mb-0">{{ day }}</p>
                                             </div>
                                             <div class="col-lg-7 col-12 d-flex flex-row ms-4">
@@ -96,7 +102,7 @@ import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import dialogMap from './dialogMap.vue';
 import { getScheduleByUser } from '../../../services/schedules.js';
-import { getAdressByUser } from '../../../services/adress.js';
+import { getAdressByUser, getTypeRoad } from '../../../services/adress.js';
 import { updateUserData } from '../../../services/users.js';
 
 
@@ -121,13 +127,26 @@ export default {
 
         getAdressByUser(this.user.id_user).then((response) => {
             this.directions = response;
+            console.log(this.directions);
+
+            this.directions = this.directions.map(address => {
+                const { id_adress, ...rest } =  address; 
+                const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
+                return { ...rest, full_address: fullAddress };
+            });
+
+            console.log(this.directions);
+        });
+
+        getTypeRoad().then((response) => {
+            this.typeRoads = response;
         });
     },
 
     data(){
         return{
             user: {
-                id_user: 9,
+                id_user: 3,
                 name: 'Pol Crespo',
                 username: '@pcrespo',
                 email: 'pcrespo@politecnics.barcelona',
@@ -135,6 +154,7 @@ export default {
             },
 
             directions: [],
+            selectedDirection: {},
 
             editingProfile: false,
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
@@ -142,6 +162,7 @@ export default {
 
             shifts : [],
             modalVisible: false,
+            typeRoads: [],
         }
     },
     methods: {
@@ -169,6 +190,10 @@ export default {
             return this.shifts.filter(s => s.day === day).length;
         },
 
+        getNumDirections(){
+            return this.directions.length;
+        },
+
         addShift(day) {
             this.shifts.push({
                 id_schedule: '',
@@ -176,8 +201,40 @@ export default {
                 shift: 2,
                 start_time: "",
                 finish_time: "",
-                id_user: this.user.id
+                id_user: this.user.id_user
             });
+        },
+
+        addDirection(adress) {
+            let idRoad;
+
+            for (const road of this.typeRoads) {
+                if (road.name && adress.name && road.name.charAt(0).toLowerCase() === adress.name.charAt(0).toLowerCase()) {
+                    idRoad = road.id_road;
+                }
+            }
+
+            this.directions.push({
+                country: adress.country,
+                city: adress.city,
+                cp: adress.cp,
+                name: adress.name,
+                number: adress.number,
+                floor: adress.floor,
+                door: adress.door,
+                id_road: idRoad,
+                id_user: this.user.id_user
+            });
+
+            this.directions = this.directions.map(address => {
+                const { id_adress, ...rest } =  address; 
+                const fullAddress = `${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
+                return { ...rest, full_address: fullAddress };
+            });
+        },
+
+        deleteDirection(index) {
+            this.directions.splice(index, 1);
         },
 
         handleSubmit(event) {
@@ -212,7 +269,8 @@ export default {
             return `${hours}:${minutes}:${seconds}`;
         },
 
-        openModal(){
+        openModal(adress){
+            this.selectedDirection = adress;
             this.modalVisible = true;
         },
 

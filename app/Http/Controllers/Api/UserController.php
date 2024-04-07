@@ -365,7 +365,7 @@ class UserController extends Controller
     
         try {
             $userInput = $request->input('user');
-            $directionsInput = $request->input('directions');
+            $directionsInput = $request->input('adresses');
             $schedulesInput = $request->input('schedules');
     
             $userDB = User::find($userInput['id_user']);
@@ -377,11 +377,22 @@ class UserController extends Controller
             $userDB->email = $userInput['email'];
             $userDB->save();
             
-            // // Update or create addresses
-            // $userDB->addresses()->delete(); // Delete existing addresses
-            // foreach ($directionsInput as $direction) {
-            //     $userDB->addresses()->create($direction);
-            // }
+            // Update or create addresses
+            $userDB->addresses()->delete();
+            foreach ($directionsInput as $direction) {
+                $newDirection = [
+                    'city' => $direction['city'],
+                    'country' => $direction['country'],
+                    'name' => $direction['name'],
+                    'cp' => $direction['cp'],
+                    'number' => $direction['number'],
+                    'floor' => $direction['floor'],
+                    'door' => $direction['door'],
+                    'id_road' => $direction['id_road'],
+                    'id_user' => $userDB->id_user,
+                ];
+                $userDB->addresses()->create($newDirection);
+            }
     
             $userDB->schedules()->delete();
             foreach ($schedulesInput as $schedule) {

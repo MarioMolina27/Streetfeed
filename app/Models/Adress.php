@@ -14,6 +14,17 @@ class Adress extends Model
     // protected $keyType= 'string';
     public $timestamps= false;
 
+    protected $fillable = [
+        'city',
+        'country',
+        'name',
+        'number',
+        'cp',
+        'floor',
+        'door',
+        'id_user',
+        'id_road'
+    ];
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
