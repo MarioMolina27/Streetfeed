@@ -7,7 +7,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
-                            <Tag>{{this.type_user.name}}</Tag>
+                            <Tag v-if="this.type_user.length === 1" v-for="ts in this.type_user" :key="ts.name">{{ts.name}}</Tag>
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
@@ -19,7 +19,10 @@
                             </div>
                         </div>
                     </div>
+
                     <p>{{user.username}}</p>
+                    <Tag v-if="this.type_user.length > 1" v-for="ts in this.type_user" :key="ts.name" class="ms-0 mt-0 mb-4">{{ts.name}}</Tag>
+
                     <div v-if="!editingProfile">
                         <p class="label-card-profile">Email</p>
                         <p>{{user.email}}</p>
@@ -39,7 +42,7 @@
                         <div @click="openModal({})" class="d-flex justify-content-center align-items-center add-shift-btn mt-3" style="margin-left: 0;"><i class="fa fa-add"></i></div>
                     </div>
 
-                    <div v-if="type_user.id === 2" class=" mb-2">
+                    <div v-if="userIsProvider" class=" mb-2">
                         <Accordion class="w-100" @tab-open="displayShifts=true" @tab-close="displayShifts=false">
                             <AccordionTab>
                                 <template #header>
@@ -143,6 +146,15 @@ export default {
         Accordion,
         AccordionTab,
         dialogMap
+    },
+
+    computed: {
+            userIsRider() {
+                return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
+            },
+            userIsProvider() {
+                return this.type_user.some(userType => userType.id === 2); // Suponiendo que el id para Provider sea 2
+            }
     },
 
     mounted() {

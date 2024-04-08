@@ -34,6 +34,7 @@ Route::get('schedule/getScheduleByUser/{user}', [ScheduleController::class, 'get
 Route::get('adress/getAdressesByUser/{user}', [AdressController::class, 'getAdressesByUser']);
 Route::post('users/updateUser', [UserController::class, 'updateUserData']);
 Route::get('adress/getTypeRoad', [AdressController::class, 'getTypeRoad']);
+Route::get('delivery/getNumProviderDeliveries/{user}', [DeliveryController::class, 'getNumProviderDeliveries']);
 
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);

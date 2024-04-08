@@ -38,7 +38,9 @@
                         </Card>
                     </div>
                 </div>
-                <top-profile :user="this.user"></top-profile>
+                <top-profile-rider v-if ="userIsRider" :user="this.user" :deliveriesUser="this.deliveriesUser"></top-profile-rider>
+                <top-profile-provider v-if ="userIsProvider" :user="this.user" :deliveriesUser="this.numProviderDeliveries"></top-profile-provider>
+
                 <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads"></profile-card>
 
                 <h3 class="mt-5 ms-3 danger-btn">Cerrar Sessión</h3>
@@ -51,9 +53,10 @@
     <script>
     import Navbar from '../../shared/Navbar.vue';
     import Card from 'primevue/card';
-    import topProfile from './topProfile.vue';
+    import topProfileRider from './topProfileRider.vue';
+    import topProfileProvider from './topProfileProvider.vue';
     import profileCard from './profileCard.vue';
-    import { getDeliveriesByUser, getDeliveriesByKgUser } from "../../../services/delivery.js"
+    import { getDeliveriesByUser, getDeliveriesByKgUser, getNumProviderDeliveries } from "../../../services/delivery.js"
     import { markersByUser } from "../../../services/markers.js"
     import { getAdressByUser, getTypeRoad } from '../../../services/adress.js';
     import { getScheduleByUser } from '../../../services/schedules.js';
@@ -66,10 +69,10 @@
           return {
             loading: true,
             loadingFinished: false,
-            type_user: {
-                id: 1,
-                name: 'Rider'
-            },
+            type_user: [
+                {id: 1, name: 'Rider'},
+                {id: 2, name: 'Provider'},
+            ],
             menuItems: [
                     {name: 'Tus Repartos', href: './delivery'},
                     {name: 'Explorar', href: './explore'},
@@ -77,6 +80,7 @@
                     {name: 'Perfil', href: './profile'}
             ],
             deliveriesUser: 0,
+            numProviderDeliveries: 0,
             markersByUser: 0,
             shifts: [],
             address: [],
@@ -90,10 +94,20 @@
             }
           }
         },
+
+        computed: {
+            userIsRider() {
+                return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
+            },
+            userIsProvider() {
+                return this.type_user.some(userType => userType.id === 2); // Suponiendo que el id para Provider sea 2
+            }
+        },
         components: {
             Navbar,
             Card,
-            topProfile,
+            topProfileRider,
+            topProfileProvider,
             profileCard,
             loader
         },
@@ -104,14 +118,16 @@
                 getDeliveriesByKgUser(this.user.id_user),
                 getScheduleByUser(this.user.id_user),
                 getAdressByUser(this.user.id_user),
-                getTypeRoad()
-            ]).then(([deliveriesResponse, markersResponse, kgResponse, scheduleResponse, addressResponse, typeRoadResponse]) => {
+                getTypeRoad(),
+                getNumProviderDeliveries(this.user.id_user)
+            ]).then(([deliveriesResponse, markersResponse, kgResponse, scheduleResponse, addressResponse, typeRoadResponse,numProviderDeliveriesResponse]) => {
                 this.deliveriesUser = deliveriesResponse;
                 this.markersByUser = markersResponse;
                 this.kgUser = kgResponse.kg;
                 this.shifts = scheduleResponse;
                 this.address = addressResponse;
                 this.typeRoads = typeRoadResponse;
+                this.numProviderDeliveries = numProviderDeliveriesResponse;
                 this.loading = false;
             }).catch(error => {
                 console.error("Hubo un error al obtener los datos:", error);

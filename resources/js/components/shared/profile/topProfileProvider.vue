@@ -6,7 +6,7 @@
                 <img v-if="this.deliveriesUser >= 0 && this.deliveriesUser <= 5" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
                 <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
-            <p class="step-text">0-5 repartos</p> 
+            <p class="step-text">0-5 entregas</p> 
         </div>
         
         <div>
@@ -18,7 +18,7 @@
                 <img v-if="this.deliveriesUser >=5 && this.deliveriesUser <=20" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
                 <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
-            <p class="step-text">5-20 repartos</p> 
+            <p class="step-text">5-20 entregas</p> 
         </div>
 
         <div>
@@ -30,34 +30,30 @@
                 <img v-if="this.deliveriesUser >20" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
                 <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
-            <p class="step-text">+20 repartos</p> 
+            <p class="step-text">+20 entregas</p> 
         </div>
     </div>
     </div>
 </template>
 
 <script>
-import { getDeliveriesByUser } from "../../../services/delivery.js"
 
 export default {
     props: {
         user: {
             type: Object,
             required: true
-        }
+        },
+        deliveriesUser: {
+            type: Number,
+            required: true
+        },
     },
 
     data() {
-        return {
-            deliveriesUser: 0,
-        }
+        
     },
-    mounted() {
-        getDeliveriesByUser(this.user.id_user).
-        then((response) => {
-            this.deliveriesUser = response;
-        })
-    }
+  
 }
 </script>
 
