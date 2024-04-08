@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <panelmenu></panelmenu>
+    <panelmenu :lang="'{{ $lang }}'"></panelmenu>
 @endsection
 
 @section('imports')
