@@ -7,7 +7,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
-                            <Tag v-if="this.type_user.length === 1" v-for="ts in this.type_user" :key="ts.name">{{ts.name}}</Tag>
+                            <Tag class="ms-0" v-if="type_user.length===1" v-for="(ts, index) in type_user" :key="ts.name">
+                                {{ ts.name }}
+                            </Tag>                        
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
@@ -19,10 +21,10 @@
                             </div>
                         </div>
                     </div>
-
                     <p>{{user.username}}</p>
-                    <Tag v-if="this.type_user.length > 1" v-for="ts in this.type_user" :key="ts.name" class="ms-0 mt-0 mb-4">{{ts.name}}</Tag>
-
+                    <Tag class="ms-0 mb-3" v-if="type_user.length>1" v-for="(ts, index) in type_user" :key="ts.name">
+                                {{ ts.name }}
+                    </Tag> 
                     <div v-if="!editingProfile">
                         <p class="label-card-profile">Email</p>
                         <p>{{user.email}}</p>
@@ -150,9 +152,11 @@ export default {
 
     computed: {
             userIsRider() {
+                // Verifica si el tipo de usuario es Rider
                 return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
             },
             userIsProvider() {
+                // Verifica si el tipo de usuario es Provider
                 return this.type_user.some(userType => userType.id === 2); // Suponiendo que el id para Provider sea 2
             }
     },

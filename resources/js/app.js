@@ -19,6 +19,8 @@ import panelFavorite from './components/riders/explore/panelFavorite.vue';
 import login from './components/auth/login.vue';
 import panelDelivery from './components/riders/delivery/panelDelivery.vue';
 import profile from './components/shared/profile/profile.vue';
+import Tooltip from 'primevue/tooltip';
+
 
 const app = createApp({}).use(PrimeVue).use(ConfirmationService);
 const appDOM = document.getElementById('app');
@@ -38,5 +40,7 @@ app.component('login', login)
 app.component('mapadmin', mapAdmin)
 app.component('paneldelivery', panelDelivery)
 app.component('profile', profile)
+app.directive('tooltip', Tooltip);
+
 
 app.mount(appDOM);

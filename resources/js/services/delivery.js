@@ -58,8 +58,8 @@ export const getDeliveriesByKgUser = async (id) => {
     }
 }
 
-export const getNumProviderDeliveries = async ($id) => {
-    const url = `api/delivery/getNumProviderDeliveries/${$id}`;
+export const getNumProviderDeliveries = async (id) => {
+    const url = `api/delivery/getNumProviderDeliveries/${id}`;
     try{
         const response = await axios.get(url);
         const data = await response.data;
@@ -69,3 +69,4 @@ export const getNumProviderDeliveries = async ($id) => {
         console.log('Error:', error);
     }
 }
+

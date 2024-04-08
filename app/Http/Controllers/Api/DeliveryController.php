@@ -215,6 +215,13 @@ class DeliveryController extends Controller
         return $deliveries;
     }
 
+    public function getNumProviderDeliveries(User $user) {
+        $deliveries = Delivery::whereHas('menu', function ($query) use ($user) {
+            $query->where('id_user', $user->id_user);
+        })->where('id_state', 3)->count();
+        return response()->json($deliveries);
+    }
+
     public function doCollect(Request $request) {
         $deliveryIds = $request->input('deliveryIds');
         try {
@@ -250,6 +257,7 @@ class DeliveryController extends Controller
         $kg = $deliveries * self::DELIVERY_KG;
         return response()->json(['kg' => $kg]);
     }
+
 
     public function getProviderDeliveries(User $user) {
         $deliveries = Delivery::whereHas('menu', function ($query) use ($user) {
