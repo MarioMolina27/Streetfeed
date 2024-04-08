@@ -57,3 +57,16 @@ export const getDeliveriesByKgUser = async (id) => {
         console.log('Error:', error);
     }
 }
+
+export const getNumProviderDeliveries = async (id) => {
+    const url = `api/delivery/getNumProviderDeliveries/${id}`;
+    try{
+        const response = await axios.get(url);
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log('Error:', error);
+    }
+}
+

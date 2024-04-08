@@ -37,27 +37,18 @@
 </template>
 
 <script>
-import { getDeliveriesByUser } from "../../../services/delivery.js"
 
 export default {
     props: {
         user: {
             type: Object,
             required: true
+        },
+        deliveriesUser: {
+            type: Number,
+            required: true
         }
     },
-
-    data() {
-        return {
-            deliveriesUser: 0,
-        }
-    },
-    mounted() {
-        getDeliveriesByUser(this.user.id_user).
-        then((response) => {
-            this.deliveriesUser = response;
-        })
-    }
 }
 </script>
 

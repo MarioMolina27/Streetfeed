@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\MarkerResource;
 
 
@@ -421,5 +422,29 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function changePassword(Request $request, User $user)
+    {
+        $validatedData = $request->validate([
+            'oldPassword' => 'required|string',
+            'newPassword' => 'required|string',
+            'newPassword2' => 'required|string|same:newPassword',
+        ]);
+
+        if (!Hash::check($validatedData['oldPassword'], $user->password)) {
+            return response()->json(['error' => 'La contraseña antigua no coincide'], 400);
+        }
+
+        if ($validatedData['newPassword'] !== $validatedData['newPassword2']) {
+            return response()->json(['error' => 'Las nuevas contraseñas no coinciden'], 400);
+        }
+
+        $user->password = Hash::make($validatedData['newPassword']);
+        $user->save();
+
+        return response()->json(['message' => 'Contraseña cambiada correctamente'], 200);
+    }
+
+    
 }
 
