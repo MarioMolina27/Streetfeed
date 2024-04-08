@@ -39,7 +39,9 @@
                         </Card>
                     </div>
                 </div>
-                <top-profile :user="this.user"></top-profile>
+                <top-profile-rider v-if="userIsRider" :user="this.user" :deliveriesUser="deliveriesUser"></top-profile-rider>
+                <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="deliveryProvider"></top-profile-provider>
+                
                 <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads"></profile-card>
 
                 <h3 class="mt-5 ms-3" style="cursor: pointer;" @click="this.modalPassword=true;">Cambiar Contraseña</h3>
@@ -71,6 +73,7 @@
           return {
             loading: true,
             loadingFinished: false,
+            modalPassword: false,
             type_user: {
                 id: 1,
                 name: 'Rider'
@@ -120,14 +123,16 @@
                 getDeliveriesByKgUser(this.user.id_user),
                 getScheduleByUser(this.user.id_user),
                 getAdressByUser(this.user.id_user),
-                getTypeRoad()
-            ]).then(([deliveriesResponse, markersResponse, kgResponse, scheduleResponse, addressResponse, typeRoadResponse]) => {
+                getTypeRoad(),
+                getNumProviderDeliveries(this.user.id_user)
+            ]).then(([deliveriesResponse, markersResponse, kgResponse, scheduleResponse, addressResponse, typeRoadResponse,numProviderDeliveriesResponse]) => {
                 this.deliveriesUser = deliveriesResponse;
                 this.markersByUser = markersResponse;
                 this.kgUser = kgResponse.kg;
                 this.shifts = scheduleResponse;
                 this.address = addressResponse;
                 this.typeRoads = typeRoadResponse;
+                this.numProviderDeliveries = numProviderDeliveriesResponse;
                 this.loading = false;
             }).catch(error => {
                 console.error("Hubo un error al obtener los datos:", error);

@@ -48,6 +48,7 @@ export const getDeliveriesByUser = async (id) => {
 
 export const getDeliveriesByKgUser = async (id) => {
     const url = `api/delivery/getDeliveriesByKgUser/${id}`;
+    console.log(url);
     try{
         const response = await axios.get(url);
         const data = await response.data;
