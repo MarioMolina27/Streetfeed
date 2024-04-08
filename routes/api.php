@@ -36,6 +36,7 @@ Route::post('users/updateUser', [UserController::class, 'updateUserData']);
 Route::get('adress/getTypeRoad', [AdressController::class, 'getTypeRoad']);
 Route::get('delivery/getNumProviderDeliveries/{user}', [DeliveryController::class, 'getNumProviderDeliveries']);
 
+
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
 Route::get('users/near-providers/{user}', [UserController::class, 'getMoreNearProviders']);
@@ -57,6 +58,8 @@ Route::post('message/delete-message', [MessageController::class, 'deleteMessage'
 Route::get('menu/get-menus/{user}', [MenuController::class, 'getMenusfromProvider']);
 Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
 Route::post('menu/update-menu', [MenuController::class, 'updateMenu']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

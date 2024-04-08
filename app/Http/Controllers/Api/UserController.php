@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\MarkerResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -70,8 +72,8 @@ class UserController extends Controller
     {
         try 
         {
-           $user->active = 0;
-           $user->save();
+            $user->active = 0;
+            $user->save();
         } 
         catch (\Exception $e) 
         {
@@ -83,8 +85,8 @@ class UserController extends Controller
     {
         try 
         {
-           $user->active = 1;
-           $user->save();
+            $user->active = 1;
+            $user->save();
         } 
         catch (\Exception $e) 
         {
@@ -312,7 +314,6 @@ class UserController extends Controller
         foreach ($riders as $key => $value) {
             $riders[$key] = $totalUsers += $value;
         }
-       
         return response()->json([$riders]);
     }
 
@@ -421,7 +422,44 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function login(Request $request) {
+        try {
+            $nickname = $request->input('nickname');
+            $password = $request->input('password');
+            $tipoUsuario = $request->input();
 
-    
+            
+            // where tipo usuario (botones)
+
+            // compeobar tipo usuario
+            
+            $user = User::with('typeUsers')
+            ->where('nickname', '=', $nickname)
+            // where tipo usuario
+            ->first();
+            if (isset($user) && Hash::check($password, $user->password)) {
+                // Suponiendo que 'type' es el atributo que determina el tipo de usuario
+                Auth::login($user);
+                return $user;
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function showPage(){
+        $user = Auth::user();
+        $typeUser = Auth::user()->typeUsers()->get();
+        if($typeUser[0]->id_type_user == '1') {
+            return view('riders.delivery.delivery', compact('user'));
+        } else if($typeUser[0]->id_type_user == '2') {
+            return view('providers.menu', compact('user'));
+        } else if($typeUser[0]->id_type_user == '3') {
+            return view('admin.home', compact('user'));
+        }
+        return view('admin.home', compact('user'));
+    }
 }
 
