@@ -12,7 +12,7 @@
                             <span class="title-primary">STREET</span><span class="title-secondary">FEED</span class="title-secondary">
                         </h1>
                     </div>
-                    <!-- sign in google -->
+                    <!-- Buttons Type User -->
                     <div class="container-fluid my-3 sign-in-google ">
                         <div class="row justify-content-center">
                             <div class="col-12">
@@ -31,19 +31,19 @@
                     </div>
                     <!-- form login -->
                     <div class="container-fluid login-form d-flex flex-column align-items-center justify-content-center ">
-                        <form action="">
+                        <div class="form-login">
                             <div class="mb-3">
-                                <label for="email-login" class="form-label">Email</label>
-                                <input class="form-control input-login" type="email" name="email-login" id="email-login" placeholder="you@example.com">
+                                <label for="nickname-login" class="form-label">Nickname</label>
+                                <input class="form-control input-login" type="text" name="nickname-login" id="nickname-login" v-model="nickname" placeholder="Your nickname">
                             </div>
                             <div class="mb-3">
                                 <label for="password-login" class="form-label">Password</label>
-                                <input class="form-control input-login" type="password" name="password-login" id="password-login" placeholder="Your password">
+                                <input class="form-control input-login" type="password" name="password-login" id="password-login" v-model="password" placeholder="Your password">
                             </div>
                             <div class="mb-3">
-                                <button class="btn w-100 btn-login" type="submit">Sign In</button>
+                                <button class="btn w-100 btn-login" type="submit" @click="login()">Sign In</button>
                             </div>
-                        </form>
+                        </div>
 
                         <div class="register-access">
                             Don’t have an account? <a href="#" id="registerLink">Sign Up Now</a>
@@ -181,55 +181,31 @@
                                 <h2 class="text-center">Business <span class="title-secondary">Info</span></h2>
                                 <h5 class="text-center fw-light">HORARY</h5>
                                 <!-- content step 4 -->
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Sunday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <!-- <Calendar id="calendar-timeonly" v-model="time" timeOnly /> -->
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Monday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <!-- <Calendar id="calendar-timeonly" v-model="time" timeOnly /> -->
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Tuesday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <!-- <Calendar id="calendar-timeonly" v-model="time" timeOnly /> -->
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Wednesday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Thursday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Friday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
-                                <div class="dia">
-                                    <label class="form-label label-day" for="">Saturday</label>
-                                    <!-- <input type="time"  class="form-control" name="" id=""> -->
-                                    <!-- <input type="time" name="" id="" style="display: none;"> -->
-                                    <Calendar id="calendar-timeonly" v-model="time" timeOnly />
-                                    <button type="button" class="btn btn-add-horary"><i class="fa-solid fa-plus"></i></button>
-                                </div>
+                                <template v-for="(day, index) in daysOfWeek" :key="index">
+                                    <div class="row mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-lg-4 col-12 d-flex flex-row align-items-center">
+                                                <img src="img/Alarmclock.svg" alt="img-first-category-game" class="img-profile-stats" />
+                                                <p class="text-profile-schedule mb-0">{{ day }}</p>
+                                            </div>
+                                            <div class="col-lg-7 col-12 d-flex flex-row ms-4">
+                                                <div class="d-flex flex-column gap-2">
+                                                    <div class="d-flex flex-row">
+                                                        <Calendar :id="'calendar-timeonly-' + index + '-morning'" class="ms-2" timeOnly />
+                                                        <Calendar :id="'calendar-timeonly-' + index + '-afternoon'" class="ms-2" timeOnly />
+                                                        <div class="d-flex justify-content-center align-items-center delete-shift-btn" @click="deleteShift(index + 1, day)"><i class="fa fa-trash"></i></div>
+                                                        <!-- <div v-if="shiftIndex === getNumberShifts(index + 1) - 1 && getNumberShifts(index + 1) === 1" @click="addShift(index+1)" class="d-flex justify-content-center align-items-center add-shift-btn"><i class="fa fa-add"></i></div> -->
+                                                    </div>
+                                                    <div class="d-flex flex-row">
+                                                        <Calendar :id="'calendar-timeonly-' + index + '-morning'" class="ms-2" timeOnly />
+                                                        <Calendar :id="'calendar-timeonly-' + index + '-afternoon'"  class="ms-2" timeOnly />
+                                                        <div class="d-flex justify-content-center align-items-center delete-shift-btn" @click="deleteShift(index + 1, day)"><i class="fa fa-trash"></i></div>
+                                                        <!-- <div v-if="shiftIndex === getNumberShifts(index + 1) - 1 && getNumberShifts(index + 1) === 1" @click="addShift(index+1)" class="d-flex justify-content-center align-items-center add-shift-btn"><i class="fa fa-add"></i></div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
+                                </template>
                                 <div class="mb-3 btn-step">
                                     <a href="#" class="prev-step">PREV</a>
                                     <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
@@ -258,14 +234,76 @@
 <script>
 import { gsap } from "gsap";
 import Calendar from 'primevue/calendar';
+import { homeRouteAdmin, mainRiderPage, mainProviderPage} from '../../utilities/constant.js';
 
 export default {
     data() {
         return {
-
+            nickname: '',
+            password: '',
+            daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+            shifts : [],
+            displayShifts: false,
         };
     },
     methods: {
+        login() {
+            axios.post('users/login', {
+                nickname: this.nickname,
+                password: this.password
+            })
+            .then(response =>{
+                console.log(response.data)
+                if (response.data != null) {
+                    const typeUser = response.data.type_users[0].id_type_user;
+                    if(typeUser == '1') {
+                        window.open(mainProviderPage,"_self")
+                    } else if((typeUser == '2')) {
+                        window.open(mainRiderPage,"_self")
+                    } else if((typeUser == '3')) {
+                        window.open(homeRouteAdmin,"_self")
+                    }
+                } else {
+                    //mensaje de error
+                    console.log('incorrct')
+                }
+                
+            })
+            .catch(error => {
+                console.error('Error al loguearse', error);
+                console.log('incorrct')
+            });
+
+            //si es correcto -> auth
+            //si es incorrecto msg error
+        },
+        getShift(day, shift) {
+            return this.shifts.find(s => s.day === day && s.shift === shift);
+        },
+        deleteShift(day, shift) {
+            const index = this.shifts.findIndex(s => s.day === day && s.shift === shift);
+            if (index !== -1) {
+                const otherShift = this.shifts.find(s => s.day === day && s.shift !== shift);
+                if (otherShift) {
+                    this.shifts.splice(index, 1);
+                    otherShift.shift = 1;
+                }
+            }
+        },
+        getNumberShifts(day) {
+            return this.shifts.filter(s => s.day === day).length;
+        },
+
+        addShift(day) {
+            this.shifts.push({
+                id_schedule: '',
+                day: day,
+                shift: 2,
+                start_time: "",
+                finish_time: "",
+                id_user: this.user.id
+            });
+        },
         intercambiarContenido() {
             let loginColumn = document.getElementById('loginColumn');
             let registerColumn = document.getElementById('registerColumn');
@@ -406,8 +444,8 @@ export default {
 
         document.getElementById('loginLink').addEventListener('click', function(e) {
             e.preventDefault();
-            mostrarLogin();
-        });
+            this.mostrarLogin();
+        }.bind(this));
         
 
         document.querySelectorAll('.next-step, .prev-step').forEach(button => {
@@ -588,7 +626,7 @@ button {
     margin: 1rem 0;
 }
 
-.login-form form,
+.login-form .form-login,
 .register-form form {
     display: flex;
     flex-direction: column;

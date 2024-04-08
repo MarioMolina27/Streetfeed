@@ -17,6 +17,12 @@ import StadisticsHome from "./StadisticsHome.vue";
 
 
 export default {
+    props: {
+        user: Object
+    },
+    mounted() {
+        console.log(this.user)
+    },
     components: {
         SidebarAdmin,
         StadisticsHome

@@ -32,6 +32,7 @@ Route::get('schedule/getScheduleByUser/{user}', [ScheduleController::class, 'get
 Route::get('adress/getAdressesByUser/{user}', [AdressController::class, 'getAdressesByUser']);
 Route::post('users/updateUser', [UserController::class, 'updateUserData']);
 
+
 Route::apiResource('users', UserController::class);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
 Route::get('users/near-providers/{user}', [UserController::class, 'getMoreNearProviders']);
@@ -46,6 +47,8 @@ Route::get('delivery/get-user-deliveries/{user}', [DeliveryController::class, 'g
 Route::post('delivery/do-suggest-reserve', [DeliveryController::class, 'doSuggestReserve']);
 Route::post('delivery/do-collect', [DeliveryController::class, 'doCollect']);
 Route::post('delivery/do-deliver', [DeliveryController::class, 'doDeliver']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -12,3 +12,6 @@ export const usersRouteAdmin= `${window.location.protocol + "//" + window.locati
 export const statisticsProviderRouteAdmin = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/admin/stadistics/providers`;
 export const statisticsRiderRouteAdmin = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/admin/stadistics/riders`;
 export const mapAdminRoute = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/admin/map`;
+
+export const mainRiderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/delivery`;
+export const mainProviderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/menu`;

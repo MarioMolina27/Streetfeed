@@ -1,22 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('landings.landing');
 });
 
+
 Route::get('admin/users', function () {
     return view('admin.admin');
-});
+})->name('mainAdmin');
 
-Route::get('menu', function () {
-    return view('providers.menu');
-});
-Route::get('delivery', function () {
-    return view('riders.delivery.delivery');
-});
+
 Route::get('explore', function () {
     return view('riders.explore.explore');
 });
@@ -46,9 +43,9 @@ Route::get('register', function () {
     return view('auth.register');
 });
 
-Route::get('admin', function () {
-    return view('admin.home');
-});
+Route::get('admin', [UserController::class,'showPage']);
+Route::get('menu', [UserController::class,'showPage']);
+Route::get('delivery', [UserController::class,'showPage']);
 
 Route::get('admin/stadistics/providers', function () {
     return view('admin.stadisticsProvider');
@@ -57,6 +54,9 @@ Route::get('admin/stadistics/providers', function () {
 Route::get('admin/stadistics/riders', function () {
     return view('admin.stadisticsRiders');
 });
+
+Route::post('users/login', [UserController::class, 'login']);
+
 
 Route::get('admin/map', function () {
     return view('admin.mapAdmin');

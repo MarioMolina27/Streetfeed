@@ -117,6 +117,8 @@ export default {
         getScheduleByUser(this.user.id_user).then((response) => {
             this.$options.originalSchedules = [...response]
             this.shifts = response;
+            
+        console.log(this.shifts)
         });
 
         getAdressByUser(this.user.id_user).then((response) => {
