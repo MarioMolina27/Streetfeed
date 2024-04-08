@@ -1,22 +1,18 @@
 <template>
     <div class="item-menu-card">
-        <span>{{ menu.title }}</span>
+        <strong class="fs-5 mb-4">{{ menu.title }}</strong>
         <div class="item-menu-products">
             <p>Primer plato: <strong class="fs-5">{{ menu.first_product }}</strong> </p>
             <p>Segundo plato: <strong class="fs-5">{{ menu.second_product }}</strong></p>
             <p>Bebida: <strong class="fs-5">{{ menu.drink_product }}</strong></p>
         </div>
         <div class="item-menu-products">
-            <InputNumber v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="menu.launchpack_count" @update:modelValue="emitChangeValue">
-              <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
-              <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
-            </InputNumber>
+            
         </div>
     </div>
 </template>
 
 <script>
-import InputNumber from 'primevue/inputnumber';
 export default {
     props: {
         menu: Object
@@ -33,7 +29,6 @@ export default {
         
     },
     components: {
-        InputNumber
     }
 }
 </script>

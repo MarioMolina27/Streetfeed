@@ -17,9 +17,7 @@ Route::get('admin/users', function () {
 Route::get('menu', function () {
     return view('providers.manage_menu.manage_menu');
 });
-Route::get('managedelivery', function () {
-    return view('providers.manage_delivery.manage_delivery');
-});
+
 Route::get('delivery', function () {
     return view('riders.delivery.delivery');
 });
@@ -53,7 +51,7 @@ Route::get('register', function () {
 });
 
 Route::get('admin', [UserController::class,'showPage']);
-Route::get('menu', [UserController::class,'showPage']);
+Route::get('managedelivery', [UserController::class,'showPage']);
 Route::get('delivery', [UserController::class,'showPage']);
 
 Route::get('admin/stadistics/providers', function () {

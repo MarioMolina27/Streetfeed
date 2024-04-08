@@ -61,7 +61,7 @@
             </Dialog>
         </div>
         <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-            <Chat :user="userChat" :loggedUser="userLogged"/>
+            <Chat :user="userChat" :loggedUser="userLogged.id_user"/>
         </Dialog>
     </div>
 </template>
@@ -76,6 +76,9 @@ import Dialog from 'primevue/dialog';
 import Chat from '../../shared/chat/chat.vue';;
 import riderCard from './riderCard.vue';
 export default{
+    props: {
+        user: Object
+    },
     data(){
         return {
             menuItems: [
@@ -93,15 +96,15 @@ export default{
             animationConfirm: false,
             showChatDialog: false,
             userChat: {},
-            userLogged: 9
         }
     },
     mounted() {
+        console.log(this.user)
         this.getAllDelivriesByRider();
     },
     methods: {
         getAllDelivriesByRider() {
-            axios.get('api/delivery/get-provider-deliveries/9')
+            axios.get(`api/delivery/get-provider-deliveries/${this.user.id_user}`)
             .then(response => {
                 console.log(response.data);
                 this.deliveriesByRiders = response.data;
