@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <top-profile-rider v-if="userIsRider" :user="this.user" :deliveriesUser="deliveriesUser"></top-profile-rider>
-                <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="deliveryProvider"></top-profile-provider>
+                <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="numProviderDeliveries"></top-profile-provider>
                 
                 <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads"></profile-card>
 
@@ -74,10 +74,9 @@
             loading: true,
             loadingFinished: false,
             modalPassword: false,
-            type_user: {
-                id: 1,
-                name: 'Rider'
-            },
+            type_user: [
+                {id: 1, name: 'Rider'},
+                {id: 2, name: 'Provider'}],
             menuItems: [
                     {name: 'Tus Repartos', href: './delivery'},
                     {name: 'Explorar', href: './explore'},
@@ -85,6 +84,7 @@
                     {name: 'Perfil', href: './profile'}
             ],
             deliveriesUser: 0,
+            numProviderDeliveries: 0,
             markersByUser: 0,
             shifts: [],
             address: [],
@@ -134,13 +134,13 @@
                 this.typeRoads = typeRoadResponse;
                 this.numProviderDeliveries = numProviderDeliveriesResponse;
                 this.loading = false;
+                console.log("Datos obtenidos correctamente");
             }).catch(error => {
                 console.error("Hubo un error al obtener los datos:", error);
             });
         },
         computed: {
             userIsRider() {
-                // Verifica si el tipo de usuario es Rider
                 return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
             },
             userIsProvider() {

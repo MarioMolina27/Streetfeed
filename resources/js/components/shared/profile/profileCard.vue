@@ -106,6 +106,7 @@ import Calendar from 'primevue/calendar';
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import dialogMap from './dialogMap.vue';
+import { updateUserData } from '../../../services/users.js';
 
 
 

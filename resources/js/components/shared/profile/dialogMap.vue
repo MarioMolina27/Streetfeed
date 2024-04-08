@@ -7,7 +7,7 @@
                         <div class="col-6">
                             <IconField iconPosition="left">
                                 <InputIcon class="pi pi-search"> </InputIcon>
-                                <InputText v-model="value1" placeholder="Search" />
+                                <InputText v-model="adress" placeholder="Search" />
                             </IconField>
                         </div>
                         <div class="col-3">
