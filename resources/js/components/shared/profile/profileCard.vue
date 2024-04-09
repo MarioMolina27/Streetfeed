@@ -87,7 +87,7 @@
                                                 </template>
                                             </div>
                                     </div>
-                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
+                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"/>
                                 </template>
                             </AccordionTab>
                         </Accordion>
@@ -107,9 +107,6 @@ import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import dialogMap from './dialogMap.vue';
 import { updateUserData } from '../../../services/users.js';
-
-
-
 
 
 export default {
@@ -139,8 +136,6 @@ export default {
             required: true
         }
     },
-    originalSchedules: null, //Variable no reactiva
-    originalDirections: null, //Variable no reactiva
     components: {
         Card,
         Tag,
@@ -163,47 +158,29 @@ export default {
     },
 
     mounted() {
-        this.$options.originalSchedules = [...this.schedules]
         this.shifts = this.schedules;
         
-
         this.directions = this.adress.map(address => {
             const { id_adress, ...rest } =  address; 
             const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
             return { ...rest, full_address: fullAddress };
         });
 
-        this.$options.originalDirections = this.adress.map(address => {
+        this.originalDirections = this.adress.map(address => {
             const { id_adress, ...rest } =  address; 
             const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
             return { ...rest, full_address: fullAddress };
-        });
+        });        
+        
+        this.originalSchedules = JSON.parse(JSON.stringify(this.schedules));
 
         this.typeRoads = this.roadTypes;
-           
-        
-        
-
-        // getAdressByUser(this.user.id_user).then((response) => {
-        //     this.directions = response;
-
-        //     this.directions = this.directions.map(address => {
-        //         const { id_adress, ...rest } =  address; 
-        //         const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
-        //         return { ...rest, full_address: fullAddress };
-        //     });
-        //     this.$options.originalDirections = [...response]
-
-        // });
-
-        // getTypeRoad().then((response) => {
-        //     this.typeRoads = response;
-        // });
     },
 
     data(){
         return{
             directions: [],
+            originalDirections: [],
             selectedDirection: {},
 
             editingProfile: false,
@@ -211,6 +188,7 @@ export default {
             displayShifts: false,
 
             shifts : [],
+            originalSchedules: [],
             modalVisible: false,
             typeRoads: [],
         }
@@ -221,8 +199,9 @@ export default {
         },
 
         cancelEditing() {
-            this.shifts = this.$options.originalSchedules;
-            this.directions = this.$options.originalDirections;
+            console.log(this.originalSchedules);
+            this.shifts = JSON.parse(JSON.stringify(this.originalSchedules))
+            this.directions = JSON.parse(JSON.stringify(this.originalDirections))
             this.editingProfile = false;
         },
 
@@ -236,6 +215,7 @@ export default {
                 }
             }
         },
+
 
         getNumberShifts(day) {
             return this.shifts.filter(s => s.day === day).length;
@@ -300,8 +280,8 @@ export default {
 
 
             updateUserData(this.user, formattedShifts, this.directions).then((response) => {
-                this.$options.originalSchedules = [...this.shifts];
-                this.$options.originalDirections = [...this.directions];
+                this.originalSchedules = [...this.shifts];
+                this.originalDirections = [...this.directions];
             });
         },
 
