@@ -3,7 +3,7 @@
         <div class="row h-100 position-relative overflow-hidden">
             <span class="logo-text">STREETFEED</span>
             <!-- primera columna: LOGIN -->
-            <div class="col-md-6 d-flex flex-column justify-content-center" id="loginColumn">
+            <div class="col-md-6 d-flex flex-column justify-content-center" id="loginColumn" v-show="showLogin">
                 <div class="content-wrapper px-5" style="margin: 0 5rem;">
                     <!-- Contenido de la primera columna -->
                     <div class="container-fluid text-center ">
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <!-- segunda columna: REGISTER d-none  d-flex d-md-block justify-content-center -->
-            <div class="position-relative col-md-6 d-flex flex-column h-100" id="registerColumn">
+            <div class="position-relative col-md-6 d-flex flex-column h-100" id="registerColumn" v-show="!showLogin">
                 <!-- Contenido de la segunda columna -->
                 <div class="content-wrapper position-relative ">
                     <div class="container-fluid mb-3 d-flex justify-content-between login-access sticky-top" id="content-register">
@@ -259,9 +259,13 @@ export default {
             shifts : [],
             displayShifts: false,
             selectUserType: null, // Tipo de usuario seleccionado
+            showLogin: true, // Inicialmente mostramos la columna de inicio de sesion
         };
     },
     methods: {
+        toggleView(view) {
+            this.showLogin = view === 'login';
+        },
         selectUserType(userType) {
             this.selectedUserType = userType;
         },
@@ -948,6 +952,16 @@ button {
 .btn-add-horary {
     border: 1px solid var(--secondary-color);
     border-radius: 50%;
+}
+
+@media screen and (max-width: 900px) {
+    #loginColumn .content-wrapper {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    #registerColumn {
+        display: none !important;
+    }
 }
 
 </style>
