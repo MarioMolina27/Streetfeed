@@ -35,6 +35,7 @@ Route::get('adress/getAdressesByUser/{user}', [AdressController::class, 'getAdre
 Route::post('users/updateUser', [UserController::class, 'updateUserData']);
 Route::get('adress/getTypeRoad', [AdressController::class, 'getTypeRoad']);
 Route::get('delivery/getNumProviderDeliveries/{user}', [DeliveryController::class, 'getNumProviderDeliveries']);
+Route::post('users/changePassword/{user}', [UserController::class, 'changePassword']);
 
 
 Route::apiResource('users', UserController::class);

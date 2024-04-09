@@ -11,9 +11,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\MarkerResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -426,7 +426,6 @@ class UserController extends Controller
         try {
             $nickname = $request->input('nickname');
             $password = $request->input('password');
-            $tipoUsuario = $request->input();
 
             
             // where tipo usuario (botones)
@@ -449,17 +448,28 @@ class UserController extends Controller
         }
     }
 
-    public function showPage(){
-        $user = Auth::user();
-        $typeUser = Auth::user()->typeUsers()->get();
-        if($typeUser[0]->id_type_user == '1') {
-            return view('riders.delivery.delivery', compact('user'));
-        } else if($typeUser[0]->id_type_user == '2') {
-            return view('providers.menu', compact('user'));
-        } else if($typeUser[0]->id_type_user == '3') {
-            return view('admin.home', compact('user'));
+    public function changePassword(Request $request, User $user)
+    {
+        $validatedData = $request->validate([
+            'oldPassword' => 'required|string',
+            'newPassword' => 'required|string',
+            'newPassword2' => 'required|string|same:newPassword',
+        ]);
+
+        if (!Hash::check($validatedData['oldPassword'], $user->password)) {
+            return response()->json(['error' => 'La contraseña antigua no coincide'], 400);
         }
-        return view('admin.home', compact('user'));
+
+        if ($validatedData['newPassword'] !== $validatedData['newPassword2']) {
+            return response()->json(['error' => 'Las nuevas contraseñas no coinciden'], 400);
+        }
+
+        $user->password = Hash::make($validatedData['newPassword']);
+        $user->save();
+
+        return response()->json(['message' => 'Contraseña cambiada correctamente'], 200);
     }
+
+    
 }
 

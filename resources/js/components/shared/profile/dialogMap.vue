@@ -6,7 +6,7 @@
                     <div class="row">
                         <div class="col-6">
                             <IconField iconPosition="left">
-                                <i class="pi pi-search"></i>
+                                <InputIcon class="pi pi-search"> </InputIcon>
                                 <InputText v-model="adress" placeholder="Search" />
                             </IconField>
                         </div>
@@ -40,6 +40,7 @@ import IconField from 'primevue/iconfield';
 import InputText from 'primevue/inputtext';
 import mapboxgl from 'mapbox-gl';
 import Button from 'primevue/button';
+import InputIcon from 'primevue/inputicon';
 
 
 export default {
@@ -48,6 +49,7 @@ export default {
         IconField,
         InputText,
         Button,
+        InputIcon
     },
     props: ['modalVisible','selectedDirection'],
 

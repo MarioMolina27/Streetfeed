@@ -47,12 +47,6 @@ export default {
         deliveriesUser: {
             type: Number,
             required: true
-        },
-    },
-
-    data() {
-        return {
-            deliveriesUser: 0,
         }
     },
 }

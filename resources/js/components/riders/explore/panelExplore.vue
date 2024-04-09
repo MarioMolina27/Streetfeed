@@ -38,6 +38,9 @@ import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
 export default{
+    props: {
+        user: Object
+    },
     data(){
       return {
         loading: true,

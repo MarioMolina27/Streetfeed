@@ -34,7 +34,8 @@ import Carousel from 'primevue/carousel';
 
 export default {
     props: {
-        menusjson: String 
+        menusjson: String,
+        user: Object
     },
     data() {
         return {

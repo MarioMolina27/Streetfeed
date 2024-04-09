@@ -27,7 +27,8 @@
 import jsPDF from 'jspdf';
 export default {
     props: {
-        datareserve: String 
+        datareserve: String ,
+        user: Object
     },
     data() {
         return {

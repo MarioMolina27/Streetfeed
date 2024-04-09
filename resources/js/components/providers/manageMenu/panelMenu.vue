@@ -3,10 +3,10 @@
         <Navbar :menuItems = 'menuItems'></Navbar>
         <div class="manage-menus-container">
             <div class="col-12">
-                <h1 class="text-center mt-4">Tus Menus</h1>
+                <h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1>
                 <div class="new-menu">
                     <i class="fa-solid fa-plus fs-5"></i>
-                    <span class="fs-5">Añade un menú</span>
+                    <span class="fs-5">{{ translations.addMenuLabel }}</span>
                 </div>
                 <div class="divider-menus">
 
@@ -22,7 +22,14 @@
 <script >
 import Navbar from '../../shared/Navbar.vue';
 import itemMenu from './itemMenu.vue';
+import esTranslations from '../../../../lang/es.json';
+import enTranslations from '../../../../lang/en.json';
+import caTranslations from '../../../../lang/ca.json';
 export default{
+    props: {
+        user: Object,
+        lang: String
+    },
     data(){
         return {
             menuItems: [
@@ -31,7 +38,18 @@ export default{
                 {name: 'Perfil', href: './profile'}
             ],
             loggedUser: 9,
-            menus: []
+            menus: [],
+            translations: {}
+        }
+    },
+    created() {
+        console.log(this.lang);
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
         }
     },
     mounted() {

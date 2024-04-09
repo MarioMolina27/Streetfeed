@@ -95,3 +95,20 @@ export const updateUserData = async (user, schedules, adresses) => {
         console.log('Error:', error);
     }
 }
+
+export const changePassword = async (id, oldPassword,newPassword,newPassword2) => {
+    const url = `api/users/changePassword/${id}`;
+    try{
+        const response = await axios.post(url, {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            newPassword2: newPassword2
+        });
+        return await response;
+        
+    }
+    catch(error){
+        console.log('Error:', error);
+        return error;
+    }
+}

@@ -16,7 +16,9 @@ import SidebarAdmin from "../shared/SidebarAdmin.vue";
 import AdminMap from "./AdminMap.vue";
 export default{
     name: "MapAdmin",
-
+    props: {
+        user: Object
+    },
     components: {
         SidebarAdmin,
         AdminMap

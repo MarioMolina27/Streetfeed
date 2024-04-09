@@ -17,6 +17,9 @@ import StadisticsProviders from "./StadisticsProviders.vue"
 
 
 export default {
+    props: {
+        user: Object
+    },
     components: {
         SidebarAdmin,
         StadisticsProviders
