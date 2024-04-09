@@ -7,7 +7,7 @@
         </template>
         <div v-else>
             <div class="container mt-3">
-                <stadistic :type_user="this.type_user" :deliveriesUser="this.deliveriesUser" :kgUser="this.kgUser" :markersByUser="this.markersByUser"></stadistic>
+                <stadistic :type_user="this.type_user" :deliveriesUser="this.deliveriesUser" :kgUser="this.kgUser" :markersByUser="this.markersByUser" :numProviderDeliveries="numProviderDeliveries"></stadistic>
                 <top-profile-rider v-if="userIsRider" :user="this.user" :deliveriesUser="deliveriesUser"></top-profile-rider>
                 <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="numProviderDeliveries"></top-profile-provider>
                 
