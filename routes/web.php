@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -15,11 +16,10 @@ Route::get('admin/users', function () {
 
 
 Route::get('menu', function () {
-    return view('providers.manage_menu.manage_menu');
+    $lang = request()->cookie('lang', 'es');
+    return view('providers.manage_menu.manage_menu', compact('lang'));
 });
-Route::get('managedelivery', function () {
-    return view('providers.manage_delivery.manage_delivery');
-});
+
 Route::get('delivery', function () {
     return view('riders.delivery.delivery');
 });
@@ -53,7 +53,7 @@ Route::get('register', function () {
 });
 
 Route::get('admin', [UserController::class,'showPage']);
-Route::get('menu', [UserController::class,'showPage']);
+Route::get('managedelivery', [UserController::class,'showPage']);
 Route::get('delivery', [UserController::class,'showPage']);
 
 Route::get('admin/stadistics/providers', function () {
@@ -70,3 +70,5 @@ Route::post('users/login', [UserController::class, 'login']);
 Route::get('admin/map', function () {
     return view('admin.mapAdmin');
 });
+
+Route::get('set-language/{lang}', [LanguageController::class,'setLanguage'])->name('set.language');

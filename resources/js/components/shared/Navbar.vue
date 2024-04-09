@@ -10,8 +10,16 @@
         <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-11 d-flex flex-row justify-content-start ': !isMobile }">
             <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
               <a class="mb-0 item-nav" :href="item.href">{{ item.name }}</a>
+              
             </div>
-
+            <div v-if="!isMobile" class="d-flex me-5">
+              <select @change="changeLanguage">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="ca">Català</option>
+              </select>
+              <a class="log-out-nav mb-0">Cerrar session</a>
+            </div>
             <div v-if="isMobile" @click="toggleMenu" class="d-flex justify-content-center align-items-center p-3 item-nav d">
               <div id="nav-icon" :class="{ 'open': showMenu }">
                 <span></span>
@@ -21,6 +29,7 @@
             </div>
 
         </div>
+        
         </div>
       <div v-if="isMobile && showMenu" class="burger-menu">
           <div class="submenu d-flex flex-column"> 
@@ -34,6 +43,7 @@
             </div>
           </div>
       </div>
+      
     </nav>
     
 </template>
@@ -80,6 +90,19 @@ export default {
         document.body.classList.remove('menu-open'); 
       }
     },
+    changeLanguage(event) {
+      const selectedLanguage = event.target.value;
+      // Enviar una solicitud al servidor para cambiar el idioma
+      axios.get(`/set-language/${selectedLanguage}`)
+          .then(response => {
+              // Actualizar la página o realizar cualquier otra acción necesaria
+              // Por ejemplo, podrías recargar los datos para reflejar el nuevo idioma
+              window.location.reload();
+          })
+          .catch(error => {
+              console.error(error);
+          });
+    }
   },
 }
 </script>

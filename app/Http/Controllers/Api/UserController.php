@@ -426,7 +426,6 @@ class UserController extends Controller
         try {
             $nickname = $request->input('nickname');
             $password = $request->input('password');
-            $tipoUsuario = $request->input();
 
             
             // where tipo usuario (botones)
@@ -455,7 +454,7 @@ class UserController extends Controller
         if($typeUser[0]->id_type_user == '1') {
             return view('riders.delivery.delivery', compact('user'));
         } else if($typeUser[0]->id_type_user == '2') {
-            return view('providers.menu', compact('user'));
+            return view('providers.manage_delivery.manage_delivery', compact('user'));
         } else if($typeUser[0]->id_type_user == '3') {
             return view('admin.home', compact('user'));
         }
