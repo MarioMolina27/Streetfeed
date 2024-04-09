@@ -257,9 +257,9 @@ export default {
                 if (response.data != null) {
                     const typeUser = response.data.type_users[0].id_type_user;
                     if(typeUser == '1') {
-                        window.open(mainProviderPage,"_self")
-                    } else if((typeUser == '2')) {
                         window.open(mainRiderPage,"_self")
+                    } else if((typeUser == '2')) {
+                        window.open(mainProviderPage,"_self")
                     } else if((typeUser == '3')) {
                         window.open(homeRouteAdmin,"_self")
                     }

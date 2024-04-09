@@ -13,11 +13,16 @@
               
             </div>
             <div v-if="!isMobile" class="d-flex me-5">
-              <select @change="changeLanguage">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-                <option value="ca">Català</option>
-              </select>
+              <Button type="button" icon="pi pi-image" @click="toggle">Català</Button>
+              <OverlayPanel ref="op">
+              <div class="flex flex-column gap-3 w-25rem">
+                  <div class="d-flex flex-column gap-2">
+                    <Button type="button" icon="pi pi-image" @click="toggle">Català</Button>
+                    <Button type="button" icon="pi pi-image" @click="toggle">Español</Button>
+                    <Button type="button" icon="pi pi-image" @click="toggle">Inglés</Button>
+                  </div>
+              </div>
+          </OverlayPanel>
               <a class="log-out-nav mb-0">Cerrar session</a>
             </div>
             <div v-if="isMobile" @click="toggleMenu" class="d-flex justify-content-center align-items-center p-3 item-nav d">
@@ -50,7 +55,7 @@
 
 <script>
 import { logoUrl } from '../../utilities/constant.js';
-
+import OverlayPanel from 'primevue/overlaypanel'; 
 export default {
   name: 'Navbar',
 
@@ -79,16 +84,8 @@ export default {
     checkScreenWidth() {
       this.isMobile = window.innerWidth <= 768;
     },
-    toggleMenu() {
-      this.showMenu = !this.showMenu;
-      this.bodyOverflow = !this.bodyOverflow;
-
-      
-      if (this.bodyOverflow) {
-        document.body.classList.add('menu-open'); 
-      } else {
-        document.body.classList.remove('menu-open'); 
-      }
+    toggle(event) {
+      this.$refs.op.toggle(event);
     },
     changeLanguage(event) {
       const selectedLanguage = event.target.value;
@@ -104,6 +101,9 @@ export default {
           });
     }
   },
+  components: {
+    OverlayPanel
+  }
 }
 </script>
 
