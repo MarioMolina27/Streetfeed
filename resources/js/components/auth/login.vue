@@ -15,30 +15,44 @@
                     <!-- Buttons Type User -->
                     <div class="container-fluid my-3 sign-in-google ">
                         <div class="row justify-content-center">
-                            <div class="col-12">
-                                <button class="btn w-100" type="button">
-                                    <i class="fa-brands fa-google"></i>
-                                    Continue with Google
+                            <div class="col-md-6">
+                                <button 
+                                    type="button" 
+                                    class="btn w-100 btn-type-user" 
+                                    :class="{ 'selected': selectedUserType === 'Provider' }" 
+                                    @click="selectUserType('Provider')"
+                                >
+                                    PROVIDER
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button
+                                    type="button"
+                                    class="btn w-100 btn-type-user"
+                                    :class="{ 'selected': selectedUserType === 'Rider' }"
+                                    @click="selectUserType('Rider')"
+                                >
+                                    RIDER
                                 </button>
                             </div>
                         </div>
                     </div>
                     <!-- divider line -->
                     <div class="container-fluid my-3 divider-login ">
-                        <div class="line"></div>
-                        <p class="m-0">OR</p>
-                        <div class="line"></div>
+                        <div class="line my-3"></div>
                     </div>
                     <!-- form login -->
                     <div class="container-fluid login-form d-flex flex-column align-items-center justify-content-center ">
                         <div class="form-login">
-                            <div class="mb-3">
-                                <label for="nickname-login" class="form-label">Nickname</label>
+                            <label for="nickname-login" class="form-label">Nickname</label>
+                            <div class="mb-3 input-wrapper">
                                 <input class="form-control input-login" type="text" name="nickname-login" id="nickname-login" v-model="nickname" placeholder="Your nickname">
+                                <i class="fa fa-user"></i>
                             </div>
-                            <div class="mb-3">
-                                <label for="password-login" class="form-label">Password</label>
+                            <label for="password-login" class="form-label">Password</label>
+                            <div class="mb-3 input-wrapper">
                                 <input class="form-control input-login" type="password" name="password-login" id="password-login" v-model="password" placeholder="Your password">
+                                <i class="fa fa-lock"></i>
                             </div>
                             <div class="mb-3">
                                 <button class="btn w-100 btn-login" type="submit" @click="login()">Sign In</button>
@@ -52,7 +66,7 @@
                 </div>
             </div>
             <!-- segunda columna: REGISTER d-none  d-flex d-md-block justify-content-center -->
-            <div class="position-relative col-md-6 border d-flex flex-column h-100" id="registerColumn">
+            <div class="position-relative col-md-6 d-flex flex-column h-100" id="registerColumn">
                 <!-- Contenido de la segunda columna -->
                 <div class="content-wrapper position-relative ">
                     <div class="container-fluid mb-3 d-flex justify-content-between login-access sticky-top" id="content-register">
@@ -244,9 +258,13 @@ export default {
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
             shifts : [],
             displayShifts: false,
+            selectUserType: null, // Tipo de usuario seleccionado
         };
     },
     methods: {
+        selectUserType(userType) {
+            this.selectedUserType = userType;
+        },
         login() {
             axios.post('users/login', {
                 nickname: this.nickname,
@@ -437,6 +455,20 @@ export default {
         }
     },
     mounted() {
+
+        /*
+        document.querySelectorAll('.btn-type-user').forEach(function(button) {
+            button.addEventListener('click', function() {
+                Remover la clase 'selected' de todos los botones
+                document.querySelectorAll('.btn-type-user.selected').forEach(function(btn) {
+                    btn.classList.remove('selected');
+                });
+                Agregar la clase 'selected' al botón clicado
+                this.classList.add('selected');
+            });
+        });
+        */
+
         document.getElementById('registerLink').addEventListener('click', function(e) {
             e.preventDefault();
             this.intercambiarContenido();
@@ -588,6 +620,31 @@ button {
     color: var(--secondary-color);
 }
 
+.sign-in-google button.btn-type-user {
+    font-size: 80%;
+    transition: font-size 0.1s ease;
+}
+
+.sign-in-google button.btn-type-user:hover {
+    color: var(--primary-street-feed);
+    background-color: var(--secondary-color);
+    font-size: 100%;
+}
+
+.sign-in-google button.btn-type-user.selected {
+    background-color: var(--secondary-color);
+    color: var(--primary-street-feed);
+    font-size: 120%;
+    
+}
+
+.selected {
+    /* Estilos para el boton seleccionado */
+    background-color: var(--secondary-color);
+    color: var(--primary-street-feed);
+    font-size: 120%;
+}
+
 /* Divider Login */
 .divider-login {
     display: flex;
@@ -613,7 +670,7 @@ button {
 .divider-login p {
     font-family: var(--primary-font);
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     color: var(--text-color);
 }
 /* --- Divider end --- */
@@ -645,6 +702,23 @@ button {
     color: var(--text-color);
 }
 
+.login-form .input-wrapper {
+    position: relative;
+    display: inline-block
+}
+
+.login-form input {
+    padding-right: 30px;
+}
+
+.login-form i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+}
+
 .input-login {
     width: 100%;
     padding: 0 0 0 .8rem;
@@ -653,6 +727,10 @@ button {
     border-radius: 8px;
     line-height: 2.5rem;
     background: none;
+}
+
+.input-wrapper:focus-within i {
+    color: var(--action-color);
 }
 
 .input-login:focus {
