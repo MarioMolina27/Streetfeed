@@ -16,6 +16,9 @@ import SidebarAdmin from "../shared/SidebarAdmin.vue";
 import UsersTable from "./UsersTable.vue";
 
 export default {
+    props: {
+        user: Object
+    },
     components: {
         SidebarAdmin,
         UsersTable,

@@ -3,58 +3,32 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\LanguageController;
-use Illuminate\Support\Facades\Auth;
 
+
+//---------------------LANDING--------------------------------
 Route::get('/', function () {
     return view('landings.landing');
 });
+//----------------------------------------------------------------
 
+
+//-----------------------AUTH--------------------------------
+Route::get('login', function () {
+    return view('auth.login');
+});
+
+Route::post('users/login', [UserController::class, 'login']);
+//----------------------------------------------------------------
+
+
+//-----------------------ADMIN--------------------------------
+Route::get('admin', function () {
+    return view('admin.home');
+});
 
 Route::get('admin/users', function () {
     return view('admin.admin');
 })->name('mainAdmin');
-
-
-Route::get('menu', function () {
-    $lang = request()->cookie('lang', 'es');
-    return view('providers.manage_menu.manage_menu', compact('lang'));
-});
-
-Route::get('delivery', function () {
-    return view('riders.delivery.delivery');
-});
-Route::get('explore', function () {
-    return view('riders.explore.explore');
-});
-Route::get('details/{nickname}', function ($nickname) {
-    return view('riders.explore.details', ['nickname' => $nickname]);
-});
-Route::get('assignreserve/{encodedMenuId}', function ($encodedMenuId) {
-    $menusjson = json_decode(base64_decode($encodedMenuId));
-    return view('riders.explore.assignreserve', ['menusjson' => $menusjson]);
-});
-Route::get('confirmation/{encodedHomelessData}', function ($encodedHomelessData) {
-    $decodedData = base64_decode($encodedHomelessData);
-    $decodedData = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $decodedData);
-    $datareserve = json_decode($decodedData);
-    return view('riders.explore.reserveconfirm', ['datareserve' => $datareserve]);
-});
-Route::get('favorite', function () {
-    return view('riders.favorite.favorite');
-});
-Route::get('profile', function () {
-    return view('shared.profile');
-});
-Route::get('login', function () {
-    return view('auth.login');
-});
-Route::get('register', function () {
-    return view('auth.register');
-});
-
-Route::get('admin', [UserController::class,'showPage']);
-Route::get('managedelivery', [UserController::class,'showPage']);
-Route::get('delivery', [UserController::class,'showPage']);
 
 Route::get('admin/stadistics/providers', function () {
     return view('admin.stadisticsProvider');
@@ -64,11 +38,62 @@ Route::get('admin/stadistics/riders', function () {
     return view('admin.stadisticsRiders');
 });
 
-Route::post('users/login', [UserController::class, 'login']);
-
-
 Route::get('admin/map', function () {
     return view('admin.mapAdmin');
 });
+//----------------------------------------------------------------
 
+
+//-----------------------RIDERS--------------------------------
+Route::get('delivery', function () {
+    return view('riders.delivery.delivery');
+});
+
+Route::get('explore', function () {
+    return view('riders.explore.explore');
+});
+
+Route::get('details/{nickname}', function ($nickname) {
+    return view('riders.explore.details', ['nickname' => $nickname]);
+});
+
+Route::get('assignreserve/{encodedMenuId}', function ($encodedMenuId) {
+    $menusjson = json_decode(base64_decode($encodedMenuId));
+    return view('riders.explore.assignreserve', ['menusjson' => $menusjson]);
+});
+
+Route::get('confirmation/{encodedHomelessData}', function ($encodedHomelessData) {
+    $decodedData = base64_decode($encodedHomelessData);
+    $decodedData = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $decodedData);
+    $datareserve = json_decode($decodedData);
+    return view('riders.explore.reserveconfirm', ['datareserve' => $datareserve]);
+});
+
+Route::get('favorite', function () {
+    return view('riders.favorite.favorite');
+});
+//----------------------------------------------------------------
+
+
+//-----------------------PROVIDERS--------------------------------
+Route::get('managedelivery', function () {
+    return view('providers.manage_delivery.manage_delivery');
+});
+
+Route::get('menu', function () {
+    $lang = request()->cookie('lang', 'es');
+    return view('providers.manage_menu.manage_menu', compact('lang'));
+});
+//----------------------------------------------------------------
+
+
+//-----------------------SHARED--------------------------------
+Route::get('profile', function () {
+    return view('shared.profile');
+});
+//----------------------------------------------------------------
+
+
+//-----------------------LANGUAGES--------------------------------
 Route::get('set-language/{lang}', [LanguageController::class,'setLanguage'])->name('set.language');
+//----------------------------------------------------------------

@@ -17,6 +17,9 @@ import StadisticsRider from "./StadisticsRider.vue";
 
 
 export default {
+    props: {
+        user: Object
+    },
     components: {
         SidebarAdmin,
         StadisticsRider

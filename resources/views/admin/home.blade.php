@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <adminhome :user="{{ $user }}"></adminhome>
+    <adminhome :user="{{ Auth::user() }}"></adminhome>
 @endsection
 
 @section('imports')

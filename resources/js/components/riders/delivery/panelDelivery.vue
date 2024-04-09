@@ -21,6 +21,9 @@ import noDelivery from './noDelivery.vue';
 import hasDelivery from './hasDelivery.vue';
 import loader from '../../shared/loader.vue';
 export default{
+    props: {
+        user: Object
+    },
     data(){
       return {
         menuItems: [

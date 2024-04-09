@@ -48,6 +48,9 @@ import loader from '../../shared/loader.vue';
 import favoriteCard from './favoriteCard.vue';
 import Skeleton from 'primevue/skeleton';
 export default{
+    props: {
+        user: Object
+    },
     data(){
       return {
         loading: true,

@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-    <paneluser></paneluser>
+    <paneluser :user="{{ Auth::user() }}"></paneluser>
 @endsection
 
 @section('imports')

@@ -63,7 +63,8 @@ import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
 export default{
     props: {
-        nickname: String
+        nickname: String,
+        user: Object
     },
     data(){
       return {

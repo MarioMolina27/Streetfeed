@@ -448,19 +448,6 @@ class UserController extends Controller
         }
     }
 
-    public function showPage(){
-        $user = Auth::user();
-        $typeUser = Auth::user()->typeUsers()->get();
-        if($typeUser[0]->id_type_user == '1') {
-            return view('riders.delivery.delivery', compact('user'));
-        } else if($typeUser[0]->id_type_user == '2') {
-            return view('providers.manage_delivery.manage_delivery', compact('user'));
-        } else if($typeUser[0]->id_type_user == '3') {
-            return view('admin.home', compact('user'));
-        }
-        return view('admin.home', compact('user'));
-    }
-
     public function changePassword(Request $request, User $user)
     {
         $validatedData = $request->validate([

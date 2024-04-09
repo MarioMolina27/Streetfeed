@@ -27,6 +27,7 @@ import enTranslations from '../../../../lang/en.json';
 import caTranslations from '../../../../lang/ca.json';
 export default{
     props: {
+        user: Object,
         lang: String
     },
     data(){
