@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <panelexplore :user="{{ Auth::user() }}"></panelexplore>
+    <panelexplore :user="{{ Auth::user() }}" :lang="'{{ $lang }}'"></panelexplore>
 @endsection
 
 @section('imports')

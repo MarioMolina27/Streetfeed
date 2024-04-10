@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
         <template v-if="loading ||!loadingFinished">
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
@@ -17,12 +17,12 @@
                     <div class="d-flex flex-column justify-content-center align-items-center">
                     <div>
                         <div>
-                            <p>Horario: </p>
+                            <p>{{translations.scheduleLabel}}: </p>
                         </div>
                         <div class="info-text" v-if="provider.schedules && provider.schedules.length > 0">
                                 <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
                         </div>
-                        <strong class="info-text" v-else>Sin Horario<br></strong>
+                        <strong class="info-text" v-else>{{translations.notScheduleLabel}}<br></strong>
                         <strong class="info-text" v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
                     </div>
                     </div>
@@ -31,14 +31,14 @@
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <div>
                             <div>
-                            <p>Ubicación: </p>
+                            <p>{{translations.ubicationLabel}}: </p>
                         </div>
                         <div class="info-text" v-if="provider.addresses && provider.addresses.length > 0">
                                 <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
                                 <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
                         </div>
                         <div class="info-text" v-else>
-                            <strong>No se encontraron direcciones.</strong>
+                            <strong>{{translations.dontFindUbication}}.</strong>
                         </div> 
                         </div> 
                     </div>
@@ -47,7 +47,7 @@
             <div class="divider"></div>
             <div class="detail-provider-menus">
                 <template v-for="(menu, index) in provider.menus">
-                    <menu-card :menu="menu" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
+                    <menu-card :menu="menu" :translations = "translations" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
                 </template>
                 <div id="reserve-details" v-show="showReserveData" class="reserve-data"></div>
                 <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
@@ -61,10 +61,14 @@
 import menuCard from './menuCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
+import esTranslations from '../../../../lang/riders/es.json';
+import enTranslations from '../../../../lang/riders/en.json';
+import caTranslations from '../../../../lang/riders/ca.json';
 export default{
     props: {
         nickname: String,
-        user: Object
+        user: Object,
+        lang: String
     },
     data(){
       return {
@@ -79,9 +83,17 @@ export default{
         ],
         loading: true,
         loadingFinished: false,
+        translations: {}
       }
     },
     created() {
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
+        }
         this.loadProvider();
     },
     computed: {
@@ -101,7 +113,6 @@ export default{
                 this.loading = false;
             })
             .catch(error => {
-                console.error('Error al obtener el proveedor:', error);
                 this.loading = false;
             });
         },

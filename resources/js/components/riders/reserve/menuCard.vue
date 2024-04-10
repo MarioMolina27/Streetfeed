@@ -7,25 +7,25 @@
         <div class="menu-card-body row gx-3">
           <div class="col-lg-4 col-md-6 col-sm-12">
               <div class="menu-products">
-                  <p class="label-type-product mb-0 fs-6">Primer producto</p>
+                  <p class="label-type-product mb-0 fs-6">{{translations.fisrtProductLabel}}</p>
                   <p class="type-product">{{ menu.first_product }}</p>
               </div>
           </div>
           <div class="col-lg-4 col-md-6 col-sm-12">
               <div class="menu-products">
-                  <p class="label-type-product mb-0 fs-6">Segundo producto</p>
+                  <p class="label-type-product mb-0 fs-6">{{translations.secondProductLabel}}</p>
                   <p class="type-product">{{ menu.second_product }}</p>
               </div>
           </div>
           <div class="col-lg-4 col-md-6 col-sm-12">
               <div class="menu-products">
-                  <p class="label-type-product mb-0 fs-6">Bebida</p>
+                  <p class="label-type-product mb-0 fs-6">{{translations.drinkLabel}}</p>
                   <p class="type-product">{{ menu.drink_product }}</p>
               </div>
           </div>
         </div>
         <div class="menu-card-footer d-flex justify-content-between">
-            <Tag :class="{'low-availability': menu.launchpack_count < 3, 'high-availability': menu.launchpack_count >= 3}" value="Primary">{{ menu.launchpack_count }} disponibles</Tag>
+            <Tag :class="{'low-availability': menu.launchpack_count < 3, 'high-availability': menu.launchpack_count >= 3}" value="Primary">{{ menu.launchpack_count }} {{translations.availableLabel}}</Tag>
             <InputNumber v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="menu.launchpack_count" @update:modelValue="emitChangeValue">
               <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
               <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
@@ -40,7 +40,8 @@ import Tag from 'primevue/tag';
 import InputNumber from 'primevue/inputnumber';
 export default{
     props: {
-      menu: Object
+      menu: Object,
+      translations: Object
     },
     data(){
       return {

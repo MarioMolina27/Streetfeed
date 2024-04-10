@@ -46,31 +46,37 @@ Route::get('admin/map', function () {
 
 //-----------------------RIDERS--------------------------------
 Route::get('delivery', function () {
-    return view('riders.delivery.delivery');
+    $lang = request()->cookie('lang', 'es');
+    return view('riders.delivery.delivery', compact('lang'));
 });
 
 Route::get('explore', function () {
-    return view('riders.explore.explore');
+    $lang = request()->cookie('lang', 'es');
+    return view('riders.explore.explore', compact('lang'));
 });
 
 Route::get('details/{nickname}', function ($nickname) {
-    return view('riders.explore.details', ['nickname' => $nickname]);
+    $lang = request()->cookie('lang', 'es');
+    return view('riders.explore.details', ['nickname' => $nickname], compact('lang'));
 });
 
 Route::get('assignreserve/{encodedMenuId}', function ($encodedMenuId) {
+    $lang = request()->cookie('lang', 'es');
     $menusjson = json_decode(base64_decode($encodedMenuId));
-    return view('riders.explore.assignreserve', ['menusjson' => $menusjson]);
+    return view('riders.explore.assignreserve', ['menusjson' => $menusjson], compact('lang'));
 });
 
 Route::get('confirmation/{encodedHomelessData}', function ($encodedHomelessData) {
+    $lang = request()->cookie('lang', 'es');
     $decodedData = base64_decode($encodedHomelessData);
     $decodedData = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $decodedData);
     $datareserve = json_decode($decodedData);
-    return view('riders.explore.reserveconfirm', ['datareserve' => $datareserve]);
+    return view('riders.explore.reserveconfirm', ['datareserve' => $datareserve], compact('lang'));
 });
 
 Route::get('favorite', function () {
-    return view('riders.favorite.favorite');
+    $lang = request()->cookie('lang', 'es');
+    return view('riders.favorite.favorite', compact('lang'));
 });
 //----------------------------------------------------------------
 

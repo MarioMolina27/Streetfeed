@@ -75,9 +75,9 @@ import VueQrcode from 'vue-qrcode';
 import Dialog from 'primevue/dialog';
 import Chat from '../../shared/chat/chat.vue';;
 import riderCard from './riderCard.vue';
-import esTranslations from '../../../../lang/es.json';
-import enTranslations from '../../../../lang/en.json';
-import caTranslations from '../../../../lang/ca.json';
+import esTranslations from '../../../../lang/providers/es.json';
+import enTranslations from '../../../../lang/providers/en.json';
+import caTranslations from '../../../../lang/providers/ca.json';
 export default{
     props: {
         user: Object,
@@ -104,7 +104,6 @@ export default{
         }
     },
     created() {
-        console.log(this.lang);
         if (this.lang === 'ca') {
             this.translations = caTranslations;
         } else if (this.lang === 'en') {

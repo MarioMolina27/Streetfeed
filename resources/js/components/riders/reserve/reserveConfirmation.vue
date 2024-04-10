@@ -12,27 +12,41 @@
         </svg>
         <div class="d-flex justify-content-center">
             <div v-if="this.reserve">
-                <h2 style="text-align: center;">Reparto reservado <strong>correctamente</strong></h2>
-                <button class="button-pdf" @click="generatePDF">Generar PDF</button>
+                <h2 style="text-align: center;">{{translations.deliveryDoneCorretly}} <strong>{{translations.correctament}}</strong></h2>
+                <button class="button-pdf" @click="generatePDF(translations)">{{ translations.generarePdf }}</button>
             </div>
             <div v-else>
-                <h2 style="text-align: center;">Ha ocurrido un error al reservar y asignar el reparto</h2>
+                <h2 style="text-align: center;">{{translations.errorOnReserve}}</h2>
             </div>
         </div>
-        <button class="button-confirm" @click="redirectToRoute">{{ !this.reserve ? 'Vuelve a realizar tu pedido' : 'Mira tu entrega!'}}</button>
+        <button class="button-confirm" @click="redirectToRoute">{{ !this.reserve ? this.translations.doDeliveryAgain : this.translations.lookYourReserve}}</button>
     </div>
 </template>
 
 <script>
 import jsPDF from 'jspdf';
+import esTranslations from '../../../../lang/riders/es.json';
+import enTranslations from '../../../../lang/riders/en.json';
+import caTranslations from '../../../../lang/riders/ca.json';
 export default {
     props: {
         datareserve: String ,
-        user: Object
+        user: Object,       
+        lang: String
     },
     data() {
         return {
-            reserve: JSON.parse(this.datareserve)
+            reserve: JSON.parse(this.datareserve),
+            translations: {}
+        }
+    },
+    created() {
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
         }
     },
     mounted() {
@@ -40,7 +54,7 @@ export default {
         console.log(this.reserve);
     },
     methods: {
-        generatePDF() {
+        generatePDF(translate) {
             let doc = new jsPDF();
             let reserve = this.reserve;
             let yPos = 5;
@@ -55,7 +69,7 @@ export default {
                 doc.addImage(imgData, 'PNG', centerXImage, centerYImage, imageWidth, imageHeight);
                 yPos += 30;
                              
-                let text = 'Resumen de la reserva';
+                let text = translate.resumeLabel;
                 let textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
                 let centerX = (doc.internal.pageSize.getWidth() - textWidth) / 2;
                 doc.setFont('helvetica', 'bold');
@@ -66,8 +80,8 @@ export default {
 
                 yPos += 20;
                 reserve.forEach(function(value) {
-                    let line1 = "Repartir en la ubicación: " + value.location + "\n";
-                    let line2 = "Van a comer: " + value.people_eat;
+                    let line1 = translate.doDeliverIn + value.location + "\n";
+                    let line2 = translate.areGonnaEat + value.people_eat;
 
                     let lines = doc.splitTextToSize(line1 + line2, 180);
 

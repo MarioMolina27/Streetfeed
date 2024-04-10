@@ -1,26 +1,26 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
         <div style="position: relative;">
             <div id="map" style="width: 100%; height: calc(100vh - 10vh);"></div>
             <div class="menus-container ms-2">
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="me-4">MENÚS QUE TIENES QUE ASIGNAR: </span>
+                    <span class="me-4">{{translations.menusToAssign}}: </span>
                     <strong style="color: #984EAE;">{{ launchpacks }}</strong>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <span class="me-4">MENÚS QUE TE FALTAN PARA ASIGNAR: </span>
+                    <span class="me-4">{{translations.menusAssigned}}: </span>
                     <strong class="d-flex flex-column justify-content-center" style="color: #984EAE;">{{ launchpacksLeft }}</strong>
                 </div>
             </div>
             <div class="homeless-assigning">
                 <Carousel ref="assignedCarrousel" v-if="homelessInformation.length > 0" :autoplayInterval=3000 :value="homelessInformation" :numVisible="1" :numScroll="1" :showIndicators="false">
                     <template #item="item">
-                        <homelessInformation :information  = "item" @marker-removed="handleMarkerRemoved"></homelessInformation>
+                        <homelessInformation :information  = "item" :translations = "translations" @marker-removed="handleMarkerRemoved"></homelessInformation>
                     </template>
                 </Carousel>
             </div>
-            <button class="delivery-button" :class="{ 'disabled-button': launchpacksLeft !== 0 }" :disabled="launchpacksLeft !== 0" @click="doReserve">{{ launchpacksLeft !== 0 ? 'Assigna todos los menús' : 'Hacer la entrega!'}}</button>
+            <button class="delivery-button" :class="{ 'disabled-button': launchpacksLeft !== 0 }" :disabled="launchpacksLeft !== 0" @click="doReserve">{{ launchpacksLeft !== 0 ? translations.assignAllMenus : translations.doDelivery }}</button>
         </div>
     </div>
 </template>
@@ -31,11 +31,15 @@ import homelessInformation from './homelessInformation.vue';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Carousel from 'primevue/carousel';
+import esTranslations from '../../../../lang/riders/es.json';
+import enTranslations from '../../../../lang/riders/en.json';
+import caTranslations from '../../../../lang/riders/ca.json';
 
 export default {
     props: {
         menusjson: String,
-        user: Object
+        user: Object,
+        lang: String
     },
     data() {
         return {
@@ -57,7 +61,17 @@ export default {
             launchpacksLeft: 0,
             homelessMarkers: [],
             homelessInformation: [],
+            translations: {}
         };
+    },
+    created() {
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
+        }
     },
     mounted() {
         mapboxgl.accessToken = this.accessToken;
@@ -104,7 +118,7 @@ export default {
                         <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people_not_eat}</strong>
                         <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
                     </div>
-                    <button id="popup-button-${data.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Asignar</button>
+                    <button id="popup-button-${data.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">${this.translations.assignMarker}</button>
                 `;
                 
                 marker.setPopup(new mapboxgl.Popup({ closeButton: false }).setHTML(popupContent));

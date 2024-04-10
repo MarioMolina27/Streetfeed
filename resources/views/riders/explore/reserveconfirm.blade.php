@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-    <reserveconfirmation :datareserve="{{ json_encode(json_encode($datareserve)) }}" :user="{{ Auth::user() }}"></reserveconfirmation>
+    <reserveconfirmation :datareserve="{{ json_encode(json_encode($datareserve)) }}" :user="{{ Auth::user() }}" :lang="'{{ $lang }}'"></reserveconfirmation>
 @endsection
 
 @section('imports')

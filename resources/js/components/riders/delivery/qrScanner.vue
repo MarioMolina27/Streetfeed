@@ -26,14 +26,15 @@
   
   export default {
     props: {
-      deliveryIds: Array
+      deliveryIds: Array,
+      translations: Object
     },
     data() {
       return {
         animating: false,
         animationError: false,
         animationConfirm: false,
-        textInfo: 'Escanea el QR del proveedor'
+        textInfo: this.translations.scanInfoLabel
       };
     },
     methods: {
@@ -57,7 +58,6 @@
                     }, 2000);
                 })
                 .catch(error => {
-                    console.error('Error al recoger el reparto:', error);
                     this.animateError();
                     setTimeout(() => {
                         this.stopAnimation();
@@ -86,12 +86,12 @@
         animateConfirm() {
             this.animating = true;
             this.animationConfirm = true;
-            this.textInfo = 'Reparto recogido';
+            this.textInfo = this.translations.deliveryDoneLabel;
         },
         animateError() {
             this.animating = true;
             this.animationError = true;
-            this.textInfo = 'Error al recoger el reparto';
+            this.textInfo = this.translations.deliveryDontDoneLabel;
         },
         stopAnimation() {
             this.animating = false;

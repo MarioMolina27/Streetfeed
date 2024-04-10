@@ -1,15 +1,15 @@
 <template>
 <div class="container-fluid ps-0 pe-0">
-    <Navbar :menuItems = 'menuItems'></Navbar>
+    <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
     <template v-if="loading ||!loadingFinished">
         <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
     </template>
     <div v-else class="delivery-container">
         <div v-if="deliveries.length === 0" class="delivery-call-action">
-            <noDelivery></noDelivery>
+            <noDelivery :translations="translations"></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-            <hasDelivery :asosiationDelivery = asosiationDelivery @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
+            <hasDelivery :asosiationDelivery = asosiationDelivery :translations="translations" @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
         </div>
     </div>
 </div>
@@ -20,9 +20,13 @@ import Navbar from '../../shared/Navbar.vue';
 import noDelivery from './noDelivery.vue';
 import hasDelivery from './hasDelivery.vue';
 import loader from '../../shared/loader.vue';
+import esTranslations from '../../../../lang/riders/es.json';
+import enTranslations from '../../../../lang/riders/en.json';
+import caTranslations from '../../../../lang/riders/ca.json';
 export default{
     props: {
-        user: Object
+        user: Object,
+        lang: String
     },
     data(){
       return {
@@ -35,7 +39,8 @@ export default{
         loading: true,
         loadingFinished: false,
         deliveries: [],
-        asosiationDelivery: {}
+        asosiationDelivery: {},
+        translations: {}
       }
     },
     methods: {
@@ -155,6 +160,16 @@ export default{
             if (Object.keys(this.asosiationDelivery).length === 0) {
                 this.deliveries = [];
             }
+        }
+    },
+    created() {
+        console.log(this.lang);
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
         }
     },
     mounted(){

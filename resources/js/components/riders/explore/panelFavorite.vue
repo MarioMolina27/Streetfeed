@@ -1,13 +1,13 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
         <div class="favorite-container">
             <template v-if="loading ||!loadingFinished">
                 <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
             </template>
             <div v-else-if="favoriteProviders.length === 0" class="favorite-call-action">
-                <h1 class="mt-5 mb-4 font-weight-bold">¿Ningún favorito todavía?</h1>
-                <p class="fs-5">Haz clic en el corazón para añadir tus favoritos y tenerlos siempre a mano en esta sección.</p>
+                <h1 class="mt-5 mb-4 font-weight-bold">{{translations.haveNotFavorites}}</h1>
+                <p class="fs-5">{{translations.doClickToAddFavorite}}</p>
                 <div class="d-flex justify-content-center" style="width: 100%;">
                     <div class="skeleton-card">
                         <Skeleton width="100%" height="10rem"></Skeleton>
@@ -26,14 +26,14 @@
                         </div>
                     </div>
                 </div>
-                <button class="button-explore mb-2" @click="goExplore">Explora proveedores</button>
+                <button class="button-explore mb-2" @click="goExplore">{{translations.exploreProviders}}</button>
             </div>
             <div v-else style="width: 100%" class="d-flex flex-column">
-                <h1 class="mt-3 mb-4" style="text-align: center;">Tus Proveedores Favoritos</h1>
+                <h1 class="mt-3 mb-4" style="text-align: center;">{{translations.yourFavoritesLabel}}</h1>
                 <div class="row">
                     <template v-for="(provider) in favoriteProviders">
                         <div class="col-lg-6 col-md-12 col-sm-12 col-12 mb-3 d-flex justify-content-center">
-                            <favorite-card :provider = provider @favoriteToggled="refreshData"></favorite-card>
+                            <favorite-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></favorite-card>
                         </div>
                     </template>
                 </div>
@@ -47,9 +47,13 @@ import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
 import favoriteCard from './favoriteCard.vue';
 import Skeleton from 'primevue/skeleton';
+import esTranslations from '../../../../lang/riders/es.json';
+import enTranslations from '../../../../lang/riders/en.json';
+import caTranslations from '../../../../lang/riders/ca.json';
 export default{
     props: {
-        user: Object
+        user: Object,
+        lang: String
     },
     data(){
       return {
@@ -61,8 +65,18 @@ export default{
                 {name: 'Explorar', href: './explore'},
                 {name: 'Favoritos', href: './favorite'},
                 {name: 'Perfil', href: './profile'}
-            ]
+            ],
+            translations: {}
       }
+    },
+    created() {
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
+        }
     },
     mounted(){
       this.refreshData()

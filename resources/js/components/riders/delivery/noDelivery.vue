@@ -1,17 +1,17 @@
 <template>
-    <h1 class="mt-5 mb-4 font-weight-bold">¿A qué esperas para hacer un reparto?</h1>
-    <p class="fs-4 mb-4">Te podemos proporcionar una sugerencia... </p>
+    <h1 class="mt-5 mb-4 font-weight-bold">{{translations.callActionDoDeliver}}</h1>
+    <p class="fs-4 mb-4">{{translations.callActionSuggestLabel}}</p>
     <div class="d-flex justify-content-center flex-column" style="height: calc(100% - 18vh);">
-        <button class="button-suggest mb-5 fs-5" @click="doSuggest">Sugiereme!</button>
+        <button class="button-suggest mb-5 fs-5" @click="doSuggest">{{translations.doSuggestionsLabel}}</button>
         <div id="map-container" style="position: relative;" class="mt-3">
             <div id="map" style="position: relative;"></div>
             <div v-if="suggestState === 'notSuggest'" class="map-unavailable"></div>
             <div v-else-if="suggestState === 'loading'" class="map-unavailable">
-                <p class="unavailable-text">Cargando...</p>
+                <p class="unavailable-text">{{translations.chargeLabel}}</p>
             </div>
             <div v-else-if="suggestState === 'noSuggestions'" class="map-unavailable">
-                <h1 class="unavailable-heading">No hay sugerencias</h1>
-                <p class="unavailable-text">Lo sentimos, no hay sugerencias disponibles en este momento.</p>
+                <h1 class="unavailable-heading">{{translations.anySuggestionsLabel}}</h1>
+                <p class="unavailable-text">{{ translations.anySuggestionsDescLabel }}</p>
             </div>
             <div v-if="suggestState === 'ready'" :class="{ 'selected': selectedProfile === 'walking' }" class="button-profile-route" style="left: 10px;" @click="createRoute('walking')">
                 <i class="fa-solid fa-person-walking" style="color: #FDF8EB;"></i>
@@ -28,11 +28,8 @@
             <div v-if="suggestState === 'ready'" class="button-center-map" @click="centerMap">
                 <i class="fa-solid fa-location-crosshairs" style="color: #FDF8EB;"></i>
             </div>
-            <button v-if="suggestState === 'ready'" class="button-reserve" @click="doReserve">RESERVA</button>
-        </div>
-        
-            
-        
+            <button v-if="suggestState === 'ready'" class="button-reserve" @click="doReserve">{{translations.reserveLabel}}</button>
+        </div>        
     </div>
 </template>
     
@@ -41,6 +38,9 @@ import axios from 'axios';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 export default{
+    props: {
+        translations: Object
+    },
     data(){
         return {
             suggestState: "notSuggest",
@@ -81,7 +81,6 @@ export default{
                             this.centerMap();
                         })
                         .catch(error => {
-                            console.error('Error al obtener sugerencia de reparto:', error);
                             this.suggestState = 'noSuggestions';
                         });
                 })
@@ -205,7 +204,6 @@ export default{
                             window.location.href = './confirmation/' + encodeURIComponent(encodedHomelessData);
                         })
                         .catch(error => {
-                            console.error('Error al obtener la información:', error);
                             const encodedHomelessData = btoa(JSON.stringify(null));
                             window.location.href = './confirmation/' + encodeURIComponent(encodedHomelessData);
                         });

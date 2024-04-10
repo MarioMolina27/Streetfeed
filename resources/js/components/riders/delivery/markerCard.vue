@@ -3,19 +3,19 @@
       <div class="homeless-card-content" style="flex: 1;">
         <div class="homeless-card-sections">
           <div>
-            <span>Reparto</span>
+            <span>{{translations.deliveryLabel}}</span>
             <p class="p-border-bottom"><strong>{{homeless.idDelivery}}</strong></p>
           </div>
-          <button v-if="isDeliverButtonActive" class="deliver-btn" :disabled="!isDeliverButtonActive" @click="doDeliver">Entregar</button>
-          <p v-else class="info not-active-info ms-5" style="font-size: 13px; text-align: end;">Antes recoge el menú</p>
+          <button v-if="isDeliverButtonActive" class="deliver-btn" :disabled="!isDeliverButtonActive" @click="doDeliver">{{translations.doDeliveryLabel}}</button>
+          <p v-else class="info not-active-info ms-5" style="font-size: 13px; text-align: end;">{{translations.needCollectBefore}}</p>
         </div>
         <div class="homeless-card-sections">
           <div>
-            <span>Ubicación</span>
+            <span>{{translations.ubicationLabel}}</span>
             <p class="p-border-bottom"><strong>{{ homeless.location }}</strong></p>
           </div> 
           <div class="d-flex justify-content-end flex-column">
-            <span style="font-weight: bold; color: #984EAE;">Necesitado</span>
+            <span style="font-weight: bold; color: #984EAE;">{{translations.homelessLabel}}</span>
           </div>
         </div>
     </div>
@@ -27,7 +27,8 @@ import { ref } from "vue";
 const isVisible = ref(false);
 export default {
     props: {
-      homeless: Object
+      homeless: Object,
+      translations: Object
     },
     data() {
       return {
@@ -42,8 +43,8 @@ export default {
     methods: {
       doDeliver() {
         this.$confirm.require({
-            message: "Estás seguro que quieres entregar el pedido?",
-            header: "Entregar",
+            message: this.translations.sureToDoDelivery,
+            header: this.translations.doDeliveryLabel,
             onShow: () => {
                 isVisible.value = true;
             },
