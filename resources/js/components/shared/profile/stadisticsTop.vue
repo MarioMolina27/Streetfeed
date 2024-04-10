@@ -1,86 +1,96 @@
 <template>
     <div v-if="userIsProvider && userIsRider" class="row d-flex justify-content-around">
-        <div class="col-3 p-0">
-            <Card>
-                <template #content>
-                    <div
-                        class="d-flex flex-column justify-content-center align-items-center"
-                    >
-                        <img
-                            src="img/bag.svg"
-                            alt="Card"
-                            class="img-profile-stats"
-                        />
-                        <p class="mb-0 mt-1 text-profile-stats">
-                            {{ this.deliveriesUser }}
-                        </p>
+        <div class="col-4 p-0" style="position: relative;">
+            <div class="h-100">
+                <Card>
+                    <template #content>
+                        <div
+                            class="d-flex flex-column justify-content-center align-items-center"
+                        >
+                            <img
+                                src="img/bag.svg"
+                                alt="Card"
+                                class="img-profile-stats"
+                            />
+                            <p class="mb-0 mt-1 text-profile-stats">
+                                {{ this.deliveriesUser }}
+                            </p>
 
-                        <p class="text_type_user">Rider</p>
-                    </div>
-                </template>
-            </Card>
+                        </div>
+                    </template>
+                </Card>
+            </div>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Rider</p>
         </div>
-        <div class="col-3 p-0">
-            <Card>
-                <template #content>
-                    <div
-                        class="d-flex flex-column justify-content-center align-items-center"
-                    >
-                        <img
-                            src="img/bag.svg"
-                            alt="Card"
-                            class="img-profile-stats"
-                        />
-                        <p class="mb-0 mt-1 text-profile-stats">
-                            {{ this.numProviderDeliveries }}
-                        </p>
-                        <p class="text_type_user">Provider</p>
-                    </div>
-                </template>
-            </Card>
-        </div>
-        <div class="col-3 p-0">
-            <Card>
-                <template #content>
-                    <div
-                        class="d-flex flex-column justify-content-center align-items-center"
-                    >
-                        <img
-                            src="img/cloud.png"
-                            alt="Card"
-                            class="img-profile-stats"
-                        />
-                        <p class="mb-0 mt-1 text-profile-stats">
-                            {{ this.deliveriesUser * kgDelivery }}kg
-                        </p>
-                        <p class="text_type_user">Rider</p>
+        <div class="col-4 p-0"  style="position: relative;">
+            <div class="h-100">
+                <Card>
+                    <template #content>
+                        <div
+                            class="d-flex flex-column justify-content-center align-items-center"
+                        >
+                            <img
+                                src="img/bag.svg"
+                                alt="Card"
+                                class="img-profile-stats"
+                            />
+                            <p class="mb-0 mt-1 text-profile-stats">
+                                {{ this.numProviderDeliveries }}
+                            </p>
+                        </div>
+                    </template>
+                </Card>
+            </div>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Provider</p>
 
-                    </div>
-                </template>
-            </Card>
+        </div>
+        <div class="col-4 p-0" style="position: relative;">
+            <div class="h-100">
+                <Card>
+                    <template #content>
+                        <div
+                            class="d-flex flex-column justify-content-center align-items-center"
+                        >
+                            <img
+                                src="img/cloud.png"
+                                alt="Card"
+                                class="img-profile-stats"
+                            />
+                            <p class="mb-0 mt-1 text-profile-stats">
+                                {{ this.deliveriesUser * kgDelivery }}kg
+                            </p>
+                        </div>
+                    </template>
+                </Card>
+            </div>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Rider</p>
+
         </div>
 
-        <div class="col-3 p-0">
-            <Card>
-                <template #content>
-                    <div
-                        class="d-flex flex-column justify-content-center align-items-center"
-                    >
-                        <img
-                            src="img/cloud.png"
-                            alt="Card"
-                            class="img-profile-stats"
-                        />
-                        <p class="mb-0 mt-1 text-profile-stats">
-                            {{ this.numProviderDeliveries * kgDelivery }}kg
-                        </p>
-                        <p class="text_type_user">Provider</p>
-                    </div>
-                </template>
-            </Card>
+        <div class="col-4 p-0 mt-3" style="position: relative;">
+            <div class="h-100">
+                <Card>
+                    <template #content>
+                        <div
+                            class="d-flex flex-column justify-content-center align-items-center"
+                        >
+                            <img
+                                src="img/cloud.png"
+                                alt="Card"
+                                class="img-profile-stats"
+                            />
+                            <p class="mb-0 mt-1 text-profile-stats">
+                                {{ this.numProviderDeliveries * kgDelivery }}kg
+                            </p>
+                        </div>
+                    </template>
+                </Card>
+            </div>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Provider</p>
         </div>
         
-        <div class="col-3 p-0">
+        <div class="col-4 p-0 mt-3" style="position: relative;">
+           <div class="h-100">
             <Card>
                 <template #content>
                     <div
@@ -94,10 +104,11 @@
                         <p class="mb-0 mt-1 text-profile-stats">
                             {{ this.markersByUser }}
                         </p>
-                        <p class="text_type_user">User</p>
                     </div>
                 </template>
             </Card>
+           </div>
+           <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Tú</p>
         </div>
     </div>
 
@@ -201,11 +212,11 @@ export default {
 .p-card {
     background-color: #b48753;
     margin: 5px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.p-card-body {
-    padding: 15px;
-}
 
 .img-profile-stats {
     width: 4vh;
@@ -218,5 +229,6 @@ export default {
 .text_type_user {
     color: #fdf8eb;
     margin-bottom: 0px;
+    font-size: 15px;
 }
 </style>
