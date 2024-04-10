@@ -1,7 +1,7 @@
 <template>
     <div class="homeless-information">
         <div class="d-flex flex-column">
-            <span>Ubicación</span>
+            <span>{{translations.ubicationLabel}}</span>
             <strong class="two-line-ellipsis">{{ information.data.location }}</strong>
         </div>
         <div class="d-flex gap">
@@ -20,7 +20,8 @@
 <script>
 export default{
     props: {
-      information: Object
+      information: Object,
+      translations: Object
     },
     data() {
         return {
