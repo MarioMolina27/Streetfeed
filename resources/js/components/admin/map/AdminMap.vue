@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="map-container">
+        <div class="map-container-admin">
             <div id="map"></div>
             <div class="relocate" @click="relocate()"><i class="fa-solid fa-location-crosshairs" style="color: #081733;"></i></div>
         </div>
@@ -147,7 +147,7 @@ export default {
 </script>
 
 <style scoped>
-    .map-container {
+    .map-container-admin {
         position: relative;
     }
 

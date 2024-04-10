@@ -1,3 +1,5 @@
+export const kgDelivery = 0.5;
+
 //Images
 export const logoUrl = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/img/logo.svg`;
 export const sideNavFirstImg = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/img/home_nav_img.svg`;
