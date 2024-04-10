@@ -7,25 +7,13 @@
         <div class="ps-4 me-2" :class="{ 'col-6 d-flex align-items-center justify-content-start': isMobile, 'col-1 d-flex align-items-center justify-content-center': !isMobile }">
             <img :src="logoUrl" alt="logo-white" height="40">
         </div>
-        <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-11 d-flex flex-row justify-content-start ': !isMobile }">
-            <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
+        <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-7 d-flex flex-row justify-content-start ': !isMobile }">
+          
+          <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
               <a class="mb-0 item-nav" :href="item.href">{{ item.name }}</a>
-              
             </div>
-            <div v-if="!isMobile" class="d-flex me-5">
-              <Button type="button" icon="pi pi-image" @click="toggle">Català</Button>
-              <OverlayPanel ref="op">
-              <div class="flex flex-column gap-3 w-25rem">
-                  <div class="d-flex flex-column gap-2">
-                    <Button type="button" icon="pi pi-image" @click="toggle">Català</Button>
-                    <Button type="button" icon="pi pi-image" @click="toggle">Español</Button>
-                    <Button type="button" icon="pi pi-image" @click="toggle">Inglés</Button>
-                  </div>
-              </div>
-          </OverlayPanel>
-              <a class="log-out-nav mb-0">Cerrar session</a>
-            </div>
-            <div v-if="isMobile" @click="toggleMenu" class="d-flex justify-content-center align-items-center p-3 item-nav d">
+            
+            <div v-if="isMobile" @click="toggleMenu" class="col-5 d-flex justify-content-end align-items-center p-3 item-nav d">
               <div id="nav-icon" :class="{ 'open': showMenu }">
                 <span></span>
                 <span></span>
@@ -34,7 +22,14 @@
             </div>
 
         </div>
-        
+        <div v-if="!isMobile" class="col-4 d-flex align-items-center justify-content-end">
+              <div class="me-5 d-flex gap-3">
+                <button class="lang-btn" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">CAT</button>
+                <button class="lang-btn" :class="{ 'active': language === 'es' }" @click="changeLanguage('es')">ESP</button>
+                <button class="lang-btn" :class="{ 'active': language === 'en' }" @click="changeLanguage('en')">ENG</button>
+              </div>
+              <a class="log-out-nav mb-0 me-3">Cerrar session</a>
+            </div>
         </div>
       <div v-if="isMobile && showMenu" class="burger-menu">
           <div class="submenu d-flex flex-column"> 
@@ -42,35 +37,39 @@
               <h3 class="title-nav mt-5">STREET<span class="title-2-nav">FEED</span></h3>
               <a v-for="(item, index) in menuItems" :key="index" class="mb-0 item-nav item-nav-mobile ms-4 mt-5" :href="item.href">{{ item.name }}</a>
             </div>
-
-            <div class="d-flex justify-content-center align-items-end mb-" style="flex:1">
+            <div class="d-flex flex-column justify-content-center align-items-center mb-5">
+              <button class="mobile-lang-btn mb-3" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">CAT</button>
+              <button class="mobile-lang-btn mb-3" :class="{ 'active': language === 'es' }"@click="changeLanguage('es')">ESP</button>
+              <button class="mobile-lang-btn" :class="{ 'active': language === 'en' }"@click="changeLanguage('en')">ENG</button>
+            </div>
+            <div class="d-flex justify-content-center align-items-end">
               <a class="log-out-nav mb-5">Cerrar session</a>
             </div>
           </div>
       </div>
-      
     </nav>
     
 </template>
 
 <script>
 import { logoUrl } from '../../utilities/constant.js';
-import OverlayPanel from 'primevue/overlaypanel'; 
 export default {
   name: 'Navbar',
 
   props: {
     menuItems: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
+    currentLanguage: String
   },
   data() {
     return {
       isMobile: false,
       showMenu: false,
       bodyOverflow: false,
-      logoUrl
+      logoUrl,
+      language: this.currentLanguage,
     };
   },
   mounted() {
@@ -82,15 +81,23 @@ export default {
   },
   methods: {
     checkScreenWidth() {
-      this.isMobile = window.innerWidth <= 768;
+      this.isMobile = window.innerWidth <= 985;
     },
-    toggle(event) {
-      this.$refs.op.toggle(event);
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+      this.bodyOverflow = !this.bodyOverflow;
+
+      
+      if (this.bodyOverflow) {
+        document.body.classList.add('menu-open'); 
+      } else {
+        document.body.classList.remove('menu-open'); 
+      }
     },
-    changeLanguage(event) {
-      const selectedLanguage = event.target.value;
+    changeLanguage(lang) {
+      this.language = lang;
       // Enviar una solicitud al servidor para cambiar el idioma
-      axios.get(`/set-language/${selectedLanguage}`)
+      axios.get(`/set-language/${lang}`)
           .then(response => {
               // Actualizar la página o realizar cualquier otra acción necesaria
               // Por ejemplo, podrías recargar los datos para reflejar el nuevo idioma
@@ -101,9 +108,6 @@ export default {
           });
     }
   },
-  components: {
-    OverlayPanel
-  }
 }
 </script>
 
@@ -235,5 +239,43 @@ export default {
     .item-nav-mobile{
       font-size: 24px;
     }
+    .lang-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 16px;
+      color: #081733; /* Color del texto */
+    }
 
+  .lang-btn:hover {
+    text-decoration: underline;
+  }
+
+  .lang-btn.active {
+    
+    padding: 7px;
+    border-radius: 3px;
+    background-color: #b17a3b;
+    color: #FDF8EB;
+  }
+  .mobile-lang-btn {
+      width: 50%;
+      background: #FDF8EB;
+      cursor: pointer;
+      padding: 7px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      color: #b17a3b;
+    }
+
+  .mobile-lang-btn:hover {
+    text-decoration: underline;
+  }
+
+  .mobile-lang-btn.active {
+    background-color: #b17a3b;
+    color: #FDF8EB;
+  }
 </style>
