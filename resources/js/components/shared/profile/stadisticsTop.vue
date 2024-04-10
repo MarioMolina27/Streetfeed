@@ -51,7 +51,7 @@
                             class="img-profile-stats"
                         />
                         <p class="mb-0 mt-1 text-profile-stats">
-                            {{ this.kgUser }}kg
+                            {{ this.deliveriesUser * kgDelivery }}kg
                         </p>
                         <p class="text_type_user">Rider</p>
 
@@ -72,7 +72,7 @@
                             class="img-profile-stats"
                         />
                         <p class="mb-0 mt-1 text-profile-stats">
-                            {{ this.kgUser }}kg <!-- Cambiar por kg por proveedor -->
+                            {{ this.numProviderDeliveries * kgDelivery }}kg
                         </p>
                         <p class="text_type_user">Provider</p>
                     </div>
@@ -136,10 +136,10 @@
                             class="img-profile-stats"
                         />
                         <p v-if="userIsRider" class="mb-0 mt-1 text-profile-stats">
-                            {{ this.kgUser }}kg
+                            {{ this.deliveriesUser * kgDelivery }}kg
                         </p>
                         <p v-else class="mb-0 mt-1 text-profile-stats">
-                            {{ this.kgUser }}kg  <!-- Cambiar por kg por proveedor -->
+                            {{ this.numProviderDeliveries * kgDelivery  }}kg  
                         </p>
                     </div>
                 </template>
@@ -168,13 +168,12 @@
 
 <script>
 import Card from "primevue/card";
+import { kgDelivery } from '../../../utilities/constant.js'
 export default {
     props: {
         type_user: Array,
         deliveriesUser: Number,
-        kgUser: Number,
         markersByUser: Number,
-
         numProviderDeliveries: Number,
     },
 
@@ -189,6 +188,11 @@ export default {
 
     components: {
         Card,
+    },
+    data() {
+        return {
+            kgDelivery,
+        };
     },
 };
 </script>

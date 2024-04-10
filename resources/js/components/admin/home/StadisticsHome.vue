@@ -68,9 +68,8 @@ import Card from "primevue/card";
 import NumUsersGraphic from "../graphics/home/NumUsers.vue";
 import EvolutionUsersGraphic from "../graphics/home/EvolutionUsersGraphic.vue";
 import DeliveryHistoryGraphic from "../graphics/home/DeliveryHistoryGraphic.vue";
-import { getDeliveriesKg } from "../../../services/delivery.js";
-
-
+import { getTotalDeliveries } from "../../../services/delivery.js";
+import { kgDelivery } from '../../../utilities/constant.js'
 
 export default {
     name: "StadisticsHome",
@@ -89,9 +88,8 @@ export default {
     },
 
     mounted() {
-        getDeliveriesKg().then((response) => {
-            console.log(response);
-            this.deliveriesKg = response.kg + " Kg";
+        getTotalDeliveries().then((response) => {
+            this.deliveriesKg = response.deliveries*kgDelivery + " Kg";
         });
     },
 }

@@ -7,7 +7,7 @@
         </template>
         <div v-else>
             <div class="container mt-3">
-                <stadistic :type_user="this.type_user" :deliveriesUser="this.deliveriesUser" :kgUser="this.kgUser" :markersByUser="this.markersByUser" :numProviderDeliveries="numProviderDeliveries"></stadistic>
+                <stadistic :type_user="this.type_user" :deliveriesUser="this.deliveriesUser" :markersByUser="this.markersByUser" :numProviderDeliveries="numProviderDeliveries"></stadistic>
                 <top-profile-rider v-if="userIsRider" :user="this.user" :deliveriesUser="deliveriesUser"></top-profile-rider>
                 <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="numProviderDeliveries"></top-profile-provider>
                 
@@ -28,7 +28,7 @@
     import topProfileRider from './topProfileRider.vue';
     import topProfileProvider from './topProfileProvider.vue';
     import profileCard from './profileCard.vue';
-    import { getDeliveriesByUser, getDeliveriesByKgUser, getNumProviderDeliveries } from "../../../services/delivery.js"
+    import { getDeliveriesByUser, getNumProviderDeliveries } from "../../../services/delivery.js"
     import { markersByUser } from "../../../services/markers.js"
     import { getAdressByUser, getTypeRoad } from '../../../services/adress.js';
     import { getScheduleByUser } from '../../../services/schedules.js';
@@ -59,7 +59,6 @@
             shifts: [],
             address: [],
             typeRoads: [],
-            kgUser: 0,
             user: {
                 id_user: 9,
                 name: 'Pol Crespo',
@@ -91,15 +90,13 @@
             Promise.all([
                 getDeliveriesByUser(this.user.id_user),
                 markersByUser(this.user.id_user),
-                getDeliveriesByKgUser(this.user.id_user),
                 getScheduleByUser(this.user.id_user),
                 getAdressByUser(this.user.id_user),
                 getTypeRoad(),
                 getNumProviderDeliveries(this.user.id_user)
-            ]).then(([deliveriesResponse, markersResponse, kgResponse, scheduleResponse, addressResponse, typeRoadResponse,numProviderDeliveriesResponse]) => {
+            ]).then(([deliveriesResponse, markersResponse, scheduleResponse, addressResponse, typeRoadResponse,numProviderDeliveriesResponse]) => {
                 this.deliveriesUser = deliveriesResponse;
                 this.markersByUser = markersResponse;
-                this.kgUser = kgResponse.kg;
                 this.shifts = scheduleResponse;
                 this.address = addressResponse;
                 this.typeRoads = typeRoadResponse;
