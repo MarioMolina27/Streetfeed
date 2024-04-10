@@ -77,7 +77,8 @@ Route::get('favorite', function () {
 
 //-----------------------PROVIDERS--------------------------------
 Route::get('managedelivery', function () {
-    return view('providers.manage_delivery.manage_delivery');
+    $lang = request()->cookie('lang', 'es');
+    return view('providers.manage_delivery.manage_delivery', compact('lang'));
 });
 
 Route::get('menu', function () {

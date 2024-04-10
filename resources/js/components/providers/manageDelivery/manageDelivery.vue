@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
         <template v-if="loading ||!loadingFinished">
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
@@ -75,9 +75,13 @@ import VueQrcode from 'vue-qrcode';
 import Dialog from 'primevue/dialog';
 import Chat from '../../shared/chat/chat.vue';;
 import riderCard from './riderCard.vue';
+import esTranslations from '../../../../lang/es.json';
+import enTranslations from '../../../../lang/en.json';
+import caTranslations from '../../../../lang/ca.json';
 export default{
     props: {
-        user: Object
+        user: Object,
+        lang: String
     },
     data(){
         return {
@@ -96,6 +100,17 @@ export default{
             animationConfirm: false,
             showChatDialog: false,
             userChat: {},
+            translations: {}
+        }
+    },
+    created() {
+        console.log(this.lang);
+        if (this.lang === 'ca') {
+            this.translations = caTranslations;
+        } else if (this.lang === 'en') {
+            this.translations = enTranslations;
+        } else {
+            this.translations = esTranslations;
         }
     },
     mounted() {
