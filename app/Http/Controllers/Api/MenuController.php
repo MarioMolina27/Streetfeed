@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Menu;
 use App\Models\User;
-use App\Models\Launchpack;
+use App\Models\Launch_Pack;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+
+
 
 
 class MenuController extends Controller
@@ -39,7 +41,7 @@ class MenuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Adress $user)
+    public function show(Menu $menu)
     {
         //
     }
@@ -47,21 +49,21 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Adress $usuari)
+    public function edit(Menu $menu)
     {
         //
     }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Adress $user)
+    public function update(Request $request, Menu $menu)
     {
         //
     }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Adress $user)
+    public function destroy(Request $request, Menu $menu)
     {
         //
     }
@@ -90,7 +92,7 @@ class MenuController extends Controller
     
             if($numLauchpack > 0){
                 for($i = 0; $i < $numLauchpack; $i++){
-                    $launchpack = new Launchpack();
+                    $launchpack = new Launch_Pack();
                     $launchpack->id_menu = $menu->id_menu;
                     $launchpack->save();
                 }
@@ -119,12 +121,12 @@ class MenuController extends Controller
             $numLauchpack = $request->numLaunchpack;
     
             if($numLauchpack > 0){
-                $launchpacks = Launchpack::where('id_menu', $menu->id_menu)->get();
+                $launchpacks = Launch_Pack::where('id_menu', $menu->id_menu)->get();
                 foreach($launchpacks as $launchpack){
                     $launchpack->delete();
                 }
                 for($i = 0; $i < $numLauchpack; $i++){
-                    $launchpack = new Launchpack();
+                    $launchpack = new Launch_Pack();
                     $launchpack->id_menu = $menu->id_menu;
                     $launchpack->save();
                 }

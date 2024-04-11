@@ -3,16 +3,16 @@
         <Navbar :menuItems = 'menuItems'></Navbar>
         <div class="manage-menus-container">
             <div class="col-12">
-                <h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1>
-                <div class="new-menu">
+                <!---<h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1> -->
+                <div class="new-menu" @click="createMenuItem()">
                     <i class="fa-solid fa-plus fs-5"></i>
                     <span class="fs-5">{{ translations.addMenuLabel }}</span>
                 </div>
                 <div class="divider-menus">
 
                 </div>
-                <template v-for="menu in menus">
-                    <itemMenu :menu = 'menu'></itemMenu>
+                <template v-for="menu in menus" :key="menu.id">
+                    <itemMenu :menu = 'menu' @deleteMenuItem="deleteMenuItem"></itemMenu>
                 </template>
             </div>
         </div>
@@ -60,7 +60,10 @@ export default{
             axios.get(`/api/menu/get-menus/${this.loggedUser}`)
                 .then(response => {
                     this.menus = response.data;
-                    console.log(this.menus);
+                    this.menus.forEach(menu => {
+                        menu.creating = false;
+                        menu.editing = false;
+                    });
                 })
                 .catch(error => {
                     console.log(error);
@@ -68,6 +71,37 @@ export default{
         },
         updateMenu(){
             console.log('update menu');
+        },
+        createMenuItem(){
+            let menu = {
+                id: this.generateRandomId(),
+                title: null,
+                first_product: null,
+                second_product: null,
+                drink_product: null,
+                launchpack: [],
+                active: 1,
+                user_id: this.user.id,
+                creating: true,
+                editing: false
+            }
+            this.menus.unshift(menu);
+        },
+        deleteMenuItem(menu) {
+            const index = this.menus.findIndex(m => m.id === menu.id);
+            if (index !== -1) {
+                let menus= this.menus.slice(0, index).concat(this.menus.slice(index + 1));
+                console.log(menus);
+            }
+        },
+
+        generateRandomId() {
+            let id;
+            do {
+                id = Math.floor(Math.random() * 10000); 
+                id += 'l'; 
+            } while (this.menus.some(menu => menu.id === id));
+            return id;
         }
     },
     components: {
@@ -88,10 +122,12 @@ export default{
         align-items: center;
         gap: 10px;
         margin-top: 20px;
-        border: 2px dashed #b17a3b;
+        border: 3px dashed #b17a3b;
         border-radius: 10px;
         padding: 10px;
         cursor: pointer;
+        font-weight: 700;
+        color: #b17a3b;
     }
     .divider-menus {
         border-top: 2px solid #b17a3b;
