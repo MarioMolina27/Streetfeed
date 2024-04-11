@@ -92,7 +92,7 @@ export default {
             this.m.editing = false;
         },
         deleteMenuItem(){
-            this.$emit('deleteMenuItem', this.m.id);
+            this.$emit('deleteMenuItem', this.m);
         }
     },
     components: {

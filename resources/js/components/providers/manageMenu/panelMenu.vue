@@ -91,7 +91,7 @@ export default{
             const index = this.menus.findIndex(m => m.id === menu.id);
             if (index !== -1) {
                 let menus= this.menus.slice(0, index).concat(this.menus.slice(index + 1));
-                console.log(menus);
+                this.menus = menus;
             }
         },
 
