@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-    <login></login>
+    <login :lang="'{{ $lang }}'"></login>
 @endsection
 
 @section('imports')

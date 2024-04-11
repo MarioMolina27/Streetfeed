@@ -2,5 +2,49 @@
     "startConversation": "Empieza una conversación",
     "atLabel": " a las ",
     "todayLabel": "Hoy",
-    "yesterdayLabel": "Ayer"
+    "yesterdayLabel": "Ayer",
+
+    "catalanAbrLabel": "CAT",
+    "spanishAbrLabel": "ESP",
+    "englishAbrLabel": "ENG",
+    "logout": "Cerrar sesión",
+    "deleteAccount": "Eliminar cuenta",
+
+    "changePassword": "Cambiar contraseña",
+    "errorChangePassword": "Error al cambiar la contraseña",
+    "oldPassword": "Contraseña antigua",
+    "newPassword": "Nueva contraseña",
+    "repeatPassword": "Repetir la nueva contraseña",
+    "hereIntroducePassword": "Aqui tienes que introducir tu contraseña actual",
+    "hereIntroduceNewPassword": "Aqui tienes que introducir tu nueva contraseña",
+    "hereRepeatNewPassword": "Aqui tienes que repetir tu nueva contraseña",
+    "saveLabel": "Guardar",
+
+    "riderLabel": "Repartidor",
+    "providerLabel": "Proveedor",
+    "youLabel": "Tú",
+
+    "zerofivedeliveries": "0-5 entregas",
+    "fivetwentydeliveries": "5-20 entregas",
+    "moretwentydeliveries": "20+ entregas",
+
+    "zerofivedelivery": "0-5 repartos",
+    "fivetwentdelivery": "5-20 repartos",
+    "moretwentydelivery": "20+ repartos",
+
+    "emailLabel": "Correo electrónico",
+    "directionLabel": "Direcciones",
+    "scheduleLabel": "Horario",
+    "mondaysLabel": "Lunes",
+    "tuesdaysLabel": "Martes",
+    "wednesdaysLabel": "Miércoles",
+    "thursdaysLabel": "Jueves",
+    "fridaysLabel": "Viernes",
+    "saturdaysLabel": "Sábado",
+    "sundaysLabel": "Domingo",
+
+    "directLabel": "Dirección",
+    "searchLabel": "Buscar",
+    "floorLabel": "Piso",
+    "doorLabel": "Puerta"
 }

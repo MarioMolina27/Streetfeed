@@ -8,7 +8,7 @@
                 <div class="circle">
                     <i class="fa-regular fa-calendar-check logo-stats" :style="delivery.id_state === 1 ? { color: '#FDF8EB' } : { color: '#b48753' }"></i>
                 </div>
-                <p class="step-text">En reserva</p> 
+                <p class="step-text">{{translations.inReserveLabel}}</p> 
             </div>
             
             <div>
@@ -19,13 +19,13 @@
                 <div class="circle">
                     <i class="fa-solid fa-truck logo-stats" :style="delivery.id_state === 2 ? { color: '#FDF8EB' } : { color: '#b48753' }"></i>
                 </div>
-                <p class="step-text">En reparto</p> 
+                <p class="step-text">{{translations.inDeliveryLabel}}</p> 
             </div>
         </div>
         <div class="menu-items">
-            <p>Primer plato: <strong class="fs-5">{{ delivery.menu.first_product }}</strong> </p>
-            <p>Segundo plato: <strong class="fs-5">{{ delivery.menu.second_product }}</strong></p>
-            <p>Bebida: <strong class="fs-5">{{ delivery.menu.drink_product }}</strong></p>
+            <p>{{translations.firstMealLabel}}: <strong class="fs-5">{{ delivery.menu.first_product }}</strong> </p>
+            <p>{{translations.secondMealLabel}}: <strong class="fs-5">{{ delivery.menu.second_product }}</strong></p>
+            <p>{{translations.drinkLabel}}: <strong class="fs-5">{{ delivery.menu.drink_product }}</strong></p>
         </div>
     </div>
 
@@ -34,7 +34,8 @@
 <script>
 export default {
     props: {
-        delivery: Object
+        delivery: Object,
+        translations: Object
     },
     data() {
         return {

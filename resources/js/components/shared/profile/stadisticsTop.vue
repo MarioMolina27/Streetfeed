@@ -20,7 +20,7 @@
                     </template>
                 </Card>
             </div>
-            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Rider</p>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">{{translations.riderLabel}}</p>
         </div>
         <div class="col-4 p-0"  style="position: relative;">
             <div class="h-100">
@@ -41,7 +41,7 @@
                     </template>
                 </Card>
             </div>
-            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Provider</p>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">{{translations.providerLabel}}</p>
 
         </div>
         <div class="col-4 p-0" style="position: relative;">
@@ -63,7 +63,7 @@
                     </template>
                 </Card>
             </div>
-            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Rider</p>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">{{translations.riderLabel}}</p>
 
         </div>
 
@@ -86,7 +86,7 @@
                     </template>
                 </Card>
             </div>
-            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Provider</p>
+            <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">{{translations.providerLabel}}</p>
         </div>
         
         <div class="col-4 p-0 mt-3" style="position: relative;">
@@ -108,7 +108,7 @@
                 </template>
             </Card>
            </div>
-           <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">Tú</p>
+           <p class="text_type_user" style="position: absolute; bottom: 2px; right: 10%;">{{translations.youLabel}}</p>
         </div>
     </div>
 
@@ -186,6 +186,7 @@ export default {
         deliveriesUser: Number,
         markersByUser: Number,
         numProviderDeliveries: Number,
+        translations: Object
     },
 
     computed: {
@@ -196,11 +197,6 @@ export default {
             return this.type_user.some((userType) => userType.id_type_user === 2);
         },
     },
-
-    mounted() {
-        console.log(this.type_user);
-    },
-
     components: {
         Card,
     },

@@ -5,12 +5,12 @@
     <nav class=" row nav-header d-flex flex-column justify-content-center me-0" style="position: sticky; top: 0;">
       <div class="d-flex flex-row">
         <div class="ps-4 me-2" :class="{ 'col-6 d-flex align-items-center justify-content-start': isMobile, 'col-1 d-flex align-items-center justify-content-center': !isMobile }">
-            <img :src="logoUrl" alt="logo-white" height="40">
+            <img class="img-land-decored" :src="logoUrl" alt="logo-white" height="40" @click="goLanding()">
         </div>
         <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-7 d-flex flex-row justify-content-start ': !isMobile }">
           
           <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
-              <a class="mb-0 item-nav" :href="item.href">{{ item.name }}</a>
+              <a class="mb-0 item-nav tab-decored" :href="item.href">{{ item.name }}</a>
             </div>
             
             <div v-if="isMobile" @click="toggleMenu" class="col-5 d-flex justify-content-end align-items-center p-3 item-nav d">
@@ -24,26 +24,26 @@
         </div>
         <div v-if="!isMobile" class="col-4 d-flex align-items-center justify-content-end">
               <div class="me-5 d-flex gap-3">
-                <button class="lang-btn" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">CAT</button>
-                <button class="lang-btn" :class="{ 'active': language === 'es' }" @click="changeLanguage('es')">ESP</button>
-                <button class="lang-btn" :class="{ 'active': language === 'en' }" @click="changeLanguage('en')">ENG</button>
+                <button class="lang-btn" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">{{translations.catalanAbrLabel}}</button>
+                <button class="lang-btn" :class="{ 'active': language === 'es' }" @click="changeLanguage('es')">{{translations.spanishAbrLabel}}</button>
+                <button class="lang-btn" :class="{ 'active': language === 'en' }" @click="changeLanguage('en')">{{translations.englishAbrLabel}}</button>
               </div>
-              <a class="log-out-nav mb-0 me-3">Cerrar session</a>
+              <a class="log-out-nav mb-0 me-3" @click="logout()">{{translations.logout}}</a>
             </div>
         </div>
       <div v-if="isMobile && showMenu" class="burger-menu">
           <div class="submenu d-flex flex-column"> 
             <div class="submenu-top d-flex flex-column" style="flex:1">
               <h3 class="title-nav mt-5">STREET<span class="title-2-nav">FEED</span></h3>
-              <a v-for="(item, index) in menuItems" :key="index" class="mb-0 item-nav item-nav-mobile ms-4 mt-5" :href="item.href">{{ item.name }}</a>
+              <a v-for="(item, index) in menuItems" :key="index" class="mb-0 item-nav item-nav-mobile ms-4 mt-5 tab-decored" :href="item.href">{{ item.name }}</a>
             </div>
             <div class="d-flex flex-column justify-content-center align-items-center mb-5">
-              <button class="mobile-lang-btn mb-3" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">CAT</button>
-              <button class="mobile-lang-btn mb-3" :class="{ 'active': language === 'es' }"@click="changeLanguage('es')">ESP</button>
-              <button class="mobile-lang-btn" :class="{ 'active': language === 'en' }"@click="changeLanguage('en')">ENG</button>
+              <button class="mobile-lang-btn mb-3" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">{{translations.catalanAbrLabel}}</button>
+              <button class="mobile-lang-btn mb-3" :class="{ 'active': language === 'es' }"@click="changeLanguage('es')">{{translations.spanishAbrLabel}}</button>
+              <button class="mobile-lang-btn" :class="{ 'active': language === 'en' }"@click="changeLanguage('en')">{{translations.englishAbrLabel}}</button>
             </div>
             <div class="d-flex justify-content-center align-items-end">
-              <a class="log-out-nav mb-5">Cerrar session</a>
+              <a class="log-out-nav mb-5" @click="logout()">{{translations.logout}}</a>
             </div>
           </div>
       </div>
@@ -70,7 +70,18 @@ export default {
       bodyOverflow: false,
       logoUrl,
       language: this.currentLanguage,
+      translations: {},
     };
+  },
+  created() {
+    import(`../../../lang/shared/${this.currentLanguage}.json`)
+        .then(module => {
+            this.translations = module.default;
+            console.log(this.translations);
+        })
+        .catch(error => {
+            console.error(`Error al importar el archivo de idioma: ${error}`);
+        });
   },
   mounted() {
     window.addEventListener('resize', this.checkScreenWidth);
@@ -87,7 +98,6 @@ export default {
       this.showMenu = !this.showMenu;
       this.bodyOverflow = !this.bodyOverflow;
 
-      
       if (this.bodyOverflow) {
         document.body.classList.add('menu-open'); 
       } else {
@@ -95,19 +105,31 @@ export default {
       }
     },
     changeLanguage(lang) {
+      if(lang === this.language) return;
       this.language = lang;
-      // Enviar una solicitud al servidor para cambiar el idioma
       axios.get(`/set-language/${lang}`)
           .then(response => {
-              // Actualizar la página o realizar cualquier otra acción necesaria
-              // Por ejemplo, podrías recargar los datos para reflejar el nuevo idioma
               window.location.reload();
           })
           .catch(error => {
               console.error(error);
           });
+    },
+    logout() {
+      axios.get('/logout')
+          .then(response => {
+              window.location.href = './login';
+          })
+          .catch(error => {
+              console.error(error);
+          });
+    },
+    goLanding() {
+      let url = window.location.href;
+      let baseUrl = url.split("public/")[0] + "public/";
+      window.location.href = baseUrl;
     }
-  },
+  }
 }
 </script>
 
@@ -245,10 +267,10 @@ export default {
       cursor: pointer;
       padding: 0;
       font-size: 16px;
-      color: #081733; /* Color del texto */
+      color: #081733;
     }
 
-  .lang-btn:hover {
+  .lang-btn:hover:not(.active) {
     text-decoration: underline;
   }
 
@@ -270,12 +292,18 @@ export default {
       color: #b17a3b;
     }
 
-  .mobile-lang-btn:hover {
+  .mobile-lang-btn:hover:not(.active) {
     text-decoration: underline;
   }
 
   .mobile-lang-btn.active {
     background-color: #b17a3b;
     color: #FDF8EB;
+  }
+  .tab-decored:hover {
+    text-decoration: underline;
+  }
+  .img-land-decored:hover {
+    cursor: pointer;
   }
 </style>

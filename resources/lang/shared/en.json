@@ -2,5 +2,50 @@
     "startConversation": "Start a conversation",
     "atLabel": " at ",
     "todayLabel": "Today",
-    "yesterdayLabel": "Yesterday"
+    "yesterdayLabel": "Yesterday",
+
+    "catalanAbrLabel": "CAT",
+    "spanishAbrLabel": "ESP",
+    "englishAbrLabel": "ENG",
+    "logout": "Log out",
+    "deleteAccount": "Delete account",
+
+    "changePassword": "Change password",
+    "errorChangePassword": "Error changing password",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "repeatPassword": "Repeat new password",
+    "hereIntroducePassword": "Here you must enter your current password",
+    "hereIntroduceNewPassword": "Here you must enter your new password",
+    "hereRepeatNewPassword": "Here you must repeat your new password",
+    "saveLabel": "Save",
+
+    "riderLabel": "Rider",
+    "providerLabel": "Provider",
+    "youLabel": "You",
+
+    "zerofivedeliveries": "0-5 deliveries",
+    "fivetwentydeliveries": "5-20 deliveries",
+    "moretwentydeliveries": "20+ deliveries",
+
+    "zerofivedelivery": "0-5 deliveries",
+    "fivetwentdelivery": "5-20 deliveries",
+    "moretwentydelivery": "20+ deliveries",
+
+    "emailLabel": "Email",
+    "directionLabel": "Directions",
+    "scheduleLabel": "Schedule",
+    "mondaysLabel": "Monday",
+    "tuesdaysLabel": "Tuesday",
+    "wednesdaysLabel": "Wednesday",
+    "thursdaysLabel": "Thursday",
+    "fridaysLabel": "Friday",
+    "saturdaysLabel": "Saturday",
+    "sundaysLabel": "Sunday",
+
+    "directLabel": "Address",
+    "searchLabel": "Search",
+    "floorLabel": "Floor",
+    "doorLabel": "Door"
 }
+

@@ -50,7 +50,7 @@
                     <menu-card :menu="menu" :translations = "translations" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
                 </template>
                 <div id="reserve-details" v-show="showReserveData" class="reserve-data"></div>
-                <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
+                <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">{{translations.reserveBtnLabel}}</button>
             </div>
             </div>
         </template>
@@ -61,9 +61,6 @@
 import menuCard from './menuCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
-import esTranslations from '../../../../lang/riders/es.json';
-import enTranslations from '../../../../lang/riders/en.json';
-import caTranslations from '../../../../lang/riders/ca.json';
 import {menuTabsTwicePoints} from '../../../utilities/menuTabs.js'
 export default{
     props: {
@@ -84,13 +81,14 @@ export default{
       }
     },
     created() {
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+        import(`../../../../lang/riders/${this.lang}.json`)
+            .then(module => {
+                this.translations = module.default;
+                console.log(this.translations);
+            })
+            .catch(error => {
+                console.error(`Error al importar el archivo de idioma: ${error}`);
+            });
         this.loadProvider();
     },
     mounted() {

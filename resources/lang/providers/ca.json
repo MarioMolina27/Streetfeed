@@ -1,4 +1,15 @@
 {
     "yourMenusLabel": "Els teus menús",
-    "addMenuLabel": "Afegeix un menú"
+    "addMenuLabel": "Afegeix un menú",
+
+    "deliveriesLabel": "Repartiments",
+    "deliverLabel": "Repartidor",
+    "clickOnQRLabel": "Feu clic al codi QR quan l'hagin escanejat",
+    "deliverWithoutQRLabel": "Lliurament sense QR",
+    "closeLabel": "Tancar",
+    "inReserveLabel": "En reserva",
+    "inDeliveryLabel": "En repartiment",
+    "firstMealLabel": "Primer plat",
+    "secondMealLabel": "Segon plat",
+    "drinkLabel": "Beguda"
 }

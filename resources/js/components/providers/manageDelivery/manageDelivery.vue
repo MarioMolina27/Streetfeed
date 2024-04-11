@@ -6,7 +6,7 @@
         </template>
         <div v-else class="deliveries-container">
             <div class="header-accordion">
-                <h1>Repartos</h1>
+                <h1>{{translations.deliveriesLabel}}</h1>
             </div>
             <Accordion :multiple="true" :activeIndex="0" expandIcon="pi pi-angle-down" collapseIcon="pi pi-angle-up" class="custom-accordion">
                 <template v-for="(riderDeliveries) in deliveriesByRiders">
@@ -15,7 +15,7 @@
                             <span class="d-flex justify-content-between align-items-center gap-2 w-100">
                                 <div style="padding: 10px;">
                                     <div >
-                                        <div class="delivery-rider-label">Repartidor:</div>
+                                        <div class="delivery-rider-label">{{translations.deliverLabel}}:</div>
                                         <div class="delivery-rider-info"><strong>{{ riderDeliveries[0].user.name + " " + riderDeliveries[0].user.surnames }}</strong></div>
                                     </div>
                                 </div>
@@ -31,7 +31,7 @@
                             </span>
                         </template>
                         <template v-for="delivery in riderDeliveries" :key="delivery.id">
-                            <riderCard :delivery="delivery" />
+                            <riderCard :delivery="delivery" :translations="translations"/>
                         </template>
                     </AccordionTab>
                 </template>
@@ -51,17 +51,17 @@
                     </div>
                     <div v-else style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <vue-qrcode v-if="scanning" :value="qrCodeData" :size="200" :scale="10" :color="{ dark: '#000000ff', light: '#ffffffff' }" :type="'image/png'" @click="handleQRCodeScan"/>
-                        <span class="qr-scan-txt-info">Haz clic en el código QR cuando lo hayan escaneado</span>
+                        <span class="qr-scan-txt-info">{{translations.clickOnQRLabel}}</span>
                     </div>
                 </div>
                 <div class="qr-deliver-centered-buttons">
-                    <button class="deliver-qr-btn" @click="doDeliver">Entrega sin QR</button>
-                    <button class="cncl-deliver-qr-btn" @click="scanning = false">Cerrar</button>
+                    <button class="deliver-qr-btn" @click="doDeliver">{{translations.deliverWithoutQRLabel}}</button>
+                    <button class="cncl-deliver-qr-btn" @click="scanning = false">{{translations.closeLabel}}</button>
                 </div>
             </Dialog>
         </div>
         <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-            <Chat :user="userChat" :loggedUser="userLogged.id_user" :lang="lang"/>
+            <Chat :user="userChat" :loggedUser="user.id_user" :lang="lang"/>
         </Dialog>
     </div>
 </template>
@@ -75,21 +75,16 @@ import VueQrcode from 'vue-qrcode';
 import Dialog from 'primevue/dialog';
 import Chat from '../../shared/chat/chat.vue';;
 import riderCard from './riderCard.vue';
-import esTranslations from '../../../../lang/providers/es.json';
-import enTranslations from '../../../../lang/providers/en.json';
-import caTranslations from '../../../../lang/providers/ca.json';
+import {menuTabs} from '../../../utilities/menuTabs.js';
 export default{
     props: {
         user: Object,
-        lang: String
+        lang: String,
+        type_user: Array
     },
     data(){
         return {
-            menuItems: [
-                {name: 'Repartos', href: './managedelivery'},
-                {name: 'Tus Menus', href: './menu'},
-                {name: 'Perfil', href: './profile'}
-            ],
+            menuItems: [],
             loading: true,
             loadingFinished: false,
             deliveriesByRiders: [],
@@ -104,16 +99,17 @@ export default{
         }
     },
     created() {
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+        import(`../../../../lang/providers/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                    console.log(this.translations);
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
     },
     mounted() {
-        console.log(this.user)
+        this.menuItems = menuTabs(this.type_user);
         this.getAllDelivriesByRider();
     },
     methods: {
@@ -142,7 +138,6 @@ export default{
             this.getAllDelivriesByRider();
         },
         doDeliver() {
-            console.log('Delivering');
             const deliveriesIds = this.qrCodeData.split(',');
             axios.post('api/delivery/do-collect', {
                 deliveryIds: deliveriesIds
@@ -162,7 +157,6 @@ export default{
                 }, 2000);
             })
             .catch(error => {
-                console.error('Error al recoger el reparto:', error);
                 this.animateError();
                 setTimeout(() => {
                     this.stopAnimation();

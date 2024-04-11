@@ -2,5 +2,49 @@
     "startConversation": "Comença una conversa",
     "atLabel": " a les ",
     "todayLabel": "Avui",
-    "yesterdayLabel": "Ahir"
+    "yesterdayLabel": "Ahir",
+
+    "catalanAbrLabel": "CAT",
+    "spanishAbrLabel": "ESP",
+    "englishAbrLabel": "ENG",
+    "logout": "Tanca la sessió",
+    "deleteAccount": "Elimina el compte",
+
+    "changePassword": "Canvia la contrasenya",
+    "errorChangePassword": "Error en canviar la contrasenya",
+    "oldPassword": "Contrasenya antiga",
+    "newPassword": "Nova contrasenya",
+    "repeatPassword": "Repeteix la nova contrasenya",
+    "hereIntroducePassword": "Aquí has d'introduir la teva contrasenya actual",
+    "hereIntroduceNewPassword": "Aquí has d'introduir la teva nova contrasenya",
+    "hereRepeatNewPassword": "Aquí has de repetir la teva nova contrasenya",
+    "saveLabel": "Desa",
+
+    "riderLabel": "Repartidor",
+    "providerLabel": "Proveïdor",
+    "youLabel": "Tu",
+
+    "zerofivedeliveries": "0-5 entregues",
+    "fivetwentydeliveries": "5-20 entregues",
+    "moretwentydeliveries": "20+ entregues",
+
+    "zerofivedelivery": "0-5 repartiments",
+    "fivetwentdelivery": "5-20 repartiments",
+    "moretwentydelivery": "20+ repartiments",
+
+    "emailLabel": "Correu electrònic",
+    "directionLabel": "Adreces",
+    "scheduleLabel": "Horari",
+    "mondaysLabel": "Dilluns",
+    "tuesdaysLabel": "Dimarts",
+    "wednesdaysLabel": "Dimecres",
+    "thursdaysLabel": "Dijous",
+    "fridaysLabel": "Divendres",
+    "saturdaysLabel": "Dissabte",
+    "sundaysLabel": "Diumenge",
+    
+    "directLabel": "Adreça",
+    "searchLabel": "Cerca",
+    "floorLabel": "Planta",
+    "doorLabel": "Porta"
 }

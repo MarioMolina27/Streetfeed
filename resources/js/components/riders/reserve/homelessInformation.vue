@@ -27,9 +27,6 @@ export default{
         return {
         }
     },
-    mounted() {
-
-    },
     methods: {
         handleRemoveMarker(id, peopleEat) {
             this.$emit('marker-removed', { id, peopleEat });

@@ -1,32 +1,32 @@
 <template>
     <div>
-        <Dialog v-model:visible="visible" modal header="Cambiar Contraseña" style="width: 90%;">
+        <Dialog v-model:visible="visible" modal :header=translations.changePassword style="width: 90%;">
             <div v-if="error" class="d-flex justify-content-center align-items-center error-container">
                 <i class="pi pi-exclamation-circle"></i>
                 <span class="ms-3">{{ error }}</span>
             </div>
             <div class="flex flex-column gap-2 mb-4">
                 <div>
-                    <label for="oldpassword" class="me-2">Contraseña antigua</label>
-                    <i class="pi pi-question-circle" v-tooltip="'Aqui tienes que introducir tu contraseña actual'"></i>
+                    <label for="oldpassword" class="me-2">{{translations.oldPassword}}</label>
+                    <i class="pi pi-question-circle" v-tooltip="translations.hereIntroducePassword"></i>
                 </div>
                 <InputText id="oldpassword" name="oldPassword" v-model="oldPassword" aria-describedby="oldpassword-help" />
             </div>
             <div class="flex flex-column gap-2 mb-2">
                 <div>
-                    <label for="newpassword" class="me-2">Nueva contraseña</label>
-                    <i class="pi pi-question-circle" v-tooltip="'Aqui tienes que introducir la nueva contraseña'"></i>
+                    <label for="newpassword" class="me-2">{{translations.newPassword}}</label>
+                    <i class="pi pi-question-circle" v-tooltip="translations.hereIntroduceNewPassword"></i>
                 </div>
                 <InputText name="newPassword" id="newpassword" v-model="newPassword" aria-describedby="newpassword-help" />
             </div>
             <div class="flex flex-column gap-2 mb-3">
                 <div>
-                    <label for="newpassword2" class="me-2">Repite la nueva contraseña</label>
-                    <i class="pi pi-question-circle" v-tooltip="'Aqui tienes que  volver a introducir la nueva contraseña'"></i>
+                    <label for="newpassword2" class="me-2">{{translations.repeatPassword}}</label>
+                    <i class="pi pi-question-circle" v-tooltip="translations.hereRepeatNewPassword"></i>
                 </div>                 
                 <InputText id="newpassword2" name="newPassword2" v-model="newPassword2" aria-describedby="newpassword2-help" />
             </div>
-            <Button label="Guardar" class="p-button mt-2" @click="savePassword()" />
+            <Button :label=translations.saveLabel class="p-button mt-2" @click="savePassword()" />
         </Dialog>
     </div>
 </template>
@@ -37,8 +37,6 @@ import IconField from 'primevue/iconfield';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { changePassword } from '../../../services/users.js';
-
-
 
 export default {
     components: {
@@ -55,7 +53,8 @@ export default {
         user: {
             type: Object,
             default: () => ({}),
-        }
+        },
+        translations: Object
     },
 
     data() {
@@ -89,7 +88,7 @@ export default {
                     if(response.data) {
                         this.$emit('closeModal');
                     } else {
-                        this.error = 'Error al cambiar la contraseña';
+                        this.error = this.translations.errorChangePassword;
                     }
                 })
                 .catch((error) => {

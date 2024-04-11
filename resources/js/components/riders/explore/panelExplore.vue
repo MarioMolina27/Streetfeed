@@ -37,9 +37,6 @@
 import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
-import esTranslations from '../../../../lang/riders/es.json';
-import enTranslations from '../../../../lang/riders/en.json';
-import caTranslations from '../../../../lang/riders/ca.json';
 import {menuTabs} from '../../../utilities/menuTabs.js'
 export default{
     props: {
@@ -59,14 +56,14 @@ export default{
       }
     }, 
     created() {
-        console.log(this.lang);
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+      import(`../../../../lang/riders/${this.lang}.json`)
+          .then(module => {
+              this.translations = module.default;
+              console.log(this.translations);
+          })
+          .catch(error => {
+              console.error(`Error al importar el archivo de idioma: ${error}`);
+          });
     },
     mounted(){
       this.menuItems = menuTabs(this.type_user);

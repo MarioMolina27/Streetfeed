@@ -1,4 +1,15 @@
 {
     "yourMenusLabel": "Your menus",
-    "addMenuLabel": "Add a menu"
+    "addMenuLabel": "Add a menu",
+
+    "deliveriesLabel": "Deliveries",
+    "deliverLabel": "Delivery person",
+    "clickOnQRLabel": "Click on the QR code when scanned",
+    "deliverWithoutQRLabel": "Delivery without QR",
+    "closeLabel": "Close",
+    "inReserveLabel": "In reserve",
+    "inDeliveryLabel": "In delivery",
+    "firstMealLabel": "First course",
+    "secondMealLabel": "Second course",
+    "drinkLabel": "Drink"
 }

@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <managedelivery :user="{{ Auth::user() }}" :lang="'{{ $lang }}'"></managedelivery>
+    <managedelivery :user="{{ Auth::user() }}" :lang="'{{ $lang }}'" :type_user="{{ Auth::user()->typeUsers }}"></managedelivery>
 @endsection
 
 @section('imports')

@@ -235,16 +235,29 @@
 import { gsap } from "gsap";
 import Calendar from 'primevue/calendar';
 import { homeRouteAdmin, mainRiderPage, mainProviderPage} from '../../utilities/constant.js';
-
 export default {
+    props: {
+        lang: String
+    },
     data() {
         return {
+            translations: {},
             nickname: '',
             password: '',
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
             shifts : [],
             displayShifts: false,
         };
+    },
+    created() {
+        import(`../../../lang/auth/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                    console.log(this.translations);
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
     },
     methods: {
         login() {

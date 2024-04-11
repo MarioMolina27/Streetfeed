@@ -446,7 +446,10 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
+    public function logout(Request $request) {
+        Auth::logout();
+        return response()->json(['message' => 'User logged out'], 200);
+    }
     public function changePassword(Request $request, User $user)
     {
         $validatedData = $request->validate([

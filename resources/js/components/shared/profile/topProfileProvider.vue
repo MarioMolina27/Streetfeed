@@ -6,7 +6,7 @@
                 <img v-if="this.deliveriesUser >= 0 && this.deliveriesUser <= 5" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
                 <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
-            <p class="step-text">0-5 entregas</p> 
+            <p class="step-text">{{translations.zerofivedeliveries}}</p> 
         </div>
         
         <div>
@@ -18,7 +18,7 @@
                 <img v-if="this.deliveriesUser >=5 && this.deliveriesUser <=20" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
                 <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
-            <p class="step-text">5-20 entregas</p> 
+            <p class="step-text">{{translations.fivetwentydeliveries}}</p> 
         </div>
 
         <div>
@@ -30,7 +30,7 @@
                 <img v-if="this.deliveriesUser >20" src="img/logo_blanco.svg" alt="img-first-category-game" class="logo-stats"/>
                 <img v-else src="img/logo.svg" alt="img-first-category-game" class="logo-stats"/>
             </div>
-            <p class="step-text">+20 entregas</p> 
+            <p class="step-text">{{translations.moretwentydeliveries}}</p> 
         </div>
     </div>
     </div>
@@ -48,6 +48,7 @@ export default {
             type: Number,
             required: true
         },
+        translations: Object
     },
   
 }

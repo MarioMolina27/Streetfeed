@@ -7,17 +7,20 @@ use App\Http\Controllers\LanguageController;
 
 //---------------------LANDING--------------------------------
 Route::get('/', function () {
-    return view('landings.landing');
+    $lang = request()->cookie('lang', 'es');
+    return view('landings.landing', compact('lang'));
 });
 //----------------------------------------------------------------
 
 
 //-----------------------AUTH--------------------------------
 Route::get('login', function () {
-    return view('auth.login');
+    $lang = request()->cookie('lang', 'es');
+    return view('auth.login', compact('lang'));
 });
 
 Route::post('users/login', [UserController::class, 'login']);
+Route::get('logout', [UserController::class, 'logout']);
 //----------------------------------------------------------------
 
 
@@ -101,7 +104,8 @@ Route::get('menu', function () {
 
 //-----------------------SHARED--------------------------------
 Route::get('profile', function () {
-    return view('shared.profile');
+    $lang = request()->cookie('lang', 'es');
+    return view('shared.profile', compact('lang'));
 });
 //----------------------------------------------------------------
 

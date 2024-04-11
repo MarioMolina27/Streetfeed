@@ -31,9 +31,6 @@ import homelessInformation from './homelessInformation.vue';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Carousel from 'primevue/carousel';
-import esTranslations from '../../../../lang/riders/es.json';
-import enTranslations from '../../../../lang/riders/en.json';
-import caTranslations from '../../../../lang/riders/ca.json';
 import {menuTabsTwicePoints} from '../../../utilities/menuTabs.js'
 
 export default {
@@ -62,13 +59,14 @@ export default {
         };
     },
     created() {
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+        import(`../../../../lang/riders/${this.lang}.json`)
+            .then(module => {
+                this.translations = module.default;
+                console.log(this.translations);
+            })
+            .catch(error => {
+                console.error(`Error al importar el archivo de idioma: ${error}`);
+            });
     },
     mounted() {
         this.menuItems = menuTabsTwicePoints(this.type_user);

@@ -25,9 +25,6 @@
 
 <script>
 import jsPDF from 'jspdf';
-import esTranslations from '../../../../lang/riders/es.json';
-import enTranslations from '../../../../lang/riders/en.json';
-import caTranslations from '../../../../lang/riders/ca.json';
 export default {
     props: {
         datareserve: String ,
@@ -41,13 +38,14 @@ export default {
         }
     },
     created() {
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+        import(`../../../../lang/riders/${this.lang}.json`)
+            .then(module => {
+                this.translations = module.default;
+                console.log(this.translations);
+            })
+            .catch(error => {
+                console.error(`Error al importar el archivo de idioma: ${error}`);
+            });
     },
     mounted() {
         console.log(this.datareserve)

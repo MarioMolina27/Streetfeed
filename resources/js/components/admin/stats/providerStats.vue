@@ -2,7 +2,7 @@
     <div class="container-fluid full-size">
         <div class="row h-100">
         <div class="col-lg-1 col-12 d-flex align-items-start mt-4 ps-4">
-            <SidebarAdmin :translations = "translations"/>
+            <SidebarAdmin :translations = "translations" :currentLanguage = 'lang'/>
         </div>
         <div class="col-lg-11 col-12">
             <StadisticsProviders :translations = "translations"/>
@@ -14,9 +14,6 @@
 <script>
 import SidebarAdmin from "../shared/SidebarAdmin.vue";
 import StadisticsProviders from "./StadisticsProviders.vue"
-import esTranslations from '../../../../lang/admin/es.json';
-import enTranslations from '../../../../lang/admin/en.json';
-import caTranslations from '../../../../lang/admin/ca.json';
 export default {
     props: {
         user: Object,
@@ -28,13 +25,14 @@ export default {
         }
     },
     created() {
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+        import(`../../../../lang/admin/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                    console.log(this.translations);
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
     },
     components: {
         SidebarAdmin,

@@ -38,9 +38,6 @@
 </template>
 
 <script>
-import esTranslations from '../../../../lang/shared/es.json';
-import enTranslations from '../../../../lang/shared/en.json';
-import caTranslations from '../../../../lang/shared/ca.json';
 export default {
     inject: ['dialogRef'],
     props: {
@@ -55,13 +52,14 @@ export default {
         }
     },
     created() {
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+      import(`../../../../lang/shared/${this.lang}.json`)
+            .then(module => {
+                this.translations = module.default;
+                console.log(this.translations);
+            })
+            .catch(error => {
+                console.error(`Error al importar el archivo de idioma: ${error}`);
+            });
     },
     mounted() {
         this.getMessages();

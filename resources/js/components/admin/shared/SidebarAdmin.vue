@@ -3,7 +3,7 @@
                 <div
                     class="col-12 d-flex justify-content-center align-items-center flex-column"
                 >
-                    <img :src="logoUrl" alt="StreetFeed Logo" height="60" />
+                    <img class="admin-img-land-decored" :src="logoUrl" alt="StreetFeed Logo" height="60" @click="goLanding()"/>
                     <h3 class="sidebar-title">{{translations.streetFeedName}}</h3>
                 </div>
                 <div class="col-12 mt-5">
@@ -61,6 +61,14 @@
                         <p class="mb-0 ms-3 title-nav-admin">{{translations.mapMenuTab}}</p>
                     </a>
                 </div>
+                <div class="col-12 align-self-end">
+                    <div class="d-flex flex-column align-items-center gap-3">
+                        <button class="admin-lang-btn" :class="{ 'active': language === 'ca' }" @click="changeLanguage('ca')">CAT</button>
+                        <button class="admin-lang-btn" :class="{ 'active': language === 'es' }" @click="changeLanguage('es')">ESP</button>
+                        <button class="admin-lang-btn" :class="{ 'active': language === 'en' }" @click="changeLanguage('en')">ENG</button>
+                    </div>
+                    <a class="log-out-nav d-flex flex-column align-items-center mt-5" @click="logout()">Cerrar session</a>
+                </div>
             </Sidebar>
             <button class="burger-menu" @click="visible = true">
                 <i class="pi pi-bars burger-logo"></i>
@@ -78,7 +86,8 @@ import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFou
 export default {
     name: "SidebarAdmin",
     props: {
-        translations: Object
+        translations: Object,
+        currentLanguage: String
     },
     components: {
         Sidebar,
@@ -98,7 +107,36 @@ export default {
             usersRouteAdmin: usersRouteAdmin,
             statisticsProviderRouteAdmin: statisticsProviderRouteAdmin,
             statisticsRiderRouteAdmin: statisticsRiderRouteAdmin,
-            mapAdminRoute: mapAdminRoute
+            mapAdminRoute: mapAdminRoute,
+            language: this.currentLanguage,
+        }
+    },
+
+    methods: {
+        changeLanguage(lang) {
+            if(lang === this.language) return;
+            this.language = lang;
+            axios.get(`/set-language/${lang}`)
+                .then(response => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+        logout() {
+            axios.get('/logout')
+                .then(response => {
+                    window.location.href = './login';
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+        goLanding() {
+            let url = window.location.href;
+            let baseUrl = url.split("public/")[0] + "public/";
+            window.location.href = baseUrl;
         }
     }
 };
@@ -144,5 +182,35 @@ a{
 .p-accordion .p-accordion-header .p-accordion-header-link{
     padding: 0;
 }
+.admin-lang-btn {
+    width: 90%;
+    background: #FDF8EB;
+    cursor: pointer;
+    padding: 7px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    color: #b17a3b;
+}
 
+  .admin-lang-btn:hover:not(.active) {
+    text-decoration: underline;
+  }
+
+  .admin-lang-btn.active {
+    background-color: #b17a3b;
+    color: #FDF8EB;
+  }
+  .log-out-nav {
+    color: #b52a2a;
+    font-weight: bold;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+.log-out-nav:hover {
+    text-decoration: underline;
+}
+.admin-img-land-decored {
+    cursor: pointer;
+}
 </style>

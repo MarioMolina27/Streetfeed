@@ -1,22 +1,22 @@
 <template>
-    <dialogPassword :modalVisible="this.modalPassword" :user= "this.user" @closeModal="closeModal"></dialogPassword>
+    <dialogPassword :modalVisible="this.modalPassword" :user= "this.user" :translations="translations" @closeModal="closeModal"></dialogPassword>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
         <template v-if="loading ||!loadingFinished">
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
         <div v-else>
             <div class="container mt-3">
-                <stadistic :type_user="this.type_user" :deliveriesUser="this.deliveriesUser" :markersByUser="this.markersByUser" :numProviderDeliveries="numProviderDeliveries"></stadistic>
-                <top-profile-rider v-if="userIsRider" :user="this.user" :deliveriesUser="deliveriesUser"></top-profile-rider>
-                <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="numProviderDeliveries"></top-profile-provider>
+                <stadistic :type_user="this.type_user" :deliveriesUser="this.deliveriesUser" :markersByUser="this.markersByUser" :numProviderDeliveries="numProviderDeliveries" :translations="translations"></stadistic>
+                <top-profile-rider v-if="userIsRider" :user="this.user" :deliveriesUser="deliveriesUser" :translations="translations"></top-profile-rider>
+                <top-profile-provider v-if="userIsProvider" :user="this.user" :deliveriesUser="numProviderDeliveries" :translations="translations"></top-profile-provider>
                 
-                <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads"></profile-card>
+                <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads" :translations="translations"></profile-card>
 
-                <h3 class="mt-5 ms-3" style="cursor: pointer;" @click="this.modalPassword=true;">Cambiar Contraseña</h3>
+                <h3 class="mt-5 ms-3" style="cursor: pointer;" @click="this.modalPassword=true;">{{translations.changePassword}}</h3>
 
-                <h3 class="mt-4 ms-3 danger-btn" style="cursor: pointer;">Cerrar Sessión</h3>
-                <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold" style="cursor: pointer;">Eliminar Cuenta</h3>
+                <h3 class="mt-4 ms-3 danger-btn" style="cursor: pointer;">{{translations.logout}}</h3>
+                <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold" style="cursor: pointer;">{{translations.deleteAccount}}</h3>
             </div>
         </div>
     </div>
@@ -36,9 +36,11 @@
     import dialogPassword from './dialogPassword.vue';
     import stadistic from './stadisticsTop.vue';
     import {menuTabs} from '../../../utilities/menuTabs.js'
+    
     export default {
         props: {
             user: Object,
+            lang: String,
             type_user: Array
         },
         data(){
@@ -53,6 +55,7 @@
             shifts: [],
             address: [],
             typeRoads: [],
+            translations: {}
           }
         },
 
@@ -73,6 +76,17 @@
             loader,
             dialogPassword,
             stadistic
+        },
+        created() {
+            import(`../../../../lang/shared/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                    console.log(this.translations);
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
+                
         },
         mounted() {
             this.menuItems = menuTabs(this.type_user);
