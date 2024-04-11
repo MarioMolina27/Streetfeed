@@ -12,7 +12,7 @@
         </div>
     </div>
     <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery" :translations="translations" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></mapDelivery>
-    <listDelivery v-else :deliveries="asosiationDelivery" :translations="translations" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></listDelivery>
+    <listDelivery v-else :deliveries="asosiationDelivery" :lang="lang" :translations="translations" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></listDelivery>
 </template>
 
 <script>
@@ -21,6 +21,7 @@ import listDelivery from './listDelivery.vue';
 export default {
     props: {
         asosiationDelivery: Object,
+        lang: String,
         translations: Object
     },
     data(){

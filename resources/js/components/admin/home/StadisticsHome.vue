@@ -4,13 +4,13 @@
             <div class="col-lg-4 col-12 mb-3">
                 <div class="d-flex flex-column justify-content-between h-100">
                     <div class="d-flex flex-column justify-content-center align-items-center mt-3">
-                        <h3 class="title-home-admin mb-0">NUESTRA</h3>
-                        <h3 class="title-home-admin mt-0 mb-3">APP</h3>
+                        <h3 class="title-home-admin mb-0">{{translations.ourLabel}}</h3>
+                        <h3 class="title-home-admin mt-0 mb-3">{{translations.appLabel}}</h3>
                     </div>
                     <Card class="p-3">
                         <template #header>
                             <div class="card-header">
-                                <h3 class="title-card-stadistics mt-3 p-2">COMIDA SALVADA</h3>
+                                <h3 class="title-card-stadistics mt-3 p-2">{{translations.foodSaveLabel}}</h3>
                             </div>
                         </template>
                         <template #content>
@@ -24,7 +24,7 @@
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">EVOLUCION STREETFEED</h3>
+                            <h3 class="title-card-stadistics mt-3">{{translations.evolutionStreetfeedLabel}}</h3>
                             <EvolutionUsersGraphic />
                         </div>
                     </template>
@@ -38,7 +38,7 @@
                 <Card class="p-3">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">NUESTROS USUARIOS</h3>
+                            <h3 class="title-card-stadistics mt-3">{{translations.ourUsersLabel}}</h3>
                             <NumUsersGraphic />
                         </div>
                     </template>
@@ -51,7 +51,7 @@
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">NUESTROS REPARTOS</h3>
+                            <h3 class="title-card-stadistics mt-3">{{translations.ourDeliveriesLabel}}</h3>
                         </div>
                     </template>
                     <template #content>
@@ -73,7 +73,9 @@ import { kgDelivery } from '../../../utilities/constant.js'
 
 export default {
     name: "StadisticsHome",
-
+    props: {
+        translations: Object
+    },
     components: {
         Card,
         NumUsersGraphic,

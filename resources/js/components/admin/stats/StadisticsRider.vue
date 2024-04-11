@@ -5,7 +5,7 @@
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">EVOLUCION DE PROVIDERS</h3>
+                            <h3 class="title-card-stadistics mt-3">{{translations.riderEvolLabel}}</h3>
                         </div>
                     </template>
                     <template #content>
@@ -18,7 +18,7 @@
                 <div class="d-flex flex-column justify-content-center h-100">
                     <div class="d-flex flex-column justify-content-center align-items-center mt-3">
                         <h3 class="title-stadistics-riders mb-0">NUESTROS</h3>
-                        <h3 class="title-stadistics-riders title-stadistics-riders-2 mt-0 mb-3">RIDERS</h3>
+                        <h3 class="title-stadistics-riders title-stadistics-riders-2 mt-0 mb-3">{{translations.ridersLabel}}</h3>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     <Card class="p-3 h-50">
                         <template #header>
                             <div class="card-header">
-                                <h3 class="title-card-stadistics mt-3 p-2">NUESTROS RIDERS</h3>
+                                <h3 class="title-card-stadistics mt-3 p-2">{{translations.oursLabel}} {{translations.ridersLabel}}</h3>
                             </div>
                         </template>
                         <template #content>
@@ -40,7 +40,7 @@
                     <Card class="p-3 h-50 mt-3">
                         <template #header>
                             <div class="card-header">
-                                <h3 class="title-card-stadistics mt-3 p-2">PEDIDOS ENTREGADOS</h3>
+                                <h3 class="title-card-stadistics mt-3 p-2">{{translations.deliveriesDoneLabel}}</h3>
                             </div>
                         </template>
                         <template #content>
@@ -53,7 +53,7 @@
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">SUS LOCALIDADES</h3>
+                            <h3 class="title-card-stadistics mt-3">{{translations.theirLocationLabel}}</h3>
                         </div>
                     </template>
                     <template #content>
@@ -74,7 +74,9 @@ import { getTotalDeliveries } from "../../../services/delivery.js";
 
 export default {
   name: "StadisticsRider",
-
+  props: {
+        translations: Object
+    },
   components: {
     Card,
     EvolutionRidersGraphic,

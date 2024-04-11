@@ -53,5 +53,10 @@
     "lookYourReserve": "Check your reservation!",
     "resumeLabel": "Reservation summary",
     "doDeliverIn": "Deliver at location: ",
-    "areGonnaEat": "They will eat: "
+    "areGonnaEat": "They will eat: ",
+
+    "yourDeliveriesTab": "Your Deliveries",
+    "exploreTab": "Explore",
+    "favoritesTab": "Favorites",
+    "profileTab": "Profile"
 }

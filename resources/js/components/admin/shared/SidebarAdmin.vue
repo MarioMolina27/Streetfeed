@@ -4,7 +4,7 @@
                     class="col-12 d-flex justify-content-center align-items-center flex-column"
                 >
                     <img :src="logoUrl" alt="StreetFeed Logo" height="60" />
-                    <h3 class="sidebar-title">STREETFEED</h3>
+                    <h3 class="sidebar-title">{{translations.streetFeedName}}</h3>
                 </div>
                 <div class="col-12 mt-5">
                     <a class="d-flex flex-row align-items-center mt-5" :href="homeRouteAdmin">
@@ -13,7 +13,7 @@
                             alt="Home Logo Nav"
                             class="logo-nav-admin ms-2"
                         />
-                        <p class="mb-0 ms-3 title-nav-admin">HOME</p>
+                        <p class="mb-0 ms-3 title-nav-admin">{{translations.homeMenuTab}}</p>
                     </a>
 
                     <div class="d-flex flex-row align-items-center mt-5">
@@ -27,16 +27,16 @@
                                             class="logo-nav-admin ms-2"
                                         />
                                         <p class="mb-0 ms-3 title-nav-admin">
-                                            STATS
+                                            {{translations.statsMenuTab}}
                                         </p>
                                     </div>
                                 </template>
                                <div class="d-flex flex-column">
                                 <a class="mt-5" :href="statisticsProviderRouteAdmin">
-                                    <a class="mb-0 ms-5 mt-5 title-nav-admin">PROVIDERS</a>
+                                    <a class="mb-0 ms-5 mt-5 title-nav-admin">{{translations.providersMenuTab}}</a>
                                </a>
                                 <a class="mt-5"  :href="statisticsRiderRouteAdmin">
-                                    <a class="mb-0 ms-5 mt-4 title-nav-admin">RIDERS</a>
+                                    <a class="mb-0 ms-5 mt-4 title-nav-admin">{{translations.ridersMenuTab}}</a>
                                 </a>
                                </div>
                             </AccordionTab>
@@ -49,7 +49,7 @@
                             alt="Home Logo Nav"
                             class="logo-nav-admin ms-2"
                         />
-                        <p class="mb-0 ms-3 title-nav-admin">USERS</p>
+                        <p class="mb-0 ms-3 title-nav-admin">{{translations.usersMenuTab}}</p>
                     </a>
 
                     <a class="d-flex flex-row align-items-center mt-5" :href="mapAdminRoute">
@@ -58,7 +58,7 @@
                             alt="Home Logo Nav"
                             class="logo-nav-admin ms-2"
                         />
-                        <p class="mb-0 ms-3 title-nav-admin">MAP</p>
+                        <p class="mb-0 ms-3 title-nav-admin">{{translations.mapMenuTab}}</p>
                     </a>
                 </div>
             </Sidebar>
@@ -77,6 +77,9 @@ import { logoUrl, sideNavFirstImg, sideNavSecondImg, sideNavThirdImg, sideNavFou
 
 export default {
     name: "SidebarAdmin",
+    props: {
+        translations: Object
+    },
     components: {
         Sidebar,
         Accordion,

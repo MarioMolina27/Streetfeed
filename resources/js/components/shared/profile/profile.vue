@@ -48,10 +48,10 @@
                 {id: 1, name: 'Rider'},
                 {id: 2, name: 'Provider'}],
             menuItems: [
-                    {name: 'Tus Repartos', href: './delivery'},
-                    {name: 'Explorar', href: './explore'},
-                    {name: 'Favoritos', href: './favorite'},
-                    {name: 'Perfil', href: './profile'}
+                {name: 'Tus Repartos', href: './delivery'},
+                {name: 'Explorar', href: './explore'},
+                {name: 'Favoritos', href: './favorite'},
+                {name: 'Perfil', href: './profile'}
             ],
             deliveriesUser: 0,
             numProviderDeliveries: 0,
@@ -106,15 +106,6 @@
             }).catch(error => {
                 console.error("Hubo un error al obtener los datos:", error);
             });
-        },
-        computed: {
-            userIsRider() {
-                return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
-            },
-            userIsProvider() {
-                // Verifica si el tipo de usuario es Provider
-                return this.type_user.some(userType => userType.id === 2); // Suponiendo que el id para Provider sea 2
-            }
         },
         methods: {
             handleLoadingFinished(){

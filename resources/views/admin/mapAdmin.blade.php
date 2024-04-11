@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <mapadmin :user="{{ Auth::user() }}"></mapadmin>
+    <mapadmin :user="{{ Auth::user() }}" :lang="'{{ $lang }}'"></mapadmin>
 @endsection
 
 @section('imports')

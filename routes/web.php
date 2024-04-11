@@ -23,23 +23,28 @@ Route::post('users/login', [UserController::class, 'login']);
 
 //-----------------------ADMIN--------------------------------
 Route::get('admin', function () {
-    return view('admin.home');
+    $lang = request()->cookie('lang', 'es');
+    return view('admin.home', compact('lang'));
 });
 
 Route::get('admin/users', function () {
-    return view('admin.admin');
+    $lang = request()->cookie('lang', 'es');
+    return view('admin.admin', compact('lang'));
 })->name('mainAdmin');
 
 Route::get('admin/stadistics/providers', function () {
-    return view('admin.stadisticsProvider');
+    $lang = request()->cookie('lang', 'es');
+    return view('admin.stadisticsProvider', compact('lang'));
 });
 
 Route::get('admin/stadistics/riders', function () {
-    return view('admin.stadisticsRiders');
+    $lang = request()->cookie('lang', 'es');
+    return view('admin.stadisticsRiders', compact('lang'));
 });
 
 Route::get('admin/map', function () {
-    return view('admin.mapAdmin');
+    $lang = request()->cookie('lang', 'es');
+    return view('admin.mapAdmin', compact('lang'));
 });
 //----------------------------------------------------------------
 

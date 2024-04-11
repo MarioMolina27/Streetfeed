@@ -1,0 +1,43 @@
+{
+    "ourLabel": "Nuestra",
+    "appLabel": "Aplicación",
+    "foodSaveLabel": "Comida Guardada",
+    "evolutionStreetfeedLabel": "Evolución Streetfeed",
+    "ourUsersLabel": "Nuestros Usuarios",
+    "ourDeliveriesLabel": "Nuestras Entregas",
+    
+    "providerLabel": "Proveedor",
+    "homelessLabel": "Personas Sin Hogar",
+    
+    "streetFeedName": "Streetfeed",
+    "homeMenuTab": "Inicio",
+    "statsMenuTab": "Estadísticas",
+    "providersMenuTab": "Proveedores",
+    "ridersMenuTab": "Repartidores",
+    "usersMenuTab": "Usuarios",
+    "mapMenuTab": "Mapa",
+    
+    "oursLabel": "Nuestros",
+    "providersLabel": "Proveedores",
+    "providerEvolLabel": "Evolución de los Proveedores",
+    "theirLocationLabel": "Sus Localizaciones",
+    "deliveriesDoneLabel": "Entregas Realizadas",
+    
+    "riderEvolLabel": "Evolución de los Repartidores",
+    "ridersLabel": "Repartidores",
+    
+    "noUserFoundLabel": "No se ha encontrado ningún usuario",
+    "loadingUserLabel": "Cargando los datos de los usuarios. Por favor, espera...",
+    "nicknameLabel": "Nombre de Usuario",
+    "emailLabel": "Correo Electrónico",
+    "nameLabel": "Nombre",
+    "surnameLabel": "Apellidos",
+    "typeUserLabel": "Tipo de Usuario",
+    "selectOneLabel": "Selecciona uno...",
+    "activeLabel": "Activo",
+    "searchByNameLabel": "Buscar por nombre",
+    "searchBySurnameLabel": "Buscar por apellidos",
+    "searchByNicknameLabel": "Buscar por nombre de usuario",
+    "searchByEmailLabel": "Buscar por correo electrónico",
+    "keyboardSearchLabel": "Buscar..."
+}

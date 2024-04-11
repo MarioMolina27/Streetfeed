@@ -38,7 +38,7 @@
     </div>
   </div>
   <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-    <Chat :user="userChat" :loggedUser="userLogged"/>
+    <Chat :user="userChat" :loggedUser="userLogged" :lang="lang"/>
   </Dialog>
 </template>
 
@@ -49,6 +49,7 @@ import Chat from '../../shared/chat/chat.vue';
 export default {
     props: {
         delivery: Object,
+        lang: String,
         translations: Object
     },
     data() {

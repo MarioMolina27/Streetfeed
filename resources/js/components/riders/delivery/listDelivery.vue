@@ -2,7 +2,7 @@
     <ConfirmDialog></ConfirmDialog>
     <div class="list-container">
         <template v-for="delivery in deliveries">
-            <providerCard :delivery="delivery" :translations="translations" @collectDelivery="doCollect" @notifyDeliver="notifyDeliver"></providerCard>
+            <providerCard :delivery="delivery" :lang="lang" :translations="translations" @collectDelivery="doCollect" @notifyDeliver="notifyDeliver"></providerCard>
             <div v-if="isScanning" class="scanner-container">
                 <qrScanner :deliveryIds="deliveryIds" :translations="translations" @closeFrame="closeFrame"></qrScanner>
             </div>
@@ -17,6 +17,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 export default {
     props: {
         deliveries: Object,
+        lang: String,
         translations: Object
     },
     data(){

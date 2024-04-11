@@ -53,5 +53,10 @@
     "lookYourReserve": "Mira la teva reserva!",
     "resumeLabel": "Resum de la reserva",
     "doDeliverIn": "Entregar en l'ubicació: ",
-    "areGonnaEat": "Menjaran: "
+    "areGonnaEat": "Menjaran: ",
+
+    "yourDeliveriesTab": "Els teus repartiments",
+    "exploreTab": "Explora",
+    "favoritesTab": "Preferits",
+    "profileTab": "Perfil"
 }

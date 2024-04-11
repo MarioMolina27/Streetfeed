@@ -8,11 +8,11 @@
             <div class="d-flex justify-content-center align-items-center">
                 <div class="d-flex justify-content-center align-items-center" style="margin: 10px;">
                     <i class="fa-solid fa-shop fs-4 me-2" style="color: #b48753;"></i>
-                    <strong class="fs-4" style="color: #b48753;">Provider</strong>
+                    <strong class="fs-4" style="color: #b48753;">{{translations.providerLabel}}</strong>
                 </div>
                 <div class="d-flex justify-content-center align-items-center" style="margin: 10px;">
                     <i class="fa-solid fa-user fs-4 me-2" style="color: #984EAE;"></i>
-                    <strong class="fs-4" style="color: #984EAE;">Homeless</strong>
+                    <strong class="fs-4" style="color: #984EAE;">{{translations.homelessLabel}}</strong>
                 </div>
             </div>
         </div>
@@ -27,7 +27,9 @@ import { logoUrl } from '../../../utilities/constant.js';
 
 export default {
     name: "AdminMap",
-
+    props: {
+        translations: Object
+    },
     data() {
         return {
             map: null,

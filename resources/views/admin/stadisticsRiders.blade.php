@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <riderstats :user="{{ Auth::user() }}"></riderstats>
+    <riderstats :user="{{ Auth::user() }}" :lang="'{{ $lang }}'"></riderstats>
 @endsection
 
 @section('imports')

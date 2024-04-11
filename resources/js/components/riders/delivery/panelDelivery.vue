@@ -9,7 +9,7 @@
             <noDelivery :translations="translations"></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-            <hasDelivery :asosiationDelivery = asosiationDelivery :translations="translations" @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
+            <hasDelivery :asosiationDelivery = "asosiationDelivery" :lang="lang" :translations="translations" @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
         </div>
     </div>
 </div>

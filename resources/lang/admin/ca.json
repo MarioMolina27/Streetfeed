@@ -1,0 +1,43 @@
+{
+    "ourLabel": "LA NOSTRA",
+    "appLabel": "APP",
+    "foodSaveLabel": "MENJAR SALVAT",
+    "evolutionStreetfeedLabel": "EVOLUCIÓ STREETFEED",
+    "ourUsersLabel": "ELS NOSTRES USUARIS",
+    "ourDeliveriesLabel": "LES NOSTRES ENTREGUES",
+
+    "providerLabel": "PROVEÏDOR",
+    "homelessLabel": "SENSE LLAR",
+
+    "streetFeedName": "STREETFEED",
+    "homeMenuTab": "INICI",
+    "statsMenuTab": "ESTADÍSTIQUES",
+    "providersMenuTab": "PROVEÏDORS",
+    "ridersMenuTab": "REPARTIDORS",
+    "usersMenuTab": "USUARIS",
+    "mapMenuTab": "MAPA",
+
+    "oursLabel": "ELS NOSTRES",
+    "providersLabel": "PROVEÏDORS",
+    "providerEvolLabel": "EVOLUCIÓ DELS PROVEÏDORS",
+    "theirLocationLabel": "LES SEVES LOCALITATS",
+    "deliveriesDoneLabel": "ENTREGUES REALITZADES",
+
+    "riderEvolLabel": "EVOLUCIÓ DELS REPARTIDORS",
+    "ridersLabel": "REPARTIDORS",
+
+    "noUserFoundLabel": "No s'ha trobat cap usuari",
+    "loadingUserLabel": "Carregant les dades dels usuaris. Siusplau, espera...",
+    "nicknameLabel": "Nom d'usuari",
+    "emailLabel": "Correu electrònic",
+    "nameLabel": "Nom",
+    "surnameLabel": "Cognoms",
+    "typeUserLabel": "Tipus d'usuari",
+    "selectOneLabel": "Selecciona un...",
+    "activeLabel": "Actiu",
+    "searchByNameLabel": "Cerca per nom",
+    "searchBySurnameLabel": "Cerca per cognoms",
+    "searchByNicknameLabel": "Cerca per nom d'usuari",
+    "searchByEmailLabel": "Cerca per correu electrònic",
+    "keyboardSearchLabel": "Escriu per cercar..."
+}

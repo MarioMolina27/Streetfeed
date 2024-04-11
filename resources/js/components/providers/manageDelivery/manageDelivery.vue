@@ -61,7 +61,7 @@
             </Dialog>
         </div>
         <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-            <Chat :user="userChat" :loggedUser="userLogged.id_user"/>
+            <Chat :user="userChat" :loggedUser="userLogged.id_user" :lang="lang"/>
         </Dialog>
     </div>
 </template>
