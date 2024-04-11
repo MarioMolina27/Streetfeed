@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <panelfavorite :user="{{ Auth::user() }}" :lang="'{{ $lang }}'"></panelfavorite>
+    <panelfavorite :user="{{ Auth::user() }}" :lang="'{{ $lang }}'" :type_user="{{ Auth::user()->typeUsers }}"></panelfavorite>
 @endsection
 
 @section('imports')

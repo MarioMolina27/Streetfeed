@@ -34,21 +34,18 @@ import Carousel from 'primevue/carousel';
 import esTranslations from '../../../../lang/riders/es.json';
 import enTranslations from '../../../../lang/riders/en.json';
 import caTranslations from '../../../../lang/riders/ca.json';
+import {menuTabsTwicePoints} from '../../../utilities/menuTabs.js'
 
 export default {
     props: {
         menusjson: String,
         user: Object,
-        lang: String
+        lang: String,
+        type_user: Array
     },
     data() {
         return {
-            menuItems: [
-                {name: 'Tus Repartos', href: '../delivery'},
-                {name: 'Explorar', href: '../explore'},
-                {name: 'Favoritos', href: '../favorite'},
-                {name: 'Perfil', href: '../profile'}
-            ],
+            menuItems: [],
             map: null,
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
             mapStyle: "mapbox://styles/mapbox/light-v11",
@@ -74,6 +71,7 @@ export default {
         }
     },
     mounted() {
+        this.menuItems = menuTabsTwicePoints(this.type_user);
         mapboxgl.accessToken = this.accessToken;
         this.map = new mapboxgl.Map({
             container: 'map',

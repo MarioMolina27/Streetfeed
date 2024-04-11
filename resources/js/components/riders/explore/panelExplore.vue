@@ -40,10 +40,12 @@ import loader from '../../shared/loader.vue';
 import esTranslations from '../../../../lang/riders/es.json';
 import enTranslations from '../../../../lang/riders/en.json';
 import caTranslations from '../../../../lang/riders/ca.json';
+import {menuTabs} from '../../../utilities/menuTabs.js'
 export default{
     props: {
       user: Object,
-      lang: String
+      lang: String,
+      type_user: Array
     },
     data(){
       return {
@@ -52,13 +54,8 @@ export default{
         nearProviders: [],
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
-        menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
-            ],
-            translations: {}
+        menuItems: [],
+        translations: {}
       }
     }, 
     created() {
@@ -72,6 +69,7 @@ export default{
         }
     },
     mounted(){
+      this.menuItems = menuTabs(this.type_user);
       this.refreshData()
     },
     methods: {

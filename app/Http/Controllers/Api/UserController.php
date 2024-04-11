@@ -321,7 +321,6 @@ class UserController extends Controller
         $users = User::with('typeUsers')->where('active', 1)->whereHas('typeUsers', function ($query) use ($typeUser){
             $query->where('user_type_user.id_type_user', $typeUser->id_type_user);
         })->get();
-
         return $users->count();
     }
 

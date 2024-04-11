@@ -50,23 +50,20 @@ import Skeleton from 'primevue/skeleton';
 import esTranslations from '../../../../lang/riders/es.json';
 import enTranslations from '../../../../lang/riders/en.json';
 import caTranslations from '../../../../lang/riders/ca.json';
+import {menuTabs} from '../../../utilities/menuTabs.js'
 export default{
     props: {
         user: Object,
-        lang: String
+        lang: String,
+        type_user: Array
     },
     data(){
       return {
         loading: true,
         loadingFinished: false,
         favoriteProviders: [],
-        menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
-            ],
-            translations: {}
+        menuItems: [],
+        translations: {}
       }
     },
     created() {
@@ -79,7 +76,8 @@ export default{
         }
     },
     mounted(){
-      this.refreshData()
+        this.menuItems = menuTabs(this.type_user);
+        this.refreshData()
     },
     methods: {
         refreshData() {

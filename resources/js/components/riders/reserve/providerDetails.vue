@@ -64,23 +64,20 @@ import loader from '../../shared/loader.vue';
 import esTranslations from '../../../../lang/riders/es.json';
 import enTranslations from '../../../../lang/riders/en.json';
 import caTranslations from '../../../../lang/riders/ca.json';
+import {menuTabsTwicePoints} from '../../../utilities/menuTabs.js'
 export default{
     props: {
         nickname: String,
         user: Object,
-        lang: String
+        lang: String,
+        type_user: Array
     },
     data(){
       return {
         idUser: 4,
         provider: [],
         menus: [],
-        menuItems: [
-            {name: 'Tus Repartos', href: '../delivery'},
-            {name: 'Explorar', href: '../explore'},
-            {name: 'Favoritos', href: '../favorite'},
-            {name: 'Perfil', href: '../profile'}
-        ],
+        menuItems: [],
         loading: true,
         loadingFinished: false,
         translations: {}
@@ -95,6 +92,9 @@ export default{
             this.translations = esTranslations;
         }
         this.loadProvider();
+    },
+    mounted() {
+        this.menuItems = menuTabsTwicePoints(this.type_user);
     },
     computed: {
         heartClass() {

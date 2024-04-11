@@ -190,11 +190,15 @@ export default {
 
     computed: {
         userIsRider() {
-            return this.type_user.some((userType) => userType.id === 1);
+            return this.type_user.some((userType) => userType.id_type_user === 1);
         },
         userIsProvider() {
-            return this.type_user.some((userType) => userType.id === 2);
+            return this.type_user.some((userType) => userType.id_type_user === 2);
         },
+    },
+
+    mounted() {
+        console.log(this.type_user);
     },
 
     components: {

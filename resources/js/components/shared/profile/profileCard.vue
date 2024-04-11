@@ -7,9 +7,13 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
-                            <Tag class="ms-0" v-if="type_user.length===1" v-for="(ts, index) in type_user" :key="ts.name">
-                                {{ ts.name }}
-                            </Tag>                        
+                            <template v-if="type_user.length===1" v-for="(ts, index) in type_user" :key="ts.name">
+                                <div :class="{'ms-3 d-flex align-items-center justify-content-center' : index == 0}">
+                                    <Tag>
+                                        {{ ts.name }}
+                                    </Tag> 
+                                </div>
+                            </template>                       
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
@@ -21,10 +25,13 @@
                             </div>
                         </div>
                     </div>
-                    <p>{{user.username}}</p>
-                    <Tag class="ms-0 mb-3" v-if="type_user.length>1" v-for="(ts, index) in type_user" :key="ts.name">
-                                {{ ts.name }}
-                    </Tag> 
+                    <p class="me-3">{{user.username}}</p>
+                    <template v-if="type_user.length>1" v-for="(ts, index) in type_user" :key="ts.name">
+                        <Tag class="mb-3">
+                            {{ ts.name }}
+                        </Tag> 
+                    </template>
+                    
                     <div v-if="!editingProfile">
                         <p class="label-card-profile">Email</p>
                         <p>{{user.email}}</p>
@@ -311,7 +318,9 @@ export default {
 </script>
 
 <style scoped>
-
+.margin-start-tag {
+    margin-left: 10px !important;
+}
 .p-card{
     border: 1.5px solid #b48753;
 }

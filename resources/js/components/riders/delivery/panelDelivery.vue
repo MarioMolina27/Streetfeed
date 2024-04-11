@@ -23,19 +23,16 @@ import loader from '../../shared/loader.vue';
 import esTranslations from '../../../../lang/riders/es.json';
 import enTranslations from '../../../../lang/riders/en.json';
 import caTranslations from '../../../../lang/riders/ca.json';
+import {menuTabs} from '../../../utilities/menuTabs.js';
 export default{
     props: {
         user: Object,
-        lang: String
+        lang: String,
+        type_user: Array
     },
     data(){
       return {
-        menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
-            ],
+        menuItems: [],
         loading: true,
         loadingFinished: false,
         deliveries: [],
@@ -173,6 +170,9 @@ export default{
         }
     },
     mounted(){
+        console.log(this.type_user);
+        this.menuItems = menuTabs(this.type_user);
+        console.log(this.menuItems);
         this.getDeliveries();
     },
     components: {

@@ -35,45 +35,33 @@
     import loader from '../../shared/loader.vue';
     import dialogPassword from './dialogPassword.vue';
     import stadistic from './stadisticsTop.vue';
-
-
+    import {menuTabs} from '../../../utilities/menuTabs.js'
     export default {
-
+        props: {
+            user: Object,
+            type_user: Array
+        },
         data(){
           return {
             loading: true,
             loadingFinished: false,
             modalPassword: false,
-            type_user: [
-                {id: 1, name: 'Rider'},
-                {id: 2, name: 'Provider'}],
-            menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
-            ],
+            menuItems: [],
             deliveriesUser: 0,
             numProviderDeliveries: 0,
             markersByUser: 0,
             shifts: [],
             address: [],
             typeRoads: [],
-            user: {
-                id_user: 9,
-                name: 'Pol Crespo',
-                username: '@pcrespo',
-                email: 'pcrespo@politecnics.barcelona',
-            }
           }
         },
 
         computed: {
             userIsRider() {
-                return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
+                return this.type_user.some(userType => userType.id_type_user === 1); // Suponiendo que el id para Rider sea 1
             },
             userIsProvider() {
-                return this.type_user.some(userType => userType.id === 2); // Suponiendo que el id para Provider sea 2
+                return this.type_user.some(userType => userType.id_type_user === 2); // Suponiendo que el id para Provider sea 2
             }
         },
         components: {
@@ -87,6 +75,7 @@
             stadistic
         },
         mounted() {
+            this.menuItems = menuTabs(this.type_user);
             Promise.all([
                 getDeliveriesByUser(this.user.id_user),
                 markersByUser(this.user.id_user),
@@ -102,7 +91,6 @@
                 this.typeRoads = typeRoadResponse;
                 this.numProviderDeliveries = numProviderDeliveriesResponse;
                 this.loading = false;
-                console.log("Datos obtenidos correctamente");
             }).catch(error => {
                 console.error("Hubo un error al obtener los datos:", error);
             });
