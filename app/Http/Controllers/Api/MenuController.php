@@ -143,6 +143,7 @@ class MenuController extends Controller
 
     public function updateLaunchPack(Request $request,Menu $menu){
         $numLauchpack = $request->numLaunchpack;
+        $menu->launchpack()->delete();
         for($i = 0; $i < $numLauchpack; $i++){
             $launchpack = new Launch_Pack();
             $launchpack->id_menu = $menu->id_menu;

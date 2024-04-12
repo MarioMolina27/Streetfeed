@@ -3,33 +3,32 @@
         <div class="d-flex flex-row justify-content-between align-items-center w-100 mb-4">
             <strong v-if="!m.editing && !m.creating"class="fs-5 mb-0">{{ m.title }}</strong>
             <input v-else class="fs-5 form-custom form-custom-title" v-model="m.title" />
-            <img v-if="!m.editing && !m.creating" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="m.editing=true" />
+            <img v-if="!m.editing && !m.creating" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="m.editing=true" style="cursor: pointer;" />
             <div v-else-if="m.editing && !m.creating" else class="d-flex flex-row-reverse" >
-                <button type="submit" class="ms-2" style="background-color: transparent; border: none;">
-                    <i class="fa fa-check save-button"></i>
-                </button>
                 <div @click="cancelEditing()">
                 <i class="fa fa-xmark save-button"></i>
                 </div>
             </div>
         </div>
-        <div v-if="!m.editing && !m.creating" class="item-menu-products">
-            <div>
+        <div v-if="!m.editing && !m.creating" class="row w-100">
+            <div class="col-lg-3 col-12">
                 <p class="mb-0 title-plate">Primer plato</p>
                 <strong class="fs-5">{{ m.first_product }}</strong>
             </div>
-            <div>
+            <div class="col-lg-3 col-12">
                 <p class="mb-0 title-plate">Segundo plato</p>
                 <strong class="fs-5">{{ m.second_product }}</strong>
             </div>
-            <div>
+            <div class="col-lg-3 col-12">
                 <p class="mb-0 title-plate">Bebida</p>
                 <strong class="fs-5">{{ m.drink_product }}</strong>
             </div>
-            <InputNumber v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="m.launchpack_count">
-              <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
-              <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
-            </InputNumber>
+            <div class="col-lg-3 col-12 d-flex justify-content-center align-items-center">
+                <InputNumber v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="m.launchpack_count" @update:modelValue="updateLaunchpacksValue">
+                    <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
+                    <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
+                </InputNumber>
+            </div>
         </div>
         <template v-else>
             <div class="row mb-3 ms-4">
@@ -46,7 +45,7 @@
                     <input class="fs-5 form-custom" v-model="m.drink_product" />
                 </div>
                 <div class="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                    <InputNumber v-if="m.editing" v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="m.launchpack_count">
+                    <InputNumber v-if="m.editing" v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="m.launchpack_count" @update:modelValue="updateLaunchpacksValue">
                         <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
                         <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
                     </InputNumber>
@@ -82,28 +81,23 @@ export default {
         return {
             m: this.menu,
             launchapack_counting: 0,
-            launchapack_counting_debounce:0,
             launchapack_counting_timer: null,
-            launchapack_counting_debaunce_time: 500
+            launchapack_counting_debaunce_time: 1000
         }
     },
     mounted() {
         this.launchapack_counting = this.m.launchpack.length;
     },
 
-    watch: {
-        watch: {
-            launchapack_counting() {
-                console.log('sss');
+    methods: {
+        updateLaunchpacksValue(val) {
                 clearTimeout(this.launchapack_counting_timer);
                 this.launchapack_counting_timer = setTimeout(() => {
-                    this.m.launchapack_counting_debounce = this.launchapack_counting;
-                    updateLaunchpacks(this.m, this.launchapack_counting_debounce);
-                }, this.launchapack_counting_debaunce_time);
-            }
-    },
-    },
-    methods: {
+                    updateLaunchpacks(this.m, val).then(response => {
+                        console.log(response);
+                    });
+                },this.launchapack_counting_debaunce_time);
+        },
         cancelEditing() {
             this.m.editing = false;
         },
@@ -158,13 +152,6 @@ export default {
         border: 3px solid #b17a3b;
         border-radius: 10px;
         padding: 10px;
-    }
-    .item-menu-products {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        gap: 10px;
     }
 
     .save-button{

@@ -60,7 +60,7 @@ Route::get('menu/get-menus/{user}', [MenuController::class, 'getMenusfromProvide
 Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
 Route::put('menu/update-menu', [MenuController::class, 'updateMenu']);
 Route::delete('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
-Route::post('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
+Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
 
 
 

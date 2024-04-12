@@ -42,7 +42,7 @@ export function deleteMenu(id) {
 }
 
 export function updateLaunchpacks(menu,numLaunchpacks) {
-    const url = `api/menu/updateLaunchPacks/${menu.id_menu}`;
+    const url = `api/menu/updateLaunchPack/${menu.id_menu}`;
     try {
         const data = {
             numLaunchpack: numLaunchpacks
