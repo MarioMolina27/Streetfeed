@@ -346,6 +346,9 @@ export default {
     width: 100%;
     padding: 10px;
     border: none;
+    outline: none;
+    border-bottom: 1px solid #b48753;
+    margin-bottom: 10px;
 }
 
 .save-button{
@@ -359,11 +362,6 @@ export default {
     border-bottom: 1px solid #b48753;
 }
 
-.form-direction{
-    outline: none;
-    border-bottom: 1px solid #b48753;
-    margin-bottom: 10px;
-}
 
 .text-profile-schedule{
     color: #081733;

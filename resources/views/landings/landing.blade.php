@@ -1,7 +1,7 @@
 @extends('layouts.layout-land')
        
 @section('content')
-    <landing></landing>
+    <h1>STREETFEED</h1>
 @endsection
 
 @section('imports')
