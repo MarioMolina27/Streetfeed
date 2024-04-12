@@ -1,10 +1,10 @@
 <template>
     <div class="container-fluid vh-100">
         <div class="row h-100 position-relative overflow-hidden">
-            <span class="logo-text">STREETFEED</span>
+            <div class="logo-text">STREETFEED</div>
             <!-- primera columna: LOGIN -->
             <div class="col-md-6 d-flex flex-column justify-content-center" id="loginColumn" v-show="showLogin">
-                <div class="content-wrapper px-5" style="margin: 0 5rem;">
+                <div class="content-wrapper" style="margin: 0 5rem;">
                     <!-- Contenido de la primera columna -->
                     <div class="container-fluid text-center ">
                         <img src="img/login/logoEQ7.svg" class="" alt="Logo Streetfeed">
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <!-- segunda columna: REGISTER d-none  d-flex d-md-block justify-content-center -->
-            <div class="position-relative col-md-6 d-flex flex-column h-100" id="registerColumn" v-show="!showLogin">
+            <div class="position-relative col-md-6 d-flex flex-column h-100 d-none d-md-block" id="registerColumn" v-show="!showLogin">
                 <!-- Contenido de la segunda columna -->
                 <div class="content-wrapper position-relative ">
                     <div class="container-fluid mb-3 d-flex justify-content-between login-access sticky-top" id="content-register">
@@ -88,7 +88,7 @@
                     </div>
 
                     <!-- title -->
-                    <h1 class="text-center mt-5 mb-5" id="title-register">Registrate y unete al cambio</h1>
+                    <h1 class="text-center mt-5 d-none" id="title-register">Registrate y unete al cambio</h1>
                     
                     <!-- form register -->
                     <div class="container-fluid register-form d-flex flex-column align-items-center justify-content-center">
@@ -99,26 +99,22 @@
                                 <h2 class="text-center">Type <span class="title-secondary">User</span></h2>
                                 <h5 class="text-center">¿Como deseas apoyar?</h5>
                                 <!-- ckeck type user -->
-                                <div class="row mb-5 align-items-center h-100">
+                                <div class="row mb-1 align-items-center mt-5 type-user-section">
                                     <div class="col d-flex justify-content-center align-items-center check-type-user">
                                         <div class="type-user-container">
-                                            <!-- checkbox user -->
-                                            <input type="checkbox" class="checkbox-user" name="" id="check-rider">
                                             <!-- image user -->
-                                            <img src="" alt="" class="img-user">
+                                            <img src="img/login/rider-user.png" alt="Rider Image" class="img-user">
                                         </div>
                                     </div>
                                     <div class="col d-flex justify-content-center align-items-center check-type-user">
                                         <div class="type-user-container">
-                                            <!-- checkbox user -->
-                                            <input type="checkbox" class="checkbox-user" name="" id="check-provider">
                                             <!-- image user -->
-                                            <img src="" alt="" class="img-user">
+                                            <img src="img/login/provider-user.png" alt="" class="img-user">
                                         </div>
                                     </div>
                         
                                 </div>
-                                <div class="mb-3 btn-step">
+                                <div class="mb-3 btn-step mt-5">
                                     <!-- <a href="">PREV</a> -->
                                     <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
                                 </div>
@@ -239,7 +235,9 @@
                 </div>
                 
             </div>
-            <img class="logo-column" src="img/login/Logo-EQ7.svg" alt="">
+            <svg class="logo-column" width="759" height="851" viewBox="0 0 759 851" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M220.326 595.601L379.499 764.152L538.873 595.601C405.354 505.588 368.793 328.133 456.257 194.4C406.566 177.98 352.633 177.98 302.74 194.4C389.8 327.738 353.845 504.598 221.134 595.007L220.326 595.601ZM749.554 0.129946C755.816 1.31693 759.856 7.05402 758.846 13.1868C753.796 40.2896 734.404 62.6445 707.943 71.9425C647.344 93.3082 593.007 128.324 548.973 174.221C686.127 265.817 721.476 449.008 627.953 583.335C635.628 590.655 642.294 598.964 647.95 607.866C648.758 609.053 649.566 610.24 650.172 611.625C683.097 666.424 686.531 733.686 658.858 791.453C643.304 824.095 606.541 841.9 570.586 834.184C567.96 833.591 565.738 832.206 564.122 830.228C560.082 825.282 560.89 818.16 565.94 814.401C620.075 771.868 633.205 696.494 596.845 638.925C594.623 635.364 591.998 632.001 589.17 629.034L379.499 851L169.827 629.034C167 632.199 164.576 635.364 162.354 638.925C126.803 695.307 138.316 768.505 189.623 811.632C191.643 813.412 193.057 815.588 193.461 818.16C194.673 824.293 190.431 830.228 184.169 831.217C148.012 837.745 111.855 818.754 97.3112 785.518C72.0618 727.554 77.1117 661.28 111.047 607.668C116.703 598.766 123.369 590.457 131.044 583.137C37.5206 449.008 72.8698 265.817 210.227 174.221C165.99 128.324 111.653 93.3082 51.0543 71.9425C24.5929 62.6445 5.20138 40.2896 0.151496 13.1868C-0.0504988 11.802 -0.0504988 10.2193 0.151496 8.8345C1.56546 2.70175 7.62532 -1.05704 13.8872 0.327777C111.047 21.2978 198.915 72.1403 264.563 145.536C338.09 115.861 420.706 115.861 494.232 145.536C559.88 72.3382 647.748 21.4957 744.908 0.327777C746.524 -0.0678848 748.14 -0.0678848 749.554 0.129946ZM578.06 550.297C653 442.875 624.721 296.283 515.239 223.085C513.825 222.096 512.411 221.305 510.997 220.316C436.057 327.738 464.337 474.33 573.818 547.528C575.232 548.517 576.646 549.308 578.06 550.297ZM180.937 550.297C292.237 479.276 323.546 333.277 251.03 224.47C250.02 223.085 249.212 221.7 248.202 220.316C136.902 291.337 105.593 437.138 178.109 546.143C179.119 547.528 179.927 548.912 180.937 550.297Z" fill="currentColor" fill-opacity="0.1"/>
+            </svg>
         </div>
     </div>
 
@@ -475,11 +473,31 @@ export default {
 
         document.getElementById('registerLink').addEventListener('click', function(e) {
             e.preventDefault();
+
+            if (window.matchMedia('(max-width: 768px)').matches) {
+
+                const columna1 = document.getElementById('loginColumn');
+                const columna2 = document.getElementById('registerColumn');
+                
+                // Alterna las clases 'd-none' y 'd-md-block' para mostrar/ocultar las columnas
+                columna1.classList.toggle('d-none');
+                columna2.classList.toggle('d-none');
+            }
+
             this.intercambiarContenido();
         }.bind(this));
 
         document.getElementById('loginLink').addEventListener('click', function(e) {
             e.preventDefault();
+            if (window.matchMedia('(max-width: 768px)').matches) {
+
+                const columna1 = document.getElementById('loginColumn');
+                const columna2 = document.getElementById('registerColumn');
+                
+                // Alterna las clases 'd-none' y 'd-md-block' para mostrar/ocultar las columnas
+                columna1.classList.toggle('d-none');
+                columna2.classList.toggle('d-none');
+    }
             this.mostrarLogin();
         }.bind(this));
         
@@ -553,12 +571,13 @@ button {
     transform: rotate(-90deg);
     transform-origin: top left;
     bottom: 1.5rem;
-    color: rgba(253, 248, 235, 10%);
     left: 55%;
     transform: rotate(270deg);
     font-family: var(--primary-font);
-    font-size: 3.45rem;
+    font-size: 5em;
     z-index: 10;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(253, 248, 235, 35%);
 }
 
 .logo-column {
@@ -567,6 +586,9 @@ button {
     height: 80%;
     top: 10%;
     transform: translateX(50%);
+    color: transparent;
+    stroke:rgba(253, 248, 235, 35%);;
+    stroke-width: 2px;
 }
 
 .header {
@@ -610,7 +632,6 @@ button {
     font-size: 1.3rem;
     font-weight: 700;
     color: var(--text-color);
-    /* padding: 0 1.8rem; */
     box-shadow: 1px 1px 1px var(--text-color);
     white-space: nowrap;
 }
@@ -704,6 +725,7 @@ button {
     margin-bottom: .5rem;
     font-weight: 600;
     color: var(--text-color);
+    font-size: 1.2rem;
 }
 
 .login-form .input-wrapper {
@@ -772,6 +794,7 @@ button {
     margin-top: 1.8rem;
     text-align: center;
     font-family: var(--primary-font), sans-serif;
+    color: var(--text-color);
 }
 
 .login-access span {
@@ -780,8 +803,9 @@ button {
 
 .register-access a,
 .login-access a {
-    color: var(--text-color);
-    font-weight: bold;
+    background: var(--text-color);
+    color: var(--primary-street-feed);
+    padding: .3em;
 }
 
 /* --- FORM REGISTER --- */
@@ -827,16 +851,12 @@ button {
 /* step */
 .step {
     height: 600px;
-    /* overflow-y: auto; */
     margin: 0 3rem;
 }
 
 .btn-step {
     display: flex;
     flex-direction: row;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
     justify-content: space-around;
     padding: 0 3rem;
@@ -866,10 +886,13 @@ button {
 }
 
 .type-user-container {
-    border: 2px solid var(--secondary-color);
-    width: 230px;
-    height: 230px;
-    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--secondary-color);
+    width: 200px;
+    height: 200px;
+    border-radius: 5%;
 }
 
 .type-user-container input {
@@ -879,65 +902,14 @@ button {
     right: 25%;
 }
 
-.checkbox-user {
-    width: 45px;
-    height: 45px;
-    clip-path: circle(50% at 50% 50%);
-    position: relative;
-    border: 2px solid var(--secondary-color);
+.type-user-container img {
+    width: 80%;
+    object-fit: cover;
 }
 
-.checkbox-user::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    clip-path: circle(50% at 50% 50%);
-    border: 2px solid var(--secondary-color);
-}
-
-.checkbox input {
-    height: 0;
-    width: 0;
-    visibility: hidden;
-}
-
-.checkbox {
-    display: block;
-    position: relative;
-    padding-left: 35px;
+.type-user-container:hover {
+    background-color: var(--secondary-color);
     cursor: pointer;
-    font-size: 22px;
-}
-
-.ckeckmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background: var(--primary-street-feed);
-    border: 2px solid var(--secondary-color);
-    border-radius: 50%;
-}
-
-.checkbox input:checked ~ .checkmark {
-    background-color: var(--action-color);
-}
-
-.checkbox input:checked ~ .checkmark::after {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 12px;
-    height: 12px;
-    background: var(--primary-street-feed);
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 /* step 4 */
@@ -954,14 +926,49 @@ button {
     border-radius: 50%;
 }
 
-@media screen and (max-width: 900px) {
-    #loginColumn .content-wrapper {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-    #registerColumn {
+/* media-queries */
+
+/* // Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    /* #loginColumn .content-wrapper {
+        padding-right: 0;
+        padding-left: 0;
+    } */
+    .logo-text,
+    .logo-column {
         display: none !important;
     }
+}
+
+@media (max-width: 576px){
+
+.login-access span,
+.register-access {
+    font-size: .9em;
+}
+
+#loginColumn .content-wrapper {
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+    margin: 0 !important;
+}
+
+.type-user-section {
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.btn-step { padding: 0; }
+.btn-step button { width: 70%; }
+
+.input-login {
+    line-height: 1.8rem;
+}
+
+.login-form label,
+.register-form label {
+    font-size: 1rem;
+}
 }
 
 </style>
