@@ -46,7 +46,7 @@
                     <input class="fs-5 form-custom" v-model="m.drink_product" />
                 </div>
                 <div class="col-lg-3 col-12 d-flex justify-content-center align-items-center">
-                    <InputNumber v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="m.launchpack_count">
+                    <InputNumber v-if="m.editing" v-model="launchapack_counting" buttonLayout="horizontal" mode="decimal" showButtons :min="0" :max="m.launchpack_count">
                         <template #incrementbuttonicon><span class="pi pi-plus" style=" color: #ffffff;font-weight: bold;"/></template>
                         <template #decrementbuttonicon><span class="pi pi-minus" style=" color: #ffffff;font-weight: bold;"/></template>
                     </InputNumber>
@@ -54,10 +54,10 @@
             </div>
             <div class="row w-100">
                 <div class="col-lg-10 col-9">
-                    <button type="submit" class="btn-menu btn-save">Guardar</button>
+                    <button type="submit" class="btn-menu btn-save" @click="saveMenu">Guardar</button>
                 </div>
                 <div v-if="m.editing" class="col-lg-2 col-3">
-                    <button class="btn-menu btn-delete"><i class="pi pi-trash"></i></button>
+                    <button class="btn-menu btn-delete" @click="deleteMenuItem"><i class="pi pi-trash"></i></button>
                 </div>
                 <div v-else class="col-lg-2 col-3">
                     <button class="btn-menu btn-delete" @click="deleteMenuItem"><i class="pi pi-times"></i></button>
@@ -71,6 +71,7 @@
 
 <script>
 import InputNumber from 'primevue/inputnumber';
+import { createMenu, updateMenu, deleteMenu, updateLaunchpacks } from '../../../services/menu.js';
 
 export default {
 
@@ -81,18 +82,64 @@ export default {
         return {
             m: this.menu,
             launchapack_counting: 0,
+            launchapack_counting_debounce:0,
+            launchapack_counting_timer: null,
+            launchapack_counting_debaunce_time: 500
         }
     },
     mounted() {
-        console.log(this.m);
         this.launchapack_counting = this.m.launchpack.length;
     },
+
+    watch: {
+        watch: {
+            launchapack_counting() {
+                console.log('sss');
+                clearTimeout(this.launchapack_counting_timer);
+                this.launchapack_counting_timer = setTimeout(() => {
+                    this.m.launchapack_counting_debounce = this.launchapack_counting;
+                    updateLaunchpacks(this.m, this.launchapack_counting_debounce);
+                }, this.launchapack_counting_debaunce_time);
+            }
+    },
+    },
     methods: {
-        cancelEditing(){
+        cancelEditing() {
             this.m.editing = false;
         },
-        deleteMenuItem(){
-            this.$emit('deleteMenuItem', this.m);
+        deleteMenuItem() {
+            console.log(this.m);
+            if(this.m.editing){
+                deleteMenu(this.m.id_menu).then(response => {
+                    console.log(response);
+                    this.$emit('deleteMenuItem', this.m);
+                });
+            } else {
+                this.$emit('deleteMenuItem', this.m);
+            }
+        },  
+        saveMenu(){
+            if(this.m.creating) {
+                delete this.m.id;
+                createMenu(this.m)
+                .then(response => {
+                    console.log(response);
+                    this.m.creating = false;
+                    this.m.id_menu= response.data.newId;
+                    console.log(this.m);
+                })
+            } else{
+                updateMenu(this.m)
+                .then(response => {
+                    this.m.editing = false;
+                })
+            }
+        }
+    },
+
+    watch: {
+        launchapack_counting(){
+        
         }
     },
     components: {

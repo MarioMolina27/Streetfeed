@@ -1,7 +1,10 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
         <Navbar :menuItems = 'menuItems'></Navbar>
-        <div class="manage-menus-container">
+        <template v-if="loading ||!loadingFinished">
+            <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
+        </template>
+        <div v-else class="manage-menus-container">
             <div class="col-12">
                 <!---<h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1> -->
                 <div class="new-menu" @click="createMenuItem()">
@@ -11,7 +14,7 @@
                 <div class="divider-menus">
 
                 </div>
-                <template v-for="menu in menus" :key="menu.id">
+                <template v-for="menu in menus" :key="menu.id_menu">
                     <itemMenu :menu = 'menu' @deleteMenuItem="deleteMenuItem"></itemMenu>
                 </template>
             </div>
@@ -25,6 +28,7 @@ import itemMenu from './itemMenu.vue';
 import esTranslations from '../../../../lang/es.json';
 import enTranslations from '../../../../lang/en.json';
 import caTranslations from '../../../../lang/ca.json';
+import loader from '../../shared/loader.vue';
 export default{
     props: {
         user: Object,
@@ -37,9 +41,10 @@ export default{
                 {name: 'Tus Menus', href: './menu'},
                 {name: 'Perfil', href: './profile'}
             ],
-            loggedUser: 9,
             menus: [],
-            translations: {}
+            translations: {},
+            loading: true,
+            loadingFinished: false
         }
     },
     created() {
@@ -57,41 +62,41 @@ export default{
     },
     methods: {
         getMenus(){
-            axios.get(`/api/menu/get-menus/${this.loggedUser}`)
+            console.log(this.user.id_user);
+            axios.get(`/api/menu/get-menus/${this.user.id_user}`)
                 .then(response => {
                     this.menus = response.data;
                     this.menus.forEach(menu => {
                         menu.creating = false;
                         menu.editing = false;
                     });
+                    this.loading = false;
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
-        updateMenu(){
-            console.log('update menu');
-        },
         createMenuItem(){
             let menu = {
-                id: this.generateRandomId(),
+                id_menu: this.generateRandomId(),
                 title: null,
                 first_product: null,
                 second_product: null,
                 drink_product: null,
                 launchpack: [],
                 active: 1,
-                user_id: this.user.id,
+                user_id: this.user.id_user,
                 creating: true,
                 editing: false
             }
             this.menus.unshift(menu);
         },
         deleteMenuItem(menu) {
-            const index = this.menus.findIndex(m => m.id === menu.id);
+            const index = this.menus.findIndex(m => m.id_menu === menu.id_menu);
+            console.log(index);
             if (index !== -1) {
-                let menus= this.menus.slice(0, index).concat(this.menus.slice(index + 1));
-                this.menus = menus;
+                this.menus.splice(index, 1); // Elimina 1 elemento en la posición 'index'
+                console.log(this.menus);
             }
         },
 
@@ -102,11 +107,15 @@ export default{
                 id += 'l'; 
             } while (this.menus.some(menu => menu.id === id));
             return id;
+        },
+        handleLoadingFinished(){
+            this.loadingFinished = true;
         }
     },
     components: {
         Navbar,
-        itemMenu
+        itemMenu,
+        loader
     },
 }
 </script>
