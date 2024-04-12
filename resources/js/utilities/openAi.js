@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 
-const apiKey = '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';
+//const apiKey = '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';
+let apiKey = "process"
 const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 const instructions = "Proyecto Connexió Solidària: Plataforma de Gestión de Alimentos para una Comunidad Más Justa y Sostenible. Descripción: Crear una comunidad justa y sostenible mediante una plataforma web para coordinar voluntarios en la recolección y distribución de alimentos excedentes. Objetivos: Reducir el malgasto alimentario, apoyar a comunidades vulnerables, sensibilizar y empoderar a voluntarios. Beneficios: Impacto social positivo, sostenibilidad ambiental y cohesión comunitaria. Demandas: Interfaz intuitiva, imagen de marca, gestión de voluntarios, coordinación de proveedores, mapa de destinos, sistemas de ayuda, seguimiento e informes, uso de IA, comunicación eficaz, seguridad, escalabilidad, integración con redes sociales y ONGs, análisis y mejora continua.";
 export const handleOpenAi = async (req, res) => {
