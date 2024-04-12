@@ -5,60 +5,69 @@
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
         <div v-else class="deliveries-container">
-            <div class="header-accordion">
-                <h1>{{translations.deliveriesLabel}}</h1>
-            </div>
-            <Accordion :multiple="true" :activeIndex="0" expandIcon="pi pi-angle-down" collapseIcon="pi pi-angle-up" class="custom-accordion">
-                <template v-for="(riderDeliveries) in deliveriesByRiders">
-                    <AccordionTab>
-                        <template #header>
-                            <span class="d-flex justify-content-between align-items-center gap-2 w-100">
-                                <div style="padding: 10px;">
-                                    <div >
-                                        <div class="delivery-rider-label">{{translations.deliverLabel}}:</div>
-                                        <div class="delivery-rider-info"><strong>{{ riderDeliveries[0].user.name + " " + riderDeliveries[0].user.surnames }}</strong></div>
-                                    </div>
-                                </div>
-                                <div class="delivery-action-btns">
-                                    <div class="delivery-button-chat" @click.stop="generateQRCode(riderDeliveries)">
-                                        <i class="fa-solid fa-qrcode fs-3" style="color: #FDF8EB;"></i>
-                                    </div>
-                                    <div class="delivery-button-chat" @click.stop="showChat(riderDeliveries[0].user)">
-                                        <i class="fa-solid fa-comment fs-3" style="color: #FDF8EB;"></i>
-                                    </div>
-                                    
-                                </div>
-                            </span>
-                        </template>
-                        <template v-for="delivery in riderDeliveries" :key="delivery.id">
-                            <riderCard :delivery="delivery" :translations="translations"/>
-                        </template>
-                    </AccordionTab>
-                </template>
-            </Accordion>
-            <Dialog v-model:visible="scanning" modal :closable="false" :showHeader="false" :style="{ width: '75%' }">
-                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-                    <div v-if="animating" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <svg class="qr-animate-svg" v-if="animationConfirm" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                            <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
-                            <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-                        </svg>
-                        <svg class="qr-animate-svg" v-if="animationError" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                            <circle class="path circle" fill="none" stroke="#B52A2A" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
-                            <line class="path line" fill="none" stroke="#B52A2A" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
-                            <line class="path line" fill="none" stroke="#B52A2A" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2"/>
-                        </svg>
-                    </div>
-                    <div v-else style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <vue-qrcode v-if="scanning" :value="qrCodeData" :size="200" :scale="10" :color="{ dark: '#000000ff', light: '#ffffffff' }" :type="'image/png'" @click="handleQRCodeScan"/>
-                        <span class="qr-scan-txt-info">{{translations.clickOnQRLabel}}</span>
-                    </div>
+            <template v-if="deliveriesByRiders.length == 0">
+                <div class="centered-div-no-deliveries">
+                    <h1 class="mt-5 mb-4 font-weight-bold text-center">Ninguna reserva hecha por parte de los repartidores</h1>
+                    <p class="fs-4 mb-4 text-center">Crea más menús y posicionate mejor en el ranking de repartos!</p>
+                    <button class="moreMenusBtn mt-5" @click="redirectToMenus()">Crea más menús</button>
+                </div>               
+            </template>
+            <template v-else>
+                <div class="header-accordion">
+                    <h1>{{translations.deliveriesLabel}}</h1>
                 </div>
-                <div class="qr-deliver-centered-buttons">
-                    <button class="deliver-qr-btn" @click="doDeliver">{{translations.deliverWithoutQRLabel}}</button>
-                    <button class="cncl-deliver-qr-btn" @click="scanning = false">{{translations.closeLabel}}</button>
-                </div>
-            </Dialog>
+                <Accordion :multiple="true" :activeIndex="0" expandIcon="pi pi-angle-down" collapseIcon="pi pi-angle-up" class="custom-accordion">
+                    <template v-for="(riderDeliveries) in deliveriesByRiders">
+                        <AccordionTab>
+                            <template #header>
+                                <span class="d-flex justify-content-between align-items-center gap-2 w-100">
+                                    <div style="padding: 10px;">
+                                        <div >
+                                            <div class="delivery-rider-label">{{translations.deliverLabel}}:</div>
+                                            <div class="delivery-rider-info"><strong>{{ riderDeliveries[0].user.name + " " + riderDeliveries[0].user.surnames }}</strong></div>
+                                        </div>
+                                    </div>
+                                    <div class="delivery-action-btns">
+                                        <div class="delivery-button-chat" @click.stop="generateQRCode(riderDeliveries)">
+                                            <i class="fa-solid fa-qrcode fs-3" style="color: #FDF8EB;"></i>
+                                        </div>
+                                        <div class="delivery-button-chat" @click.stop="showChat(riderDeliveries[0].user)">
+                                            <i class="fa-solid fa-comment fs-3" style="color: #FDF8EB;"></i>
+                                        </div>
+                                        
+                                    </div>
+                                </span>
+                            </template>
+                            <template v-for="delivery in riderDeliveries" :key="delivery.id">
+                                <riderCard :delivery="delivery" :translations="translations"/>
+                            </template>
+                        </AccordionTab>
+                    </template>
+                </Accordion>
+                <Dialog v-model:visible="scanning" modal :closable="false" :showHeader="false" :style="{ width: '75%' }">
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                        <div v-if="animating" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <svg class="qr-animate-svg" v-if="animationConfirm" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                                <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                                <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                            </svg>
+                            <svg class="qr-animate-svg" v-if="animationError" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                                <circle class="path circle" fill="none" stroke="#B52A2A" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                                <line class="path line" fill="none" stroke="#B52A2A" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
+                                <line class="path line" fill="none" stroke="#B52A2A" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2"/>
+                            </svg>
+                        </div>
+                        <div v-else style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <vue-qrcode v-if="scanning" :value="qrCodeData" :size="200" :scale="10" :color="{ dark: '#000000ff', light: '#ffffffff' }" :type="'image/png'" @click="handleQRCodeScan"/>
+                            <span class="qr-scan-txt-info">{{translations.clickOnQRLabel}}</span>
+                        </div>
+                    </div>
+                    <div class="qr-deliver-centered-buttons">
+                        <button class="deliver-qr-btn" @click="doDeliver">{{translations.deliverWithoutQRLabel}}</button>
+                        <button class="cncl-deliver-qr-btn" @click="scanning = false">{{translations.closeLabel}}</button>
+                    </div>
+                </Dialog>
+            </template>
         </div>
         <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
             <Chat :user="userChat" :loggedUser="user.id_user" :lang="lang"/>
@@ -179,6 +188,9 @@ export default{
         showChat(user) {
             this.userChat = user;
             this.showChatDialog = true;
+        },
+        redirectToMenus() {
+            window.location.href = './menu';
         }
     },
     components: {
@@ -361,5 +373,26 @@ export default{
 }
 .dialog-responsive > .p-dialog-header {
     justify-content: end;
+}
+.moreMenusBtn {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    width: 50%;
+    max-width: 500px;
+    color: #FDF8EB;
+    background-color: #984EAE;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.moreMenusBtn:hover {
+    transform: scale(1.05);
+}
+.centered-div-no-deliveries {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 20vh);
 }
 </style>

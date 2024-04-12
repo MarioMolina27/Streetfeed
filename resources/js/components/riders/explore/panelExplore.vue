@@ -5,30 +5,38 @@
         <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
     </template>
     <div v-else class="explore-container">
-      <div v-if="nearProviders.length != 0" class="provider-container">
-        <h2>{{translations.discoverProvidersCloseToYou}}</h2>
-        <div class="card-container d-flex flex-nowrap">
-          <template v-for="(provider) in nearProviders">
-            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
-          </template>
+      <template v-if="nearProviders.length == 0 && hasMoreFavoritesPrvoviders.length == 0 && favouriteProviders.length == 0">
+          <div class="centered-div-no-deliveries">
+              <h1 class="mt-5 mb-4 font-weight-bold text-center">No hay ningún proveedor que proporcione comida en estos momentos</h1>
+              <p class="fs-4 mb-4 text-center">Vuelve en otro momento y ayudanos a mejorar el mundo</p>
+          </div>               
+      </template>
+      <template v-else>
+        <div v-if="nearProviders.length != 0" class="provider-container">
+          <h2>{{translations.discoverProvidersCloseToYou}}</h2>
+          <div class="card-container d-flex flex-nowrap">
+            <template v-for="(provider) in nearProviders">
+              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+            </template>
+          </div>
         </div>
-      </div>
-      <div v-if="hasMoreFavoritesPrvoviders.length != 0" class="provider-container">
-        <h2>{{translations.discoverProvidersMoreLike}}</h2>
-        <div class="card-container d-flex flex-nowrap">
-          <template v-for="(provider) in hasMoreFavoritesPrvoviders">
-            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
-          </template>
+        <div v-if="hasMoreFavoritesPrvoviders.length != 0" class="provider-container">
+          <h2>{{translations.discoverProvidersMoreLike}}</h2>
+          <div class="card-container d-flex flex-nowrap">
+            <template v-for="(provider) in hasMoreFavoritesPrvoviders">
+              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+            </template>
+          </div>
         </div>
-      </div>
-      <div v-if="favouriteProviders.length != 0" class="provider-container">
-        <h2>{{translations.favoriteLabel}}</h2>
-        <div class="card-container d-flex flex-nowrap">
-          <template v-for="(provider) in favouriteProviders">
-            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
-          </template>
-        </div>
-      </div>
+        <div v-if="favouriteProviders.length != 0" class="provider-container">
+          <h2>{{translations.favoriteLabel}}</h2>
+          <div class="card-container d-flex flex-nowrap">
+            <template v-for="(provider) in favouriteProviders">
+              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+            </template>
+          </div>
+        </div>  
+      </template>
     </div>
   </div>
 </template>

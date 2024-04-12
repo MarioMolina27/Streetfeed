@@ -41,7 +41,7 @@ export default{
     methods: {
         getDeliveries() {
             this.loading = true;
-            axios.get('/api/delivery/get-user-deliveries/4')
+            axios.get(`/api/delivery/get-user-deliveries/${this.user.id_user}`)
                 .then(response => {
                     this.deliveries = [];
                     this.deliveries = response.data;
@@ -49,7 +49,6 @@ export default{
                     this.loading = false;
                 })
                 .catch(error => {
-                    console.error('Error al obtener los repartos:', error);
                     this.loading = false;
                 });
         },
