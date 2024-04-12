@@ -11,16 +11,16 @@
         </template>
         <template #content>
             <p>
-            Horario:<br>
+            {{translations.scheduleLabel}}:<br>
             <strong v-if="provider.schedules && provider.schedules.length > 0">
               {{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}
             </strong>
-            <strong v-else>Sin Horario</strong><br>
+            <strong v-else>{{translations.notScheduleLabel}}</strong><br>
             <strong v-if="provider.schedules[1]">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
             </p>
             <div class="d-flex justify-content-between">
-            <Tag :class="{'low-availability': totalLaunchpacks  < 3, 'high-availability': totalLaunchpacks  >= 3}" value="Primary">{{ totalLaunchpacks  }} disponibles</Tag>
-            <span><strong>{{ provider.distance }}km</strong> de ti</span>
+            <Tag :class="{'low-availability': totalLaunchpacks  < 3, 'high-availability': totalLaunchpacks  >= 3}" value="Primary">{{ totalLaunchpacks  }} {{translations.availableLabel}}</Tag>
+            <span><strong>{{ provider.distance }}km</strong> {{translations.fromYouLabel}}</span>
             </div>  
         </template>
     </Card>
@@ -31,7 +31,8 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 export default{
     props: {
-      provider: Object
+      provider: Object,
+      translations: Object
     },
     data(){
       return {
@@ -65,14 +66,11 @@ export default{
             providerId: this.provider.id_user
         })
         .then(response => {
-            console.log(response.data.message);
             this.$emit('favoriteToggled');
             this.isRequesting = false;
         })
         .catch(error => {
-            console.error('Error al cambiar el estado de favorito:', error);
-                        this.isRequesting = false;
-
+            this.isRequesting = false;
         });
       },
       showDetails(){

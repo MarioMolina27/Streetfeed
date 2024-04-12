@@ -4,8 +4,8 @@
             <div class="col-lg-4 col-12 mb-3">
                 <div class="d-flex flex-column justify-content-center h-100">
                     <div class="d-flex flex-column justify-content-center align-items-center mt-3">
-                        <h3 class="title-stadistics-providers mb-0">NUESTROS</h3>
-                        <h3 class="title-stadistics-providers title-stadistics-providers-2 mt-0 mb-3">PROVIDERS</h3>
+                        <h3 class="title-stadistics-providers mb-0">{{translations.oursLabel}}</h3>
+                        <h3 class="title-stadistics-providers title-stadistics-providers-2 mt-0 mb-3">{{translations.providersLabel}}</h3>
                     </div>
                 </div>
             </div>
@@ -14,7 +14,7 @@
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">EVOLUCION DE PROVIDERS</h3>
+                            <h3 class="title-card-stadistics mt-3">{{translations.providerEvolLabel}}</h3>
                         </div>
                     </template>
                     <template #content>
@@ -28,7 +28,7 @@
                 <Card class="p-3 h-100">
                     <template #header>
                         <div class="card-header">
-                            <h3 class="title-card-stadistics mt-3">SUS LOCALIDADES</h3>
+                            <h3 class="title-card-stadistics mt-3">{{ translations.theirLocationLabel }}</h3>
                         </div>
                     </template>
                     <template #content>
@@ -41,7 +41,7 @@
                     <Card class="p-3 h-50">
                         <template #header>
                             <div class="card-header">
-                                <h3 class="title-card-stadistics mt-3 p-2">NUESTROS PROVIDERS</h3>
+                                <h3 class="title-card-stadistics mt-3 p-2">{{translations.oursLabel}} {{translations.providersLabel}}</h3>
                             </div>
                         </template>
                         <template #content>
@@ -51,7 +51,7 @@
                     <Card class="p-3 h-50 mt-3">
                         <template #header>
                             <div class="card-header">
-                                <h3 class="title-card-stadistics mt-3 p-2">PEDIDOS ENTREGADOS</h3>
+                                <h3 class="title-card-stadistics mt-3 p-2">{{translations.deliveriesDoneLabel}}</h3>
                             </div>
                         </template>
                         <template #content>
@@ -73,7 +73,9 @@ import { getTotalDeliveries } from "../../../services/delivery.js";
 
 export default {
     name: "StadisticsProviders",
-
+    props: {
+        translations: Object
+    },
     components: {
         Card,
         EvolutionProvidersGraphic,

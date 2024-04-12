@@ -2,17 +2,17 @@
     <div class="switches-container">
         <input type="radio" id="switchList" name="switchPlan" value="List" v-model="selectedOption"/>
         <input type="radio" id="switchMap" name="switchPlan" value="Map" v-model="selectedOption"/>
-        <label for="switchList" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'Map' }">Lista</label>
-        <label for="switchMap" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'List' }">Rutas</label>
+        <label for="switchList" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'Map' }">{{ translations.listLabel }}</label>
+        <label for="switchMap" :class="{ 'switch-option': true, 'notSelected': selectedOption === 'List' }">{{ translations.routeLabel }}</label>
         <div class="switch-wrapper">
         <div class="switch">
-            <div>Lista</div>
-            <div>Rutas</div>
+            <div>{{ translations.listLabel }}</div>
+            <div>{{ translations.routeLabel }}</div>
         </div>
         </div>
     </div>
-    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></mapDelivery>
-    <listDelivery v-else :deliveries="asosiationDelivery" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></listDelivery>
+    <mapDelivery v-if="selectedOption === 'Map'" :deliveries="asosiationDelivery" :translations="translations" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></mapDelivery>
+    <listDelivery v-else :deliveries="asosiationDelivery" :lang="lang" :translations="translations" @isChanging="emitIsChanging" @notifyDeliver="notifyDeliver"></listDelivery>
 </template>
 
 <script>
@@ -20,7 +20,9 @@ import mapDelivery from './mapDelivery.vue';
 import listDelivery from './listDelivery.vue';
 export default {
     props: {
-        asosiationDelivery: Object 
+        asosiationDelivery: Object,
+        lang: String,
+        translations: Object
     },
     data(){
         return {

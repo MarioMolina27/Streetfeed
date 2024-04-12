@@ -3,24 +3,24 @@
       <div class="provider-card-content" style="flex: 1;">
         <div class="provider-card-header mb-4">
           <h2 class="mb-0"><strong>{{delivery[0].provider.nickname}}</strong></h2>
-          <button v-if="isCollectButtonActive" class="collect-delivery-btn" :disabled="!isCollectButtonActive" @click="doCollect">Recoger</button>
-          <span v-if="!isWithinSchedule" class="not-open ms-5" style="font-size: 15px; text-align: end;">El recinto se encuentra cerrado</span> 
+          <button v-if="isCollectButtonActive" class="collect-delivery-btn" :disabled="!isCollectButtonActive" @click="doCollect">{{translations.collectLabel}}</button>
+          <span v-if="!isWithinSchedule" class="not-open ms-5" style="font-size: 15px; text-align: end;">{{translations.localIsNotOpen}}</span> 
         </div>
         <div class="provider-card-body row gx-3 ps-0">
           <div class="col-lg-6 col-sm-12">
               <div class="provider-products">
-                  <p class="label-type-product mb-0 fs-6">Ubicación</p>
+                  <p class="label-type-product mb-0 fs-6">{{translations.ubicationLabel}}</p>
                   <p class="type-product"><strong>{{ delivery[0].provider.location }}</strong></p>
               </div>
           </div>
           <div class="col-lg-5 col-8">
               <div class="provider-products">
-                    <p class="label-type-product mb-0 fs-6">Horario</p>
+                    <p class="label-type-product mb-0 fs-6">{{translations.scheduleLabel}}</p>
                     <template v-if="delivery[0].provider.schedules.length > 0">
                         <p class="type-product"><strong>{{ closestSchedule.start_time }} - {{ closestSchedule.finish_time }}</strong><span v-if="!isWithinSchedule" class="not-open ms-2">(Cerrado)</span></p>
                     </template>
                     <template v-else>
-                        <p class="type-product"><strong>No hay horarios disponibles</strong></p>
+                        <p class="type-product"><strong>{{translations.schedullesNotAvailable}}</strong></p>
                     </template>
               </div>
           </div>
@@ -32,13 +32,13 @@
         </div>
         <div class="d-flex justify-content-center flex-column">
             <template v-for="homeless in delivery">
-                <markerCard :homeless="homeless.homeless" @notifyDeliver="notifyDeliver"></markerCard>
+                <markerCard :homeless="homeless.homeless" :translations="translations" @notifyDeliver="notifyDeliver"></markerCard>
             </template>
         </div>
     </div>
   </div>
   <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-    <Chat :user="userChat" :loggedUser="userLogged"/>
+    <Chat :user="userChat" :loggedUser="userLogged" :lang="lang"/>
   </Dialog>
 </template>
 
@@ -48,7 +48,9 @@ import Dialog from 'primevue/dialog';
 import Chat from '../../shared/chat/chat.vue';
 export default {
     props: {
-        delivery: Object
+        delivery: Object,
+        lang: String,
+        translations: Object
     },
     data() {
       return {

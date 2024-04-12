@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
         <template v-if="loading ||!loadingFinished">
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
@@ -17,12 +17,12 @@
                     <div class="d-flex flex-column justify-content-center align-items-center">
                     <div>
                         <div>
-                            <p>Horario: </p>
+                            <p>{{translations.scheduleLabel}}: </p>
                         </div>
                         <div class="info-text" v-if="provider.schedules && provider.schedules.length > 0">
                                 <strong>{{ provider.schedules[0].start_time + " - " + provider.schedules[0].finish_time }}</strong>
                         </div>
-                        <strong class="info-text" v-else>Sin Horario<br></strong>
+                        <strong class="info-text" v-else>{{translations.notScheduleLabel}}<br></strong>
                         <strong class="info-text" v-if="provider.schedules && provider.schedules.length > 1">{{ provider.schedules[1].start_time + " - " + provider.schedules[1].finish_time }}</strong><br>
                     </div>
                     </div>
@@ -31,14 +31,14 @@
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <div>
                             <div>
-                            <p>Ubicación: </p>
+                            <p>{{translations.ubicationLabel}}: </p>
                         </div>
                         <div class="info-text" v-if="provider.addresses && provider.addresses.length > 0">
                                 <strong>{{ provider.addresses[0].road_type.name + " " + provider.addresses[0].name + " " + provider.addresses[0].number + " (" + provider.addresses[0].cp + ")"}}</strong><br>
                                 <strong>{{ provider.addresses[0].city + ", " + provider.addresses[0].country }}</strong><br>
                         </div>
                         <div class="info-text" v-else>
-                            <strong>No se encontraron direcciones.</strong>
+                            <strong>{{translations.dontFindUbication}}.</strong>
                         </div> 
                         </div> 
                     </div>
@@ -47,10 +47,10 @@
             <div class="divider"></div>
             <div class="detail-provider-menus">
                 <template v-for="(menu, index) in provider.menus">
-                    <menu-card :menu="menu" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
+                    <menu-card :menu="menu" :translations = "translations" @value-changed="updateLaunchpack" :class="{'mb-3': index === provider.menus.length - 1}"></menu-card>
                 </template>
                 <div id="reserve-details" v-show="showReserveData" class="reserve-data"></div>
-                <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">Reserva</button>
+                <button v-show="showReserveData" class="reserve-button mb-5" @click="assignReserve">{{translations.reserveBtnLabel}}</button>
             </div>
             </div>
         </template>
@@ -61,28 +61,38 @@
 import menuCard from './menuCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
+import {menuTabsTwicePoints} from '../../../utilities/menuTabs.js'
 export default{
     props: {
         nickname: String,
-        user: Object
+        user: Object,
+        lang: String,
+        type_user: Array
     },
     data(){
       return {
         idUser: 4,
         provider: [],
         menus: [],
-        menuItems: [
-            {name: 'Tus Repartos', href: '../delivery'},
-            {name: 'Explorar', href: '../explore'},
-            {name: 'Favoritos', href: '../favorite'},
-            {name: 'Perfil', href: '../profile'}
-        ],
+        menuItems: [],
         loading: true,
         loadingFinished: false,
+        translations: {},
+        nameRoute: '../explore'
       }
     },
     created() {
+        import(`../../../../lang/riders/${this.lang}.json`)
+            .then(module => {
+                this.translations = module.default;
+            })
+            .catch(error => {
+                console.error(`Error al importar el archivo de idioma: ${error}`);
+            });
         this.loadProvider();
+    },
+    mounted() {
+        this.menuItems = menuTabsTwicePoints(this.type_user, this.lang);
     },
     computed: {
         heartClass() {
@@ -101,7 +111,6 @@ export default{
                 this.loading = false;
             })
             .catch(error => {
-                console.error('Error al obtener el proveedor:', error);
                 this.loading = false;
             });
         },

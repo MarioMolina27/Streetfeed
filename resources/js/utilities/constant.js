@@ -1,3 +1,5 @@
+export const kgDelivery = 0.5;
+
 //Images
 export const logoUrl = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/img/logo.svg`;
 export const sideNavFirstImg = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/img/home_nav_img.svg`;
@@ -14,4 +16,4 @@ export const statisticsRiderRouteAdmin = `${window.location.protocol + "//" + wi
 export const mapAdminRoute = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/admin/map`;
 
 export const mainRiderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/delivery`;
-export const mainProviderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/menu`;
+export const mainProviderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/managedelivery`;

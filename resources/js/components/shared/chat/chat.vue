@@ -24,10 +24,10 @@
                     </div>
 
                     <p class="message-info-manage-ticket-chatting" v-if="messages.length !== 0 && !showTimeStamp(message)">
-                        <strong>{{ message.isMyMessage ? 'Tú' : user.name }}</strong> - {{ dateCorrectFormatTodayYesterday(message.day) + " a las " + message.time }}
+                        <strong>{{ message.isMyMessage ? 'Tú' : user.name }}</strong> - {{ dateCorrectFormatTodayYesterday(message.day) + translations.atLabel + message.time }}
                     </p>
                 </div>
-                <p class="message-start-conversion" v-if="messages.length === 0">Empieza una conversación</p>
+                <p class="message-start-conversion" v-if="messages.length === 0">{{translations.startConversation}}</p>
             </div>
             <div class="chat-input">
                 <textarea ref="messageInput" class="chat-text-input description" rows="1" cols="100" @keydown="onKeyDown"pInputTextarea></textarea>
@@ -42,12 +42,23 @@ export default {
     inject: ['dialogRef'],
     props: {
         user: Object,
-        loggedUser: Number
+        loggedUser: Number,
+        lang: String
     },
     data() {
         return {
-            messages: []
+            messages: [],
+            translations: {},
         }
+    },
+    created() {
+      import(`../../../../lang/shared/${this.lang}.json`)
+            .then(module => {
+                this.translations = module.default;
+            })
+            .catch(error => {
+                console.error(`Error al importar el archivo de idioma: ${error}`);
+            });
     },
     mounted() {
         this.getMessages();
@@ -105,9 +116,9 @@ export default {
             yesterday.setDate(today.getDate() - 1);
 
             if (messsageDate.toDateString() === today.toDateString()) {
-                return "Hoy";
+                return this.translations.todayLabel;
             } else if (messsageDate.toDateString() === yesterday.toDateString()) {
-                return "Ayer";
+                return this.translations.yesterdayLabel;
             } else {
                 return messsageDate.toLocaleDateString();
             }

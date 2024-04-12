@@ -1,7 +1,7 @@
 @extends('layouts.layout')
        
 @section('content')
-    <profile :user="{{ Auth::user() }}"></profile>
+    <profile :user="{{ Auth::user() }}" :lang="'{{ $lang }}'" :type_user="{{ Auth::user()->typeUsers }}"></profile>
 @endsection
 
 @section('imports')

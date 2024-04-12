@@ -1,15 +1,15 @@
 <template>
 <div class="container-fluid ps-0 pe-0">
-    <Navbar :menuItems = 'menuItems'></Navbar>
+    <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
     <template v-if="loading ||!loadingFinished">
         <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
     </template>
     <div v-else class="delivery-container">
         <div v-if="deliveries.length === 0" class="delivery-call-action">
-            <noDelivery></noDelivery>
+            <noDelivery :translations="translations"></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
-            <hasDelivery :asosiationDelivery = asosiationDelivery @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
+            <hasDelivery :asosiationDelivery = "asosiationDelivery" :lang="lang" :translations="translations" @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>
         </div>
     </div>
 </div>
@@ -20,22 +20,22 @@ import Navbar from '../../shared/Navbar.vue';
 import noDelivery from './noDelivery.vue';
 import hasDelivery from './hasDelivery.vue';
 import loader from '../../shared/loader.vue';
+import {menuTabs} from '../../../utilities/menuTabs.js';
 export default{
     props: {
-        user: Object
+        user: Object,
+        lang: String,
+        type_user: Array
     },
     data(){
       return {
-        menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
-            ],
+        menuItems: [],
         loading: true,
         loadingFinished: false,
         deliveries: [],
-        asosiationDelivery: {}
+        asosiationDelivery: {},
+        translations: {},
+        nameRoute: './delivery'
       }
     },
     methods: {
@@ -157,7 +157,17 @@ export default{
             }
         }
     },
+    created() {
+        import(`../../../../lang/riders/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
+    },
     mounted(){
+        this.menuItems = menuTabs(this.type_user, this.lang);
         this.getDeliveries();
     },
     components: {

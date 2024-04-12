@@ -1,31 +1,31 @@
 <template>
   <div class="container-fluid ps-0 pe-0">
-    <Navbar :menuItems = 'menuItems'></Navbar>
+    <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
     <template v-if="loading ||!loadingFinished">
         <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
     </template>
     <div v-else class="explore-container">
       <div v-if="nearProviders.length != 0" class="provider-container">
-        <h2>Descubre a tus proveedores más cercanos</h2>
+        <h2>{{translations.discoverProvidersCloseToYou}}</h2>
         <div class="card-container d-flex flex-nowrap">
           <template v-for="(provider) in nearProviders">
-            <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
+            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
           </template>
         </div>
       </div>
       <div v-if="hasMoreFavoritesPrvoviders.length != 0" class="provider-container">
-        <h2>Los proveedores más queridos</h2>
+        <h2>{{translations.discoverProvidersMoreLike}}</h2>
         <div class="card-container d-flex flex-nowrap">
           <template v-for="(provider) in hasMoreFavoritesPrvoviders">
-            <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
+            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
           </template>
         </div>
       </div>
       <div v-if="favouriteProviders.length != 0" class="provider-container">
-        <h2>Favoritos</h2>
+        <h2>{{translations.favoriteLabel}}</h2>
         <div class="card-container d-flex flex-nowrap">
           <template v-for="(provider) in favouriteProviders">
-            <provider-card :provider = provider @favoriteToggled="refreshData"></provider-card>
+            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
           </template>
         </div>
       </div>
@@ -37,9 +37,12 @@
 import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
+import {menuTabs, getRouteActiveName} from '../../../utilities/menuTabs.js'
 export default{
     props: {
-        user: Object
+      user: Object,
+      lang: String,
+      type_user: Array
     },
     data(){
       return {
@@ -48,15 +51,22 @@ export default{
         nearProviders: [],
         hasMoreFavoritesPrvoviders: [],
         favouriteProviders: [],
-        menuItems: [
-                {name: 'Tus Repartos', href: './delivery'},
-                {name: 'Explorar', href: './explore'},
-                {name: 'Favoritos', href: './favorite'},
-                {name: 'Perfil', href: './profile'}
-            ]
+        menuItems: [],
+        translations: {},
+        nameRoute: './explore'
       }
+    }, 
+    created() {
+      import(`../../../../lang/riders/${this.lang}.json`)
+          .then(module => {
+              this.translations = module.default;
+          })
+          .catch(error => {
+              console.error(`Error al importar el archivo de idioma: ${error}`);
+          });
     },
     mounted(){
+      this.menuItems = menuTabs(this.type_user, this.lang);
       this.refreshData()
     },
     methods: {
@@ -89,7 +99,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 body {
   background-color: #FDF8EB;
 }
@@ -104,7 +114,6 @@ body {
   margin-bottom: 2rem;
 }
 .card-container {
-  margin-top: 1rem;
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;

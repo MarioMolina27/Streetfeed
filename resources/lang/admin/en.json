@@ -1,0 +1,43 @@
+{
+    "ourLabel": "Our",
+    "appLabel": "App",
+    "foodSaveLabel": "Food Saved",
+    "evolutionStreetfeedLabel": "Streetfeed Evolution",
+    "ourUsersLabel": "Our Users",
+    "ourDeliveriesLabel": "Our Deliveries",
+    
+    "providerLabel": "Provider",
+    "homelessLabel": "Homeless",
+    
+    "streetFeedName": "Streetfeed",
+    "homeMenuTab": "Home",
+    "statsMenuTab": "Statistics",
+    "providersMenuTab": "Providers",
+    "ridersMenuTab": "Riders",
+    "usersMenuTab": "Users",
+    "mapMenuTab": "Map",
+    
+    "oursLabel": "Ours",
+    "providersLabel": "Providers",
+    "providerEvolLabel": "Provider Evolution",
+    "theirLocationLabel": "Their Locations",
+    "deliveriesDoneLabel": "Deliveries Done",
+    
+    "riderEvolLabel": "Rider Evolution",
+    "ridersLabel": "Riders",
+    
+    "noUserFoundLabel": "No user found",
+    "loadingUserLabel": "Loading user data. Please wait...",
+    "nicknameLabel": "Username",
+    "emailLabel": "Email",
+    "nameLabel": "Name",
+    "surnameLabel": "Surname",
+    "typeUserLabel": "User Type",
+    "selectOneLabel": "Select one...",
+    "activeLabel": "Active",
+    "searchByNameLabel": "Search by name",
+    "searchBySurnameLabel": "Search by surname",
+    "searchByNicknameLabel": "Search by username",
+    "searchByEmailLabel": "Search by email",
+    "keyboardSearchLabel": "Search..."  
+}

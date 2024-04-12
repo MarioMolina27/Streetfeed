@@ -18,11 +18,11 @@
             <i class="fa-solid fa-location-crosshairs" style="color: #FDF8EB;"></i>
         </div>
         <div v-if="isScanning" class="scanner-container">
-            <qrScanner :deliveryIds="deliveryIds" @closeFrame="closeFrame"></qrScanner>
+            <qrScanner :deliveryIds="deliveryIds" :translations="translations" @closeFrame="closeFrame"></qrScanner>
         </div>
         <div v-if="providerInformation != []" class="provider-list d-flex flex-nowrap">
             <template v-for="information in providerInformation">
-                <providerItemCarrousel :information  = "information" :active="isActiveProvider(information)" @childClick="handleChildClick"></providerItemCarrousel>
+                <providerItemCarrousel :information  = "information" :active="isActiveProvider(information)" :translations="translations" @childClick="handleChildClick"></providerItemCarrousel>
             </template>
         </div>
     </div>
@@ -40,6 +40,7 @@ const isVisible = ref(false);
 export default{
     props: {
         deliveries: Object,
+        translations: Object
     },
     data(){
         return {
@@ -161,7 +162,7 @@ export default{
                             <strong class="fs-3" style="color: #B48753; margin-right: 10px;">${info.nickname}</strong>
                             <i class="fa-solid fa-store fs-4"></i>
                         </div>
-                        ${this.isCollectButtonActive ? `<button id="popup-button-provider-${info.id_user}" class="btn" style="background-color:#B48753; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Recoger</button>` : ''}
+                        ${this.isCollectButtonActive ? `<button id="popup-button-provider-${info.id_user}" class="btn" style="background-color:#B48753; color: #FDF8EB; border: none;display: block; margin: 0 auto;">${this.translations.collectLabel}</button>` : ''}
                     `;
                     const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false }).setHTML(popupContent);
                     marker.setPopup(popup);
@@ -180,9 +181,9 @@ export default{
                             <i class="fa-solid fa-utensils fs-4"></i>
                         </div>
                         ${this.numDeliveries(info.id_marker) != 0 ? 
-                        `<button id="popup-button-homeless-${info.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">Entrega</button>` 
+                        `<button id="popup-button-homeless-${info.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: block; margin: 0 auto;">${this.translations.doDeliveryLabel}</button>` 
                         : 
-                        `<button id="popup-button-homeless-${info.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: none; margin: 0 auto;">Entrega</button>`}
+                        `<button id="popup-button-homeless-${info.id_marker}" class="btn" style="background-color:#984EAE; color: #FDF8EB; border: none;display: none; margin: 0 auto;">${this.translations.doDeliveryLabel}</button>`}
                     `;
                     
                     const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false }).setHTML(popupContent);
@@ -271,8 +272,8 @@ export default{
         },
         deliverMenus(homelessMarker, marker) {    
             this.$confirm.require({
-                message: "Estás seguro que quieres entregar el pedido?",
-                header: "Entregar",
+                message: this.translations.sureToDoDelivery,
+                header: this.translations.doDeliveryLabel,
                 onShow: () => {
                     isVisible.value = true;
                 },

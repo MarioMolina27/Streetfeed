@@ -1,5 +1,5 @@
 <template>
-<dialogMap :selectedDirection="this.selectedDirection" :modalVisible="this.modalVisible" @closeModal="closeModal" @addDirection="addDirection"></dialogMap>
+<dialogMap :selectedDirection="this.selectedDirection" :modalVisible="this.modalVisible" :translations="translations" @closeModal="closeModal" @addDirection="addDirection"></dialogMap>
     <div class="mt-5">
         <Card>
             <template #content>
@@ -7,9 +7,13 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0 label-name-user">{{user.name}}</h3>
-                            <Tag class="ms-0" v-if="type_user.length===1" v-for="(ts, index) in type_user" :key="ts.name">
-                                {{ ts.name }}
-                            </Tag>                        
+                            <template v-if="type_user.length===1" v-for="(ts, index) in type_user" :key="ts.name">
+                                <div :class="{'ms-3 d-flex align-items-center justify-content-center' : index == 0}">
+                                    <Tag>
+                                        {{ ts.name }}
+                                    </Tag> 
+                                </div>
+                            </template>                       
                         </div>
                         <img v-if="!editingProfile" src="img/edit-profile.svg" alt="edit-profile-button" height="35" @click="editingProfile=true" />
                         <div v-else class="d-flex flex-row-reverse" >
@@ -21,20 +25,23 @@
                             </div>
                         </div>
                     </div>
-                    <p>{{user.username}}</p>
-                    <Tag class="ms-0 mb-3" v-if="type_user.length>1" v-for="(ts, index) in type_user" :key="ts.name">
-                                {{ ts.name }}
-                    </Tag> 
+                    <p class="me-3">{{user.username}}</p>
+                    <template v-if="type_user.length>1" v-for="(ts, index) in type_user" :key="ts.name">
+                        <Tag class="mb-3">
+                            {{ ts.name }}
+                        </Tag> 
+                    </template>
+                    
                     <div v-if="!editingProfile">
-                        <p class="label-card-profile">Email</p>
+                        <p class="label-card-profile">{{translations.emailLabel}}</p>
                         <p>{{user.email}}</p>
-                        <p class="label-card-profile">Direcciones</p>
+                        <p class="label-card-profile">{{translations.directionLabel}}</p>
                         <p v-for="direction in directions" :key="direction">{{direction.full_address}}</p>
                     </div>
                     <div v-else class="mb-4">
-                        <p class="label-card-profile">Email</p>
+                        <p class="label-card-profile">{{translations.emailLabel}}</p>
                         <input type="text" class="form-custom" v-model="user.email">
-                        <p class="label-card-profile">Direcciones</p>
+                        <p class="label-card-profile">{{translations.directionLabel}}</p>
                         <template v-if="this.directions.length > 0">
                             <div v-for="(direction, index) in directions" :key="direction.id" class="d-flex flex-row" v-i>
                                 <input type="text" class="form-custom form-direction" disabled v-model="direction.full_address">
@@ -50,7 +57,7 @@
                                 <template #header>
                                     <div class="d-flex flex-row align-items-center">
                                         <p class="mb-0 title-schedules-profile">
-                                            Horario
+                                            {{translations.scheduleLabel}}
                                         </p>
                                         <i v-if="!displayShifts" class="pi pi-eye ms-3 eye-schedule"></i>
                                         <i v-else class="pi pi-eye-slash ms-3 eye-schedule"></i>
@@ -87,7 +94,7 @@
                                                 </template>
                                             </div>
                                     </div>
-                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
+                                    <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"/>
                                 </template>
                             </AccordionTab>
                         </Accordion>
@@ -107,10 +114,6 @@ import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import dialogMap from './dialogMap.vue';
 import { updateUserData } from '../../../services/users.js';
-
-
-
-
 
 export default {
     props: {
@@ -137,10 +140,9 @@ export default {
         type_user: {
             type: Object,
             required: true
-        }
+        },
+        translations: Object
     },
-    originalSchedules: null, //Variable no reactiva
-    originalDirections: null, //Variable no reactiva
     components: {
         Card,
         Tag,
@@ -153,64 +155,45 @@ export default {
 
     computed: {
             userIsRider() {
-                // Verifica si el tipo de usuario es Rider
-                return this.type_user.some(userType => userType.id === 1); // Suponiendo que el id para Rider sea 1
+                return this.type_user.some(userType => userType.id_type_user === 1); // Suponiendo que el id para Rider sea 1
             },
             userIsProvider() {
-                // Verifica si el tipo de usuario es Provider
-                return this.type_user.some(userType => userType.id === 2); // Suponiendo que el id para Provider sea 2
+                return this.type_user.some(userType => userType.id_type_user === 2); // Suponiendo que el id para Provider sea 2
             }
     },
 
     mounted() {
-        this.$options.originalSchedules = [...this.schedules]
         this.shifts = this.schedules;
         
-
         this.directions = this.adress.map(address => {
             const { id_adress, ...rest } =  address; 
             const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
             return { ...rest, full_address: fullAddress };
         });
 
-        this.$options.originalDirections = this.adress.map(address => {
+        this.originalDirections = this.adress.map(address => {
             const { id_adress, ...rest } =  address; 
             const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
             return { ...rest, full_address: fullAddress };
-        });
+        });        
+        
+        this.originalSchedules = JSON.parse(JSON.stringify(this.schedules));
 
         this.typeRoads = this.roadTypes;
-           
-        
-        
-
-        // getAdressByUser(this.user.id_user).then((response) => {
-        //     this.directions = response;
-
-        //     this.directions = this.directions.map(address => {
-        //         const { id_adress, ...rest } =  address; 
-        //         const fullAddress = `${rest.road_type.name} ${rest.name} ${rest.number}, ${rest.city}, ${rest.cp}, ${rest.country}`;
-        //         return { ...rest, full_address: fullAddress };
-        //     });
-        //     this.$options.originalDirections = [...response]
-
-        // });
-
-        // getTypeRoad().then((response) => {
-        //     this.typeRoads = response;
-        // });
     },
 
     data(){
         return{
             directions: [],
+            originalDirections: [],
             selectedDirection: {},
 
             editingProfile: false,
-            daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+            daysOfWeek: [this.translations.mondaysLabel, this.translations.tuesdaysLabel, this.translations.wednesdaysLabel, this.translations.thursdaysLabel, this.translations.fridaysLabel, this.translations.saturdaysLabel, this.translations.sundaysLabel],
             displayShifts: false,
 
             shifts : [],
+            originalSchedules: [],
             modalVisible: false,
             typeRoads: [],
         }
@@ -221,8 +204,9 @@ export default {
         },
 
         cancelEditing() {
-            this.shifts = this.$options.originalSchedules;
-            this.directions = this.$options.originalDirections;
+            console.log(this.originalSchedules);
+            this.shifts = JSON.parse(JSON.stringify(this.originalSchedules))
+            this.directions = JSON.parse(JSON.stringify(this.originalDirections))
             this.editingProfile = false;
         },
 
@@ -236,6 +220,7 @@ export default {
                 }
             }
         },
+
 
         getNumberShifts(day) {
             return this.shifts.filter(s => s.day === day).length;
@@ -300,8 +285,8 @@ export default {
 
 
             updateUserData(this.user, formattedShifts, this.directions).then((response) => {
-                this.$options.originalSchedules = [...this.shifts];
-                this.$options.originalDirections = [...this.directions];
+                this.originalSchedules = [...this.shifts];
+                this.originalDirections = [...this.directions];
             });
         },
 
@@ -331,7 +316,9 @@ export default {
 </script>
 
 <style scoped>
-
+.margin-start-tag {
+    margin-left: 10px !important;
+}
 .p-card{
     border: 1.5px solid #b48753;
 }

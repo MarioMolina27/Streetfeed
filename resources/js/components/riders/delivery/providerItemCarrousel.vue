@@ -8,7 +8,8 @@
 export default {
     props: {
         information: Object,
-        active: Boolean
+        active: Boolean,
+        translations: Object
     },
     data() {
         return {

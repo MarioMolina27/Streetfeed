@@ -247,10 +247,13 @@
 import { gsap } from "gsap";
 import Calendar from 'primevue/calendar';
 import { homeRouteAdmin, mainRiderPage, mainProviderPage} from '../../utilities/constant.js';
-
 export default {
+    props: {
+        lang: String
+    },
     data() {
         return {
+            translations: {},
             nickname: '',
             password: '',
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
@@ -259,6 +262,15 @@ export default {
             selectUserType: null, // Tipo de usuario seleccionado
             showLogin: true, // Inicialmente mostramos la columna de inicio de sesion
         };
+    },
+    created() {
+        import(`../../../lang/auth/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
     },
     methods: {
         toggleView(view) {
@@ -277,9 +289,9 @@ export default {
                 if (response.data != null) {
                     const typeUser = response.data.type_users[0].id_type_user;
                     if(typeUser == '1') {
-                        window.open(mainProviderPage,"_self")
-                    } else if((typeUser == '2')) {
                         window.open(mainRiderPage,"_self")
+                    } else if((typeUser == '2')) {
+                        window.open(mainProviderPage,"_self")
                     } else if((typeUser == '3')) {
                         window.open(homeRouteAdmin,"_self")
                     }

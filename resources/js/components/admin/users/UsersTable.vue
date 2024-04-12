@@ -21,17 +21,17 @@
                             </InputIcon>
                             <InputText
                                 v-model="filters['global'].value"
-                                placeholder="Keyword Search"
+                                :placeholder=translations.keyboardSearchLabel
                             />
                         </IconField>
                     </div>
                 </template>
-                <template #empty> No users found. </template>
-                <template #loading> Loading users data. Please wait. </template>
+                <template #empty> {{translations.noUserFoundLabel}}. </template>
+                <template #loading> {{translations.loadingUserLabel}} </template>
 
                 <Column
                     field="nickname"
-                    header="Nickname"
+                    :header="translations.nicknameLabel"
                     style="min-width: 12rem"
                 >
                     <template #body="{ data }">
@@ -43,13 +43,13 @@
                             type="text"
                             @input="filterCallback()"
                             class="p-column-filter"
-                            placeholder="Search by nickname"
+                            :placeholder="translations.searchByNicknameLabel"
                         />
                     </template>
                 </Column>
 
                 <Column
-                    header="Email"
+                    :header="translations.emailLabel"
                     filterField="email"
                     style="min-width: 12rem"
                 >
@@ -62,13 +62,13 @@
                             type="text"
                             @input="filterCallback()"
                             class="p-column-filter"
-                            placeholder="Search by email"
+                            :placeholder="translations.searchByEmailLabel"
                         />
                     </template>
                 </Column>
 
                 <Column
-                    header="Name"
+                    :header="translations.nameLabel"
                     filterField="name"
                     style="min-width: 12rem"
                 >
@@ -81,13 +81,13 @@
                             type="text"
                             @input="filterCallback()"
                             class="p-column-filter"
-                            placeholder="Search by name"
+                            :placeholder="translations.searchByNameLabel"
                         />
                     </template>
                 </Column>
 
                 <Column
-                    header="Surname"
+                    :header="translations.surnameLabel"
                     filterField="surnames"
                     style="min-width: 12rem"
                 >
@@ -100,14 +100,14 @@
                             type="text"
                             @input="filterCallback()"
                             class="p-column-filter"
-                            placeholder="Search by surname"
+                            :placeholder="translations.searchBySurnameLabel"
                         />
                     </template>
                 </Column>
 
                 <Column
                     field="type_users"
-                    header="Status"
+                    :header="translations.typeUserLabel"
                     :showFilterMenu="false"
                     :filterMenuStyle="{ width: '14rem' }"
                     style="min-width: 12rem"
@@ -130,7 +130,7 @@
                             v-model="filterModel.value"
                             @change="filterCallback()"
                             :options="statuses"
-                            placeholder="Select One"
+                            :placeholder="translations.selectOneLabel"
                             class="p-column-filter"
                             style="min-width: 12rem"
                             :showClear="true"
@@ -147,7 +147,7 @@
 
                 <Column
                     field="active"
-                    header="Active"
+                    :header="translations.activeLabel"
                     dataType="boolean"
                     style="min-width: 6rem"
                 >
@@ -225,6 +225,9 @@ const isVisible = ref(false);
 
 export default {
     name: "UsersTable",
+    props: {
+        translations: Object
+    },
     data() {
         return {
             userNotActiveImg,

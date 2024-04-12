@@ -2,10 +2,10 @@
     <div class="container-fluid full-size">
         <div class="row h-100">
         <div class="col-lg-1 col-12 d-flex align-items-start mt-4 ps-4">
-            <SidebarAdmin />
+            <SidebarAdmin :translations = "translations" :currentLanguage = 'lang'/>
         </div>
         <div class="col-lg-11 col-12">
-            <StadisticsHome />
+            <StadisticsHome :translations = "translations"/>
         </div>
     </div>
     </div>
@@ -14,14 +14,24 @@
 <script>
 import SidebarAdmin from "../shared/SidebarAdmin.vue";
 import StadisticsHome from "./StadisticsHome.vue";
-
-
 export default {
     props: {
-        user: Object
+        user: Object,
+        lang: String
     },
-    mounted() {
-        console.log(this.user)
+    data() {
+        return {
+            translations: {}
+        }
+    },
+    created() {
+        import(`../../../../lang/admin/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
     },
     components: {
         SidebarAdmin,

@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
         <div class="manage-menus-container">
             <div class="col-12">
                 <h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1>
@@ -22,9 +22,9 @@
 <script >
 import Navbar from '../../shared/Navbar.vue';
 import itemMenu from './itemMenu.vue';
-import esTranslations from '../../../../lang/es.json';
-import enTranslations from '../../../../lang/en.json';
-import caTranslations from '../../../../lang/ca.json';
+import esTranslations from '../../../../lang/providers/es.json';
+import enTranslations from '../../../../lang/providers/en.json';
+import caTranslations from '../../../../lang/providers/ca.json';
 export default{
     props: {
         user: Object,
@@ -39,7 +39,8 @@ export default{
             ],
             loggedUser: 9,
             menus: [],
-            translations: {}
+            translations: {},
+            nameRoute: './menu'
         }
     },
     created() {

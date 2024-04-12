@@ -1,20 +1,20 @@
 <template>
     <div>
-        <Dialog v-model:visible="visible" modal header="Dirección" style="width: 90%;">
+        <Dialog v-model:visible="visible" modal :header=translations.directLabel style="width: 90%;">
             <div class="d-flex flex-column">
                 <div style="position: relative;">
                     <div class="row">
                         <div class="col-6">
                             <IconField iconPosition="left">
                                 <InputIcon class="pi pi-search"> </InputIcon>
-                                <InputText v-model="adress" placeholder="Search" />
+                                <InputText v-model="adress" :placeholder=translations.searchLabel />
                             </IconField>
                         </div>
                         <div class="col-3">
-                            <InputText v-model="floor" placeholder="Floor" />
+                            <InputText v-model="floor" :placeholder=translations.floorLabel />
                         </div>
                         <div class="col-3">
-                            <InputText v-model="door" placeholder="Door" />
+                            <InputText v-model="door" :placeholder=translations.doorLabel />
                         </div>
                     </div>
                     <div v-if="suggestions.length > 0 && showSuggestions" class="mapbox-autofilll-results mt-2">
@@ -29,7 +29,7 @@
                     <div id="map" class="map" style="width: 100%;"></div>
                 </div>
             </div>
-            <Button label="Guardar" class="p-button mt-2" @click="closeModal()" />
+            <Button :label=translations.saveLabel class="p-button mt-2" @click="closeModal()" />
         </Dialog>
     </div>
 </template>
@@ -51,7 +51,7 @@ export default {
         Button,
         InputIcon
     },
-    props: ['modalVisible','selectedDirection'],
+    props: ['modalVisible','selectedDirection', 'translations'],
 
     data() {
         return {
@@ -71,7 +71,6 @@ export default {
             marker: new mapboxgl.Marker({ color: "#b48753" }),
         };
     },
-
     methods: {
             selectSuggestion(suggestion) {
                 this.selectedSuggestion = suggestion;
