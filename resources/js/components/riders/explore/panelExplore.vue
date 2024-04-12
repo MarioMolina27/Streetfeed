@@ -80,9 +80,9 @@ export default{
     methods: {
       refreshData() {
         Promise.all([
-          axios.get('api/users/near-providers/4'),
-          axios.get('api/users/has-more-favourites-providers/4'),
-          axios.get('api/users/favourite-providers/4')
+          axios.get(`api/users/near-providers/${this.user.id_user}`),
+          axios.get(`api/users/has-more-favourites-providers/${this.user.id_user}`),
+          axios.get(`api/users/favourite-providers/${this.user.id_user}`)
         ])
         .then(([nearProvidersResponse, hasMoreFavoritesResponse, favoriteProvidersResponse]) => {
             this.nearProviders = nearProvidersResponse.data;
@@ -91,7 +91,6 @@ export default{
             this.loading = false;
         })
         .catch(error => {
-            console.error('Error al obtener los datos:', error);
             this.loading = false;
         });
       },

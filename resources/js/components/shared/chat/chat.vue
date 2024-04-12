@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import loader from '../../shared/loader.vue';
 export default {
     inject: ['dialogRef'],
     props: {
@@ -47,8 +48,8 @@ export default {
     },
     data() {
         return {
-            messages: [],
-            translations: {},
+          messages: [],
+          translations: {},
         }
     },
     created() {
@@ -185,6 +186,9 @@ export default {
                 console.log(error);
             });
         }
+    },
+    components: {
+        loader
     }
 }
 </script>

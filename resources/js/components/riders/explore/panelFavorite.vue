@@ -79,7 +79,7 @@ export default{
     },
     methods: {
         refreshData() {
-            axios.get('api/users/favourite-providers/4')
+            axios.get(`api/users/favourite-providers/${this.user.id_user}`)
                 .then(response => {
                     this.favoriteProviders = response.data;
                     this.loading = false;
