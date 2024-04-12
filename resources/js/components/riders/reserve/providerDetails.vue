@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
         <template v-if="loading ||!loadingFinished">
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
@@ -77,14 +77,14 @@ export default{
         menuItems: [],
         loading: true,
         loadingFinished: false,
-        translations: {}
+        translations: {},
+        nameRoute: '../explore'
       }
     },
     created() {
         import(`../../../../lang/riders/${this.lang}.json`)
             .then(module => {
                 this.translations = module.default;
-                console.log(this.translations);
             })
             .catch(error => {
                 console.error(`Error al importar el archivo de idioma: ${error}`);
@@ -92,7 +92,7 @@ export default{
         this.loadProvider();
     },
     mounted() {
-        this.menuItems = menuTabsTwicePoints(this.type_user);
+        this.menuItems = menuTabsTwicePoints(this.type_user, this.lang);
     },
     computed: {
         heartClass() {

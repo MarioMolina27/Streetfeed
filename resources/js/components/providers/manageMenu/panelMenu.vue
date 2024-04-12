@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
         <div class="manage-menus-container">
             <div class="col-12">
                 <h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1>
@@ -39,7 +39,8 @@ export default{
             ],
             loggedUser: 9,
             menus: [],
-            translations: {}
+            translations: {},
+            nameRoute: './menu'
         }
     },
     created() {

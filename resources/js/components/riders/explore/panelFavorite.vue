@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
         <div class="favorite-container">
             <template v-if="loading ||!loadingFinished">
                 <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
@@ -60,21 +60,21 @@ export default{
         loadingFinished: false,
         favoriteProviders: [],
         menuItems: [],
-        translations: {}
+        translations: {},
+        nameRoute: './favorite'
       }
     },
     created() {
         import(`../../../../lang/riders/${this.lang}.json`)
             .then(module => {
                 this.translations = module.default;
-                console.log(this.translations);
             })
             .catch(error => {
                 console.error(`Error al importar el archivo de idioma: ${error}`);
             });
     },
     mounted(){
-        this.menuItems = menuTabs(this.type_user);
+        this.menuItems = menuTabs(this.type_user, this.lang);
         this.refreshData()
     },
     methods: {

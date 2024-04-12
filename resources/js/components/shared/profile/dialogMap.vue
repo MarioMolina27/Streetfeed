@@ -71,9 +71,6 @@ export default {
             marker: new mapboxgl.Marker({ color: "#b48753" }),
         };
     },
-    mounted() {
-       console.log(this.translations);
-    },
     methods: {
             selectSuggestion(suggestion) {
                 this.selectedSuggestion = suggestion;

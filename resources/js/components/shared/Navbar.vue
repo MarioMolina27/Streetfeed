@@ -10,7 +10,7 @@
         <div :class="{ 'col-6 d-flex align-items-center justify-content-end': isMobile, 'col-7 d-flex flex-row justify-content-start ': !isMobile }">
           
           <div v-if="!isMobile" v-for="(item, index) in menuItems" :key="index" class="d-flex flex-row justify-content-center align-items-center me-5">
-              <a class="mb-0 item-nav tab-decored" :href="item.href">{{ item.name }}</a>
+              <a class="mb-0 item-nav tab-decored" :class="{'underline-tab-decored' : nameRoute == item.href}" :href="item.href">{{ item.name }}</a>
             </div>
             
             <div v-if="isMobile" @click="toggleMenu" class="col-5 d-flex justify-content-end align-items-center p-3 item-nav d">
@@ -61,6 +61,7 @@ export default {
       type: Array,
       required: true,
     },
+    nameRoute: String,
     currentLanguage: String
   },
   data() {
@@ -77,7 +78,6 @@ export default {
     import(`../../../lang/shared/${this.currentLanguage}.json`)
         .then(module => {
             this.translations = module.default;
-            console.log(this.translations);
         })
         .catch(error => {
             console.error(`Error al importar el archivo de idioma: ${error}`);
@@ -305,5 +305,8 @@ export default {
   }
   .img-land-decored:hover {
     cursor: pointer;
+  }
+  .underline-tab-decored {
+    text-decoration: underline;
   }
 </style>

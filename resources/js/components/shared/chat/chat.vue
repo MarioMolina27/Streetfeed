@@ -55,7 +55,6 @@ export default {
       import(`../../../../lang/shared/${this.lang}.json`)
             .then(module => {
                 this.translations = module.default;
-                console.log(this.translations);
             })
             .catch(error => {
                 console.error(`Error al importar el archivo de idioma: ${error}`);

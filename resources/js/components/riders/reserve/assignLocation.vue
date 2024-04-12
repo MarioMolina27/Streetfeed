@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
         <div style="position: relative;">
             <div id="map" style="width: 100%; height: calc(100vh - 10vh);"></div>
             <div class="menus-container ms-2">
@@ -55,21 +55,21 @@ export default {
             launchpacksLeft: 0,
             homelessMarkers: [],
             homelessInformation: [],
-            translations: {}
+            translations: {},
+            nameRoute: '../explore'
         };
     },
     created() {
         import(`../../../../lang/riders/${this.lang}.json`)
             .then(module => {
                 this.translations = module.default;
-                console.log(this.translations);
             })
             .catch(error => {
                 console.error(`Error al importar el archivo de idioma: ${error}`);
             });
     },
     mounted() {
-        this.menuItems = menuTabsTwicePoints(this.type_user);
+        this.menuItems = menuTabsTwicePoints(this.type_user, this.lang);
         mapboxgl.accessToken = this.accessToken;
         this.map = new mapboxgl.Map({
             container: 'map',
