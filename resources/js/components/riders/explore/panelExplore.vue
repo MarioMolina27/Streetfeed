@@ -46,6 +46,7 @@ import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
 import {menuTabs, getRouteActiveName} from '../../../utilities/menuTabs.js'
+import {handleOpenAi} from "../../../utilities/openAi.js";
 export default{
     props: {
       user: Object,
@@ -74,6 +75,7 @@ export default{
           });
     },
     mounted(){
+      handleOpenAi("De que va la app?");
       this.menuItems = menuTabs(this.type_user, this.lang);
       this.refreshData()
     },

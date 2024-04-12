@@ -497,7 +497,7 @@
 
 <script>
     import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { ScrollTrigger } from "gsap/ScrollTrigger"
     export default{
         data() {
             return {
@@ -513,7 +513,7 @@
                 currentScrollY: 0,
                 targetScrollY: 0,
                 currentMaskSize: 0,
-                maskSizeIsHovering: false
+                maskSizeIsHovering: false,
             };
         },
         methods:{
@@ -691,6 +691,7 @@
                     }, 2000);
                 });
             },
+
             lineMaskAnimation(){
                 Array.from(document.querySelectorAll('.line-mask')).forEach(element => {
                     gsap.to(`#${element.id}`, {
@@ -880,7 +881,6 @@
         mounted() {
             gsap.registerPlugin(ScrollTrigger);
 
-            
                     
             document.addEventListener('DOMContentLoaded',   () => {
                 this.initVariables();
