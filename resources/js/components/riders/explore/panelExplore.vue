@@ -5,30 +5,38 @@
         <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
     </template>
     <div v-else class="explore-container">
-      <div v-if="nearProviders.length != 0" class="provider-container">
-        <h2>{{translations.discoverProvidersCloseToYou}}</h2>
-        <div class="card-container d-flex flex-nowrap">
-          <template v-for="(provider) in nearProviders">
-            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
-          </template>
+      <template v-if="nearProviders.length == 0 && hasMoreFavoritesPrvoviders.length == 0 && favouriteProviders.length == 0">
+          <div class="centered-div-no-deliveries">
+              <h1 class="mt-5 mb-4 font-weight-bold text-center">No hay ningún proveedor que proporcione comida en estos momentos</h1>
+              <p class="fs-4 mb-4 text-center">Vuelve en otro momento y ayudanos a mejorar el mundo</p>
+          </div>               
+      </template>
+      <template v-else>
+        <div v-if="nearProviders.length != 0" class="provider-container">
+          <h2>{{translations.discoverProvidersCloseToYou}}</h2>
+          <div class="card-container d-flex flex-nowrap">
+            <template v-for="(provider) in nearProviders">
+              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+            </template>
+          </div>
         </div>
-      </div>
-      <div v-if="hasMoreFavoritesPrvoviders.length != 0" class="provider-container">
-        <h2>{{translations.discoverProvidersMoreLike}}</h2>
-        <div class="card-container d-flex flex-nowrap">
-          <template v-for="(provider) in hasMoreFavoritesPrvoviders">
-            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
-          </template>
+        <div v-if="hasMoreFavoritesPrvoviders.length != 0" class="provider-container">
+          <h2>{{translations.discoverProvidersMoreLike}}</h2>
+          <div class="card-container d-flex flex-nowrap">
+            <template v-for="(provider) in hasMoreFavoritesPrvoviders">
+              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+            </template>
+          </div>
         </div>
-      </div>
-      <div v-if="favouriteProviders.length != 0" class="provider-container">
-        <h2>{{translations.favoriteLabel}}</h2>
-        <div class="card-container d-flex flex-nowrap">
-          <template v-for="(provider) in favouriteProviders">
-            <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
-          </template>
-        </div>
-      </div>
+        <div v-if="favouriteProviders.length != 0" class="provider-container">
+          <h2>{{translations.favoriteLabel}}</h2>
+          <div class="card-container d-flex flex-nowrap">
+            <template v-for="(provider) in favouriteProviders">
+              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+            </template>
+          </div>
+        </div>  
+      </template>
     </div>
   </div>
 </template>
@@ -37,7 +45,7 @@
 import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
-import {menuTabs, getRouteActiveName} from '../../../utilities/menuTabs.js'
+import {menuTabs} from '../../../utilities/menuTabs.js'
 export default{
     props: {
       user: Object,
@@ -72,9 +80,9 @@ export default{
     methods: {
       refreshData() {
         Promise.all([
-          axios.get('api/users/near-providers/4'),
-          axios.get('api/users/has-more-favourites-providers/4'),
-          axios.get('api/users/favourite-providers/4')
+          axios.get(`api/users/near-providers/${this.user.id_user}`),
+          axios.get(`api/users/has-more-favourites-providers/${this.user.id_user}`),
+          axios.get(`api/users/favourite-providers/${this.user.id_user}`)
         ])
         .then(([nearProvidersResponse, hasMoreFavoritesResponse, favoriteProvidersResponse]) => {
             this.nearProviders = nearProvidersResponse.data;
@@ -83,7 +91,6 @@ export default{
             this.loading = false;
         })
         .catch(error => {
-            console.error('Error al obtener los datos:', error);
             this.loading = false;
         });
       },

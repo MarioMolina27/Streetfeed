@@ -1,7 +1,7 @@
 @extends('layouts.layout-land')
        
 @section('content')
-    <h1>STREETFEED</h1>
+    <landing :api-key="{{ json_encode($apiKeyOpenAI) }}"></landing>
 @endsection
 
 @section('imports')
