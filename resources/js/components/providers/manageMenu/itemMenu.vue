@@ -113,20 +113,31 @@ export default {
             }
         },  
         saveMenu(){
-            if(this.m.creating) {
-                delete this.m.id;
-                createMenu(this.m)
-                .then(response => {
-                    console.log(response);
-                    this.m.creating = false;
-                    this.m.id_menu= response.data.newId;
-                    console.log(this.m);
-                })
-            } else{
-                updateMenu(this.m)
-                .then(response => {
-                    this.m.editing = false;
-                })
+            console.log(this.m);
+            console.log(this.m);
+            if(this.m.first_product !== '' && this.m.first_product !== null &&
+               this.m.second_product !== '' && this.m.second_product !== null &&
+               this.m.drink_product !== '' && this.m.drink_product !== null &&
+               this.m.title !== '' && this.m.title !== null) {
+                if(this.m.creating) {
+                    delete this.m.id;
+                    createMenu(this.m)
+                    .then(response => {
+                        console.log(response);
+                        this.m.creating = false;
+                        this.m.id_menu= response.data.newId;
+                        console.log(this.m);
+                    })
+                } else{
+                    updateMenu(this.m)
+                    .then(response => {
+                        this.m.editing = false;
+                    })
+                }
+            }
+            else{
+                console.log('Todos los campos del menu son obligatorios');
+                this.$emit('showError', 'Todos los campos del menu son obligatorios');
             }
         }
     },
