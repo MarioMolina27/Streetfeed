@@ -1,7 +1,7 @@
 @extends('layouts.layout-land')
        
 @section('content')
-    <landing></landing>
+    <landing :api-key="{{ json_encode($apiKeyOpenAI) }}"></landing>
 @endsection
 
 @section('imports')

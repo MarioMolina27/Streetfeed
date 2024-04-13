@@ -45,7 +45,7 @@
 import providerCard from './providerCard.vue';
 import Navbar from '../../shared/Navbar.vue';
 import loader from '../../shared/loader.vue';
-import {menuTabs, getRouteActiveName} from '../../../utilities/menuTabs.js'
+import {menuTabs} from '../../../utilities/menuTabs.js'
 export default{
     props: {
       user: Object,

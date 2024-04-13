@@ -498,7 +498,11 @@
 <script>
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { createOpenAiWithKey, handleOpenAi } from '../../utilities/chatBot.js';
     export default{
+        props: {
+            apiKey: String
+        },
         data() {
             return {
                 varEntranceAnimation: [
@@ -684,10 +688,13 @@
             },
 
 
-            falsoFetch() {
+            falsoFetch(message) {
+                
+                let aiResponse = handleOpenAi(message);
+    
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
-                        resolve("Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, doloremque iste ipsam distinctio vitae sint accusantium possimus dolore ipsa voluptates magnam minima aliquid atque quod, quia inventore repellendus saepe minus!");
+                        resolve(aiResponse);
                     }, 2000);
                 });
             },
@@ -878,9 +885,9 @@
             },
         },
         mounted() {
-            gsap.registerPlugin(ScrollTrigger);
-
-            
+            console.log(this.apiKey);
+            createOpenAiWithKey(this.apiKey);
+            gsap.registerPlugin(ScrollTrigger);            
                     
             document.addEventListener('DOMContentLoaded',   () => {
                 this.initVariables();
