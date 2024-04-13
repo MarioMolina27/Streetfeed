@@ -5,6 +5,7 @@
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
         <div v-else class="manage-menus-container">
+            <Toast />
             <div class="col-12">
                 <!---<h1 class="text-center mt-4">{{ translations.yourMenusLabel }}</h1> -->
                 <div class="new-menu" @click="createMenuItem()">
@@ -15,7 +16,7 @@
 
                 </div>
                 <template v-for="menu in menus" :key="menu.id_menu">
-                    <itemMenu :menu = 'menu' @deleteMenuItem="deleteMenuItem"></itemMenu>
+                    <itemMenu :menu = 'menu' @deleteMenuItem="deleteMenuItem" @showError="showError"></itemMenu>
                 </template>
             </div>
         </div>
@@ -29,6 +30,8 @@ import esTranslations from '../../../../lang/es.json';
 import enTranslations from '../../../../lang/en.json';
 import caTranslations from '../../../../lang/ca.json';
 import loader from '../../shared/loader.vue';
+import Toast from 'primevue/toast';
+
 export default{
     props: {
         user: Object,
@@ -110,12 +113,17 @@ export default{
         },
         handleLoadingFinished(){
             this.loadingFinished = true;
+        },
+
+        showError(message) {
+            this.$toast.add({ severity: 'error', summary: 'Error', detail: message, life: 3000 });
         }
     },
     components: {
         Navbar,
         itemMenu,
-        loader
+        loader,
+        Toast
     },
 }
 </script>
