@@ -20,9 +20,11 @@ import login from './components/auth/login.vue';
 import panelDelivery from './components/riders/delivery/panelDelivery.vue';
 import profile from './components/shared/profile/profile.vue';
 import Tooltip from 'primevue/tooltip';
+import ToastService from 'primevue/toastservice';
 
 
-const app = createApp({}).use(PrimeVue).use(ConfirmationService);
+
+const app = createApp({}).use(PrimeVue).use(ConfirmationService).use(ToastService);
 const appDOM = document.getElementById('app');
 
 app.component('paneluser', panelUser)
