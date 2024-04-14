@@ -96,10 +96,12 @@ class UserController extends Controller
     
     public function getProviderByNick($nickname, User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
+        if ($currentDay == 0) {
+            $currentDay = 7;
+        }
         $currentUserLat = $user->latitude;
         $currentUserLng = $user->longitude;
         $currentUser = $user;
-        
         $provider = User::with([
                 'addresses.roadType', 
                 'schedules' => function ($query) use ($currentDay) {
@@ -128,7 +130,9 @@ class UserController extends Controller
     }
     public function getMoreNearProviders(User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
-
+        if ($currentDay == 0) {
+            $currentDay = 7;
+        }
         $providers = User::with([
             'addresses.roadType', 
             'schedules' => function ($query) use ($currentDay) {
@@ -159,7 +163,9 @@ class UserController extends Controller
     }
     public function getBetterProviders(User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
-    
+        if ($currentDay == 0) {
+            $currentDay = 7;
+        }
         $providers  = User::with([
             'addresses.roadType', 
             'schedules' => function ($query) use ($currentDay) {
@@ -191,6 +197,9 @@ class UserController extends Controller
     }
     public function getFavouritesProviders(User $user) {
         $currentDay = Carbon::now()->dayOfWeek;
+        if ($currentDay == 0) {
+            $currentDay = 7;
+        }
         $currentUserLat = $user->latitude;
         $currentUserLng = $user->longitude;
 

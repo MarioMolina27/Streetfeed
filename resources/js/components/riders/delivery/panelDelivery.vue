@@ -6,7 +6,7 @@
     </template>
     <div v-else class="delivery-container">
         <div v-if="deliveries.length === 0" class="delivery-call-action">
-            <noDelivery :translations="translations"></noDelivery>
+            <noDelivery :translations="translations" :user = "user"></noDelivery>
         </div>
         <div v-else style="width: 100%" class="d-flex flex-column">
             <hasDelivery :asosiationDelivery = "asosiationDelivery" :lang="lang" :translations="translations" @isChanging="onChangeDeliveries" @notifyDeliver="notifyDeliver"></hasDelivery>

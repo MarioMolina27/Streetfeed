@@ -25,9 +25,9 @@
 <script >
 import Navbar from '../../shared/Navbar.vue';
 import itemMenu from './itemMenu.vue';
-import esTranslations from '../../../../lang/es.json';
-import enTranslations from '../../../../lang/en.json';
-import caTranslations from '../../../../lang/ca.json';
+import esTranslations from '../../../../lang/providers/es.json';
+import enTranslations from '../../../../lang/providers/en.json';
+import caTranslations from '../../../../lang/providers/ca.json';
 import loader from '../../shared/loader.vue';
 export default{
     props: {

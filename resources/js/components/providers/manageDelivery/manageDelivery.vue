@@ -154,6 +154,7 @@ export default{
             .then(response => {
                 if (response.status == 200) {
                     this.animateConfirm();
+                    this.getAllDelivriesByRider();
                 } else {
                     this.animateError();
                 }
@@ -191,7 +192,16 @@ export default{
         },
         redirectToMenus() {
             window.location.href = './menu';
-        }
+        },
+        modifyDeliveriesStatus(deliveriesIds) {
+            this.deliveriesByRiders.forEach(riderDeliveries => {
+                riderDeliveries.forEach(delivery => {
+                    if (deliveriesIds.includes(delivery.id)) {
+                        riderDeliveries.splice(riderDeliveries.indexOf(delivery), 1);
+                    }
+                });
+            });
+        },
     },
     components: {
         Navbar,

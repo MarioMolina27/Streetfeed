@@ -206,6 +206,9 @@ class DeliveryController extends Controller
                             ->with('user')
                             ->with(['menu.user'=> function ($query) {
                                 $currentDay = Carbon::now()->dayOfWeek;
+                                if ($currentDay == 0) {
+                                    $currentDay = 7;
+                                }
                                 $query->with(['schedules' => function ($query) use ($currentDay) {
                                     $query->where('day', $currentDay);
                                 }]);
@@ -269,6 +272,9 @@ class DeliveryController extends Controller
         ->with('user')
         ->with(['menu.user'=> function ($query) {
             $currentDay = Carbon::now()->dayOfWeek;
+            if ($currentDay == 0) {
+                $currentDay = 7;
+            }
             $query->with(['schedules' => function ($query) use ($currentDay) {
                 $query->where('day', $currentDay);
             }]);
