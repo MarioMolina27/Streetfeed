@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded',   () => {
     setEntranceAnimation();
     document.querySelector('.entrance-isotype').addEventListener('transitionend', setEntranceAnimation);
     document.querySelector('.entrance-curtine').addEventListener('transitionend', landingPageIn);
+    document.querySelector('.go-to-login-btn').addEventListener('click', sendToLogin);
     document.addEventListener('mousemove', updateMouseMove);
     document.addEventListener('scroll', updateScrollBar);
     Array.from(document.querySelectorAll('.cursor-hoverable')).forEach(element => [{event: 'mouseenter', isHovering: true}, {event: 'mouseleave', isHovering: false}].forEach(obj => element.addEventListener(obj.event, () => document.querySelector('.cursor-frame').classList.toggle('cursor-hover', obj.isHovering))));
@@ -173,6 +174,10 @@ function landingPageIn(){
     document.querySelector('.entrance-scene').remove();
 
     //  ...
+}
+
+function sendToLogin(){
+    window.location.href = window.location.protocol + "//" + window.location.host + "/Streetfeed/public/login";
 }
 
 function toggleMovileNavContainer(){
@@ -803,23 +808,33 @@ function controlInputNumHomeless(e){
 
 function saveMarker(){
     const numPeople = Number(document.querySelector('.num-homeless-input').value);
-    const url = '../endpoints/placeMarker.json';
     const markerInfo = {
         lng: modalConfirmatedCenter.lng,
         lat: modalConfirmatedCenter.lat,
-        numPeople: numPeople
-    }
-    const requestOptions = {
-        method: 'POST',
-        body: JSON.stringify(markerInfo),
-        headers: { 'Content-Type': 'application/json' }
+        numPeople: numPeople,
+        id_user_creator: null
     };
+    setTimeout(() => {
+        fetch('api/marker/create-marker', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(markerInfo)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                //YA VA
+            })
+            .catch(error => reject(error));
+    }, 20)
 
-    // fetch(url, requestOptions)
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.warn(`Error Saving Marker: ${error}`))
-    
     toggleModal(false)
     console.log(markerInfo)
     

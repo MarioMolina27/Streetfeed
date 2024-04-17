@@ -61,7 +61,7 @@ Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
 Route::put('menu/update-menu', [MenuController::class, 'updateMenu']);
 Route::delete('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
 Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
-
+Route::post('marker/create-marker', [MarkerController::class, 'createMarker']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

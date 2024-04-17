@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </a>
-            <a class="nav-option-container nav-button-option nav-link-to-login cursor-hoverable">
+            <a class="nav-option-container nav-button-option nav-link-to-login cursor-hoverable go-to-login-btn">
                 <div class="option-overflow-window">
                     <div class="nav-option-name-container">
                         <div class="nav-option-name">START HELPING!</div>
@@ -105,7 +105,7 @@
             </div>
             <div class="movile-nav-link-to-app-frame">
                 <div class="movile-nav-call-to-action">Do you want to make a difference in someone's life today?</div>
-                <a class="movile-nav-link-to-app-btn">
+                <a class="movile-nav-link-to-app-btn go-to-login-btn">
                     <div class="movile-nav-option-name-container">
                         <div class="movile-nav-option-name">START HELPING!</div>
                     </div>
@@ -616,7 +616,7 @@
         <video class="call-to-action-interactive-video" src="img/land/video_interactivo.mp4" muted></video>
         <div class="call-to-action-text-container flex-center">
             <div class="call-to-action-text">JOIN THE ADVENTURE</div>
-            <div class="call-to-action-button nav-option-container nav-button-option nav-link-to-login cursor-hoverable">
+            <div class="call-to-action-button nav-option-container nav-button-option nav-link-to-login cursor-hoverable go-to-login-btn">
                 <div class="option-overflow-window">
                     <div class="nav-option-name-container">
                         <div class="nav-option-name">START HELPING!</div>
