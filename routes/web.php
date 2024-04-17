@@ -7,8 +7,9 @@ use App\Http\Controllers\LanguageController;
 
 //---------------------LANDING--------------------------------
 Route::get('/', function () {
+    $apiKeyOpenAI = env('API_KEY');
     $lang = request()->cookie('lang', 'es');
-    return view('landings.landing', compact('lang'));
+    return view('landings.landing', compact('lang'), compact('apiKeyOpenAI'));
 });
 //----------------------------------------------------------------
 

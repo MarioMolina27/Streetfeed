@@ -58,7 +58,9 @@ Route::post('message/send-message', [MessageController::class, 'sendMessage']);
 Route::post('message/delete-message', [MessageController::class, 'deleteMessage']);
 Route::get('menu/get-menus/{user}', [MenuController::class, 'getMenusfromProvider']);
 Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
-Route::post('menu/update-menu', [MenuController::class, 'updateMenu']);
+Route::put('menu/update-menu', [MenuController::class, 'updateMenu']);
+Route::delete('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
+Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
 
 
 

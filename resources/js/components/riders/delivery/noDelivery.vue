@@ -39,7 +39,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 export default{
     props: {
-        translations: Object
+        translations: Object,
+        user: Object
     },
     data(){
         return {
@@ -48,7 +49,7 @@ export default{
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
             mapStyle: "mapbox://styles/mapbox/light-v11",
             defaultLocation: { lat: 41.388752, lng: 2.17271 },
-            userId: 4,
+            userId: this.user.id_user,
             userCurrentLocation: { latitude: null, longitude: null },
             selectedProfile: 'walking',
             routeDuration: null,
