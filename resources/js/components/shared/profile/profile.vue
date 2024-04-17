@@ -1,4 +1,5 @@
 <template>
+    <ConfirmDialog></ConfirmDialog>
     <dialogPassword :modalVisible="this.modalPassword" :user= "this.user" :translations="translations" @closeModal="closeModal"></dialogPassword>
     <div class="container-fluid ps-0 pe-0">
         <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang' :nameRoute="nameRoute"></Navbar>
@@ -13,10 +14,10 @@
                 
                 <profile-card :user="this.user" :type_user="this.type_user" :schedules="this.shifts" :adress="this.address" :roadTypes="this.typeRoads" :translations="translations"></profile-card>
 
-                <h3 class="mt-5 ms-3" style="cursor: pointer;" @click="this.modalPassword=true;">{{translations.changePassword}}</h3>
+                <h3 class="mt-5 ms-3 link" style="cursor: pointer;" @click="this.modalPassword=true;">{{translations.changePassword}}</h3>
 
-                <h3 class="mt-4 ms-3 danger-btn" style="cursor: pointer;">{{translations.logout}}</h3>
-                <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold" style="cursor: pointer;">{{translations.deleteAccount}}</h3>
+                <h3 class="mt-4 ms-3 danger-btn link" style="cursor: pointer;" @click="logout">{{translations.logout}}</h3>
+                <h3 class="mt-4 ms-3 mb-4 danger-btn fw-bold link" style="cursor: pointer;" @click="softDeleteUser">{{translations.deleteAccount}}</h3>
             </div>
         </div>
     </div>
@@ -36,6 +37,9 @@
     import dialogPassword from './dialogPassword.vue';
     import stadistic from './stadisticsTop.vue';
     import {menuTabs} from '../../../utilities/menuTabs.js'
+    import { deleteUser } from '../../../services/users.js';
+    import ConfirmDialog from "primevue/confirmdialog";
+
     
     export default {
         props: {
@@ -56,7 +60,8 @@
             address: [],
             typeRoads: [],
             translations: {},
-            nameRoute: './profile'
+            nameRoute: './profile',
+            isVisible: false
           }
         },
 
@@ -76,7 +81,8 @@
             profileCard,
             loader,
             dialogPassword,
-            stadistic
+            stadistic,
+            ConfirmDialog
         },
         created() {
             import(`../../../../lang/shared/${this.lang}.json`)
@@ -115,6 +121,36 @@
             },
             closeModal(){
                 this.modalPassword = false;
+            },
+
+            logout() {
+                axios.get('/logout')
+                .then(response => {
+                    window.location.href = './login';
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            },
+
+            softDeleteUser(){
+                this.$confirm.require({
+                    message: this.translations.deleteAccountMessage,
+                    header: this.translations.titleDeleteAccount,
+                    onShow: () => {
+                        this.isVisible = true;
+                    },
+                    onHide: () => {
+                        this.isVisible = false;
+                    },
+                    accept: () => {
+                        deleteUser(this.user.id_user)
+                        .then(response => {
+                           this.logout();
+                        })
+                        this.isVisible = false;
+                    },
+                });
             }
         }
     }
@@ -143,5 +179,9 @@
         .danger-btn{
             color: #B52A2A;
             font-weight: 600;
+        }
+
+        .link:hover{
+            text-decoration: underline;
         }
     </style>

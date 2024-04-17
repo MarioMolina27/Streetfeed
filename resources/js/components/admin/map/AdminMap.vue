@@ -89,7 +89,7 @@ export default {
                     popupContent = `
                     <div class="mb-2" style="text-align: center;">
                         <strong class="fs-3" style="color: #984EAE; margin-right: 10px;">${data.num_people}</strong>
-                        <i class="fa-solid fa-user fs-4"></i><i class="fa-solid fa-utensils fs-4"></i>
+                        <i class="fa-solid fa-user fs-4"></i>
                     </div>
                 `;
                 }

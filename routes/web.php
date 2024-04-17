@@ -10,7 +10,7 @@ Route::get('/', function () {
     $apiKeyOpenAI = env('API_KEY');
     $lang = request()->cookie('lang', 'es');
     return view('landings.landing', compact('lang'), compact('apiKeyOpenAI'));
-});
+})->name('landing');
 //----------------------------------------------------------------
 
 

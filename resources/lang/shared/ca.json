@@ -20,6 +20,9 @@
     "hereRepeatNewPassword": "Aquí has de repetir la teva nova contrasenya",
     "saveLabel": "Desa",
 
+    "titleDeleteAccount": "Eliminar compte",
+    "deleteAccountMessage": "Estàs segur que vols eliminar el teu compte?",
+
     "riderLabel": "Repartidor",
     "providerLabel": "Proveïdor",
     "youLabel": "Tu",

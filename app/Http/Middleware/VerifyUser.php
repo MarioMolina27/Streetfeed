@@ -17,6 +17,11 @@ class VerifyUser
     public function handle(Request $request, Closure $next,...$tipos): Response
     {
         $user = Auth::user();
+
+        if ($user === null) {
+            return redirect()->route('landing');
+        }
+
         $userTypes = $user->typeUsers->pluck('name')->toArray();
 
         foreach ($tipos as $tipo) {

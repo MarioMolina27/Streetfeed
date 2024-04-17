@@ -20,6 +20,9 @@
     "hereRepeatNewPassword": "Here you must repeat your new password",
     "saveLabel": "Save",
 
+    "titleDeleteAccount": "Delete account",
+    "deleteAccountMessage": "Are you sure you want to delete your account?",
+
     "riderLabel": "Rider",
     "providerLabel": "Provider",
     "youLabel": "You",

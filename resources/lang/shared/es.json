@@ -20,6 +20,9 @@
     "hereRepeatNewPassword": "Aqui tienes que repetir tu nueva contraseña",
     "saveLabel": "Guardar",
 
+    "titleDeleteAccount": "Eliminar cuenta",
+    "deleteAccountMessage": "¿Estás seguro de que quieres eliminar tu cuenta?",
+
     "riderLabel": "Repartidor",
     "providerLabel": "Proveedor",
     "youLabel": "Tú",
