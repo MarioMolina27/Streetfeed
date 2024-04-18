@@ -14,8 +14,8 @@
             $client = new Client();
     
             $data = [
-                "name" => "Vueltia Chatbot",
-                "instructions" => "Eres un chatbot de un portal de tours llamado Vueltia, no me respondas a ninguna pregunta no relacionada con el portal de tour",
+                "name" => "StreetFeed Chatbot",
+                "instructions" => "Chatbot para la aplicación StreetFeed, de reparto de comida solidaria basado en un sistema de rider y providers.",
                 "model" => "gpt-3.5-turbo"
             ];
     
