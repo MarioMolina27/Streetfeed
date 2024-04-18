@@ -11,5 +11,6 @@
     "inDeliveryLabel": "En reparto",
     "firstMealLabel": "Primer plato",
     "secondMealLabel": "Segundo plato",
-    "drinkLabel": "Bebida"
+    "drinkLabel": "Bebida",
+    "saveLabel": "Guardar"
 }

@@ -11,5 +11,6 @@
     "inDeliveryLabel": "In delivery",
     "firstMealLabel": "First course",
     "secondMealLabel": "Second course",
-    "drinkLabel": "Drink"
+    "drinkLabel": "Drink",
+    "saveLabel": "Save"
 }

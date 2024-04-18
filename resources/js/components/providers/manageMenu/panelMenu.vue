@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid ps-0 pe-0">
-        <Navbar :menuItems = 'menuItems'></Navbar>
+        <Navbar :menuItems = 'menuItems' :currentLanguage = 'lang'></Navbar>
         <template v-if="loading ||!loadingFinished">
             <loader :loading = 'loading' @loading-finished="handleLoadingFinished"></loader>
         </template>
@@ -16,7 +16,7 @@
 
                 </div>
                 <template v-for="menu in menus" :key="menu.id_menu">
-                    <itemMenu :menu = 'menu' @deleteMenuItem="deleteMenuItem" @showError="showError"></itemMenu>
+                    <itemMenu :menu = 'menu' @deleteMenuItem="deleteMenuItem" @showError="showError" :translations="translations"></itemMenu>
                 </template>
             </div>
         </div>
@@ -26,9 +26,6 @@
 <script >
 import Navbar from '../../shared/Navbar.vue';
 import itemMenu from './itemMenu.vue';
-import esTranslations from '../../../../lang/providers/es.json';
-import enTranslations from '../../../../lang/providers/en.json';
-import caTranslations from '../../../../lang/providers/ca.json';
 import loader from '../../shared/loader.vue';
 import Toast from 'primevue/toast';
 
@@ -52,13 +49,13 @@ export default{
     },
     created() {
         console.log(this.lang);
-        if (this.lang === 'ca') {
-            this.translations = caTranslations;
-        } else if (this.lang === 'en') {
-            this.translations = enTranslations;
-        } else {
-            this.translations = esTranslations;
-        }
+        import(`../../../../lang/providers/${this.lang}.json`)
+                .then(module => {
+                    this.translations = module.default;
+                })
+                .catch(error => {
+                    console.error(`Error al importar el archivo de idioma: ${error}`);
+                });
     },
     mounted() {
         this.getMenus();

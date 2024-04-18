@@ -12,15 +12,15 @@
         </div>
         <div v-if="!m.editing && !m.creating" class="row w-100">
             <div class="col-lg-3 col-12">
-                <p class="mb-0 title-plate">Primer plato</p>
+                <p class="mb-0 title-plate">{{ translations.firstMealLabel }}</p>
                 <strong class="fs-5">{{ m.first_product }}</strong>
             </div>
             <div class="col-lg-3 col-12">
-                <p class="mb-0 title-plate">Segundo plato</p>
+                <p class="mb-0 title-plate">{{ translations.secondMealLabel}}</p>
                 <strong class="fs-5">{{ m.second_product }}</strong>
             </div>
             <div class="col-lg-3 col-12">
-                <p class="mb-0 title-plate">Bebida</p>
+                <p class="mb-0 title-plate">{{ translations.drinkLabel}}</p>
                 <strong class="fs-5">{{ m.drink_product }}</strong>
             </div>
             <div class="col-lg-3 col-12 d-flex justify-content-center align-items-center">
@@ -33,15 +33,15 @@
         <template v-else>
             <div class="row mb-3 ms-4">
                 <div class="col-lg-3 col-12">
-                    <p class="mb-0 title-plate">Primer plato</p>
+                    <p class="mb-0 title-plate">{{ translations.firstMealLabel }}</p>
                     <input class="fs-5 form-custom" v-model="m.first_product" />
                 </div>
                 <div class="col-lg-3 col-12">
-                    <p class="mb-0 title-plate">Segundo plato</p>
+                    <p class="mb-0 title-plate">{{ translations.secondMealLabel}}</p>
                     <input class="fs-5 form-custom" v-model="m.second_product" />
                 </div>
                 <div class="col-lg-3 col-12">
-                    <p class="mb-0 title-plate">Bebida</p>
+                    <p class="mb-0 title-plate">{{ translations.drinkLabel}}</p>
                     <input class="fs-5 form-custom" v-model="m.drink_product" />
                 </div>
                 <div class="col-lg-3 col-12 d-flex justify-content-center align-items-center">
@@ -53,7 +53,7 @@
             </div>
             <div class="row w-100">
                 <div class="col-lg-10 col-9">
-                    <button type="submit" class="btn-menu btn-save" @click="saveMenu">Guardar</button>
+                    <button type="submit" class="btn-menu btn-save" @click="saveMenu">{{ translations.saveLabel }}</button>
                 </div>
                 <div v-if="m.editing" class="col-lg-2 col-3">
                     <button class="btn-menu btn-delete" @click="deleteMenuItem"><i class="pi pi-trash"></i></button>
@@ -75,7 +75,8 @@ import { createMenu, updateMenu, deleteMenu, updateLaunchpacks } from '../../../
 export default {
 
     props: {
-        menu: Object
+        menu: Object,
+        translations: Object
     },
     data(){
         return {
@@ -139,12 +140,6 @@ export default {
                 console.log('Todos los campos del menu son obligatorios');
                 this.$emit('showError', 'Todos los campos del menu son obligatorios');
             }
-        }
-    },
-
-    watch: {
-        launchapack_counting(){
-        
         }
     },
     components: {
