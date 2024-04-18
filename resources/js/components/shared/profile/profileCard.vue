@@ -69,7 +69,7 @@
                                                 <i class="fa-regular fa-clock img-profile-stats" alt="img-first-category-game"></i>
                                                 <p class="text-profile-schedule mb-0">{{ day }}</p>
                                             </div>
-                                            <div class="col-lg-7 col-12 d-flex flex-row ms-4">
+                                            <div class="col-lg-7 col-12 d-flex flex-row ms-4 justify-content-center">
                                                 <template v-if="editingProfile">
                                                     <div class="d-flex flex-column gap-2">
                                                         <template v-for="(shift, shiftIndex) in getNumberShifts(index + 1)">
@@ -77,9 +77,10 @@
                                                                 <Calendar :id="'calendar-timeonly-' + index + '-morning'" v-model="getShift(index + 1, shift).start_time" class="ms-2" timeOnly />
                                                                 <Calendar :id="'calendar-timeonly-' + index + '-afternoon'" v-model="getShift(index + 1, shift).finish_time" class="ms-2" timeOnly />
                                                                 <div class="d-flex justify-content-center align-items-center delete-shift-btn" @click="deleteShift(index + 1, shift)"><i class="fa fa-trash"></i></div>
-                                                                <div v-if="shiftIndex === getNumberShifts(index + 1) - 1 && getNumberShifts(index + 1) === 1" @click="addShift(index+1)" class="d-flex justify-content-center align-items-center add-shift-btn"><i class="fa fa-add"></i></div>
+                                                                <div v-if="shiftIndex === getNumberShifts(index + 1) - 1 && getNumberShifts(index + 1) === 1" @click="addShift(index+1,2)" class="d-flex justify-content-center align-items-center add-shift-btn"><i class="fa fa-add"></i></div>
                                                             </div>
                                                         </template>
+                                                        <div v-if=" getNumberShifts(index + 1) === 0" @click="addShift(index+1,1)" class="d-flex justify-content-center align-items-center add-shift-btn-0-items"><i class="fa fa-add"></i></div>
                                                     </div>
                                                 </template>
                                                 <template v-else>
@@ -213,11 +214,12 @@ export default {
         deleteShift(day, shift) {
             const index = this.shifts.findIndex(s => s.day === day && s.shift === shift);
             if (index !== -1) {
-                const otherShift = this.shifts.find(s => s.day === day && s.shift !== shift);
-                if (otherShift) {
-                    this.shifts.splice(index, 1);
-                    otherShift.shift = 1;
-                }
+                // const otherShift = this.shifts.find(s => s.day === day && s.shift !== shift);
+                // if (otherShift) {
+                //     this.shifts.splice(index, 1);
+                //     otherShift.shift = 1;
+                // }
+                this.shifts.splice(index, 1);
             }
         },
 
@@ -230,15 +232,17 @@ export default {
             return this.directions.length;
         },
 
-        addShift(day) {
+        addShift(day,shift) {
+            console.log(day);
             this.shifts.push({
                 id_schedule: '',
                 day: day,
-                shift: 2,
-                start_time: "",
-                finish_time: "",
+                shift: shift,
+                start_time: "00:00:00",
+                finish_time: "00:00:00",
                 id_user: this.user.id_user
             });
+            console.log(this.shifts);
         },
 
         addDirection(adress) {
@@ -389,13 +393,18 @@ export default {
     margin-left: 10px;
 }
 
-.add-shift-btn{
+.add-shift-btn, .add-shift-btn-0-items{
     cursor: pointer;
 }
 .add-shift-btn i{
     color: #2ab52a;
     font-size: 1.5rem;
-    margin-left: 20px;
+    margin-left: 15px;
+}
+
+.add-shift-btn-0-items i{
+    color: #2ab52a;
+    font-size: 1.5rem;
 }
 
 .divider-schedule{
