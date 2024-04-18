@@ -11,7 +11,7 @@ class ChatGptController extends Controller
     public function createThread() {
         $chatGptApi = new ChatGptApi();
         $threadId = $chatGptApi->createThread();
-        return $threadId;
+        return json_encode($threadId);
     }
 
     public function addMessage(Request $request, $threadId) {

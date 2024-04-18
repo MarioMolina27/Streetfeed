@@ -22,9 +22,9 @@ const
 initialMapBoxPosition = { container: 'mapbox-map', style: 'mapbox://styles/mapbox/light-v11', center: [2.15899, 41.38879], zoom: 11, pitch: 30, bearing: 0 },
 mapBoxToken = 'pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw';
 let  mapboxMap, movingMapFrame, movingMapFrameDiference, searchBoxTimeoutID, modalConfirmatedCenter;
-const maxWaitingTime = 2000;
+const maxWaitingTime = 15000;
 let chatIsResponding, timeOutID;
-
+let threadId;
 document.addEventListener('DOMContentLoaded',   () => {
     initVariables();
     initVariablesAnimations();
@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded',   () => {
     sendConsoleLogMessage();
     initMapbox();
     selectLang();
+    createThreadAi();
     // setEntranceAnimation();
     // document.querySelector('.entrance-isotype').addEventListener('transitionend', setEntranceAnimation);
     // document.querySelector('.entrance-curtine').addEventListener('transitionend', landingPageIn);
@@ -1000,18 +1001,31 @@ function requestAiTimeOutController(userMessage){
 }
 
 function requestAIResponse(userMessage) {
-    const url = '../endpoints/openAi.json'
+    const url = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/api/chatbot/addMessage/${threadId}`;
+
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(userMessage)
+        body: JSON.stringify({ message: userMessage })
     }
     return new Promise((resolve, reject) => {
-        setTimeout(()=> {
-            fetch(url)
+        fetch(url, requestOptions)
             .then(response => response.json())
-            .then(data => resolve(data[0].text))
+            .then(data => data.failed ? reject(new Error('An Error ocurred. Please, try again later')) : resolve(data.success))
             .catch(_ => reject(new Error('An Error ocurred. Please, try again later')))
-        }, Math.random() * maxWaitingTime * 1.5)
     });
+}
+
+function createThreadAi() {
+    const url = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/api/chatbot/createThread`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => threadId = data)
+        .catch(error => console.warn(`Failed to Fetch into DB: ${error}`));
 }
