@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\Api\ChatGptController;
 
 
 //---------------------LANDING--------------------------------
@@ -117,3 +118,4 @@ Route::middleware(['auth'])->group(function () {
 //-----------------------LANGUAGES--------------------------------
 Route::get('set-language/{lang}', [LanguageController::class,'setLanguage'])->name('set.language');
 //----------------------------------------------------------------
+

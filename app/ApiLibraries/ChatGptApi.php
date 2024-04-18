@@ -53,8 +53,6 @@
         //*************************************************************************/
         public function createThread(){
             $apiKey = env('OPENAI_API_KEY');
-            $assistantId = env('OPENAI_ASSISTANCE_ID');
-
             $client = new Client();
     
             $url = 'https://api.openai.com/v1/threads';
@@ -84,11 +82,9 @@
         //************************ Envio de mensajes *************************** /
         //*    envio del mensaje al assistente de chatgpt para su ejecución      */
         //*************************************************************************/
-        public function addMessage($threadId) {
+        public function addMessage($threadId, $message) {
             $apiKey = env('OPENAI_API_KEY');
             $client = new Client();
-
-            $message ='De que va el proyecto?';
 
 
             $url = "https://api.openai.com/v1/threads/$threadId/messages";

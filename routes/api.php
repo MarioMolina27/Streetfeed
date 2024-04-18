@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AdressController;
 use App\Http\Controllers\Api\MarkerController;
-use App\Http\Api\Controllers\ChatGptController;
+use App\Http\Controllers\Api\ChatGptController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\ScheduleController;
@@ -63,8 +63,8 @@ Route::put('menu/update-menu', [MenuController::class, 'updateMenu']);
 Route::delete('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
 Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
 
-Route::get('chatbot/create-thread', [ChatGptController::class, 'createThread']);
-Route::get('chatbot/addMessage/{threadId}', [ChatGptController::class, 'createThread']);
+Route::get('chatbot/createThread', [ChatGptController::class, 'createThread']);
+Route::post('chatbot/addMessage/{threadId}', [ChatGptController::class, 'addMessage']);
 
 
 
