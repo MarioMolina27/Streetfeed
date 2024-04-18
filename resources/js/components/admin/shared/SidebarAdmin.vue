@@ -145,6 +145,7 @@ import {
     statisticsProviderRouteAdmin,
     statisticsRiderRouteAdmin,
     mapAdminRoute,
+    loginPage
 } from "../../../utilities/constant.js";
 
 export default {
@@ -173,6 +174,7 @@ export default {
             statisticsRiderRouteAdmin: statisticsRiderRouteAdmin,
             mapAdminRoute: mapAdminRoute,
             language: this.currentLanguage,
+            loginPage: loginPage,
         };
     },
 
@@ -193,7 +195,7 @@ export default {
             axios
                 .get("/logout")
                 .then((response) => {
-                    window.location.href = "./login";
+                    window.location.href = this.loginPage;
                 })
                 .catch((error) => {
                     console.error(error);

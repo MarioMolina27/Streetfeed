@@ -17,3 +17,5 @@ export const mapAdminRoute = `${window.location.protocol + "//" + window.locatio
 
 export const mainRiderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/delivery`;
 export const mainProviderPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/managedelivery`;
+
+export const loginPage = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/login`;
