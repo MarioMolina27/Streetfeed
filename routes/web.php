@@ -9,7 +9,11 @@ use App\Http\Controllers\LanguageController;
 Route::get('/', function () {
     $apiKeyOpenAI = env('API_KEY');
     $lang = request()->cookie('lang', 'es');
-    return view('landings.landing', compact('lang'), compact('apiKeyOpenAI'));
+    $translationFilePath = resource_path("lang" . DIRECTORY_SEPARATOR . "landing" . DIRECTORY_SEPARATOR . "$lang.json");
+
+    $trans = json_decode(file_get_contents($translationFilePath));
+    
+    return view('landings.landing', compact('lang', 'apiKeyOpenAI', 'trans'));
 });
 //----------------------------------------------------------------
 

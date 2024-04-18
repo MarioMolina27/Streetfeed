@@ -31,9 +31,11 @@ document.addEventListener('DOMContentLoaded',   () => {
     createAnimations();
     createAnimatonActivators();
     sendConsoleLogMessage();
-    setEntranceAnimation();
-    document.querySelector('.entrance-isotype').addEventListener('transitionend', setEntranceAnimation);
-    document.querySelector('.entrance-curtine').addEventListener('transitionend', landingPageIn);
+    initMapbox();
+    selectLang();
+    // setEntranceAnimation();
+    // document.querySelector('.entrance-isotype').addEventListener('transitionend', setEntranceAnimation);
+    // document.querySelector('.entrance-curtine').addEventListener('transitionend', landingPageIn);
     document.querySelector('.go-to-login-btn').addEventListener('click', sendToLogin);
     document.addEventListener('mousemove', updateMouseMove);
     document.addEventListener('scroll', updateScrollBar);
@@ -41,13 +43,12 @@ document.addEventListener('DOMContentLoaded',   () => {
     Array.from(document.querySelectorAll('.mask-activator')).forEach(element => [{event: 'mouseenter', isHovering: true}, {event: 'mouseleave', isHovering: false}].forEach(obj => element.addEventListener(obj.event, () => maskedContainerActivator(obj.isHovering))));
     Array.from(document.querySelectorAll('.who-dev-name-container')).forEach(element => element.addEventListener('click', e => {!e.currentTarget.classList.contains('dev-shown') && changeDeveloperInfo(e)}));
     Array.from(document.querySelectorAll('.faq-question-aswer-container')).forEach(question => question.addEventListener('click', openFaqQuestion));
+    Array.from(document.querySelectorAll('.search-box-suggestion-container')).forEach(element => element.addEventListener('click', e => insertCoordinatesInMap(e.currentTarget, e.currentTarget.dataset.lng, e.currentTarget.dataset.lat)));
     Array.from(document.querySelectorAll('.movile-nav-landing-part-container')).forEach(element => element.addEventListener('click', () => document.querySelector('.navbar-frame').classList.remove('movile-nav-shown')));
     [{event: 'mouseenter', isHovering: true}, {event: 'mouseleave', isHovering: false}].forEach(obj => document.querySelector('.who-img-frame').addEventListener(obj.event, () => contactmeCursorActivator(obj.isHovering)));
     document.querySelector('.faq-option-faq').addEventListener('click', () => document.querySelector('.faq-content-container').classList.remove('chatbot-active'))
     document.querySelector('.nav-toggler-btn').addEventListener('click', toggleMovileNavContainer);
     document.querySelector('.faq-option-chatbot-container').addEventListener('click', openChatBotFrame);
-    initMapbox();
-    Array.from(document.querySelectorAll('.search-box-suggestion-container')).forEach(element => element.addEventListener('click', e => insertCoordinatesInMap(e.currentTarget, e.currentTarget.dataset.lng, e.currentTarget.dataset.lat)));
     ['.map-handle-container', '.interactive-map-frame'].forEach(classname => ['mousedown', 'touchstart'].forEach(event => document.querySelector(classname).addEventListener(event, setInteractiveMapFrameMovement, {passive: true})));
     ['.search-box-input-user', '.search-geolocalitation-btn', '.search-box-suggestions-container', '.mapbox-map-container', '.confirm-marker-btn', '.modal-backdrop', '.modal-frame'].forEach(classname => ['mousedown', 'touchstart', 'click'].forEach(event => document.querySelector(classname).addEventListener(event, e => e.stopPropagation(), {passive: true})))
     document.querySelector('.place-marker-btn').addEventListener('click', saveMarker)
@@ -67,8 +68,42 @@ document.addEventListener('DOMContentLoaded',   () => {
     document.querySelector('.chatbot-text-input').addEventListener('input', chatbotInputController)
     document.querySelector('.chatbot-text-input').addEventListener('keydown', sendMessageController)
     document.querySelector('.chatbot-send-message').addEventListener('click', sendMessageController)
+    Array.from(document.querySelectorAll('.lang-option')).forEach(option => option.addEventListener('click', changeLanguage));
 });
 
+function selectLang() {
+    let langOption = document.querySelector('.lang-option');
+    let currentLang = langOption.getAttribute('data-current');
+
+    document.querySelector(`.lang-btn-${currentLang}`).classList.add('selected-lang');
+}
+
+function changeLanguage(e){
+    const lang = e.currentTarget.dataset.lang;
+    const currentlang = e.currentTarget.dataset.current;
+
+    if(lang === currentlang) return;
+
+    document.querySelector('.selected-lang')?.classList.remove('selected-lang');
+    e.currentTarget.classList.add('selected-lang');
+    const url = `${window.location.protocol + "//" + window.location.host}/Streetfeed/public/set-language/${lang}`;
+    console.log(url);
+    setTimeout(() => {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                } else {
+                    window.location.reload();
+                }
+                return response.json();
+            })
+            .then(data => {
+                window.location.reload();
+            })
+            .catch(error => reject(error));
+    }, 20)    
+}
 
 function contactmeCursorActivator(isActive){
     document.querySelector('.cursor-frame').classList.toggle('cursor-hovering-contact-me', isActive)

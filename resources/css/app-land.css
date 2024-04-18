@@ -92,6 +92,23 @@ input, textarea{
     align-items: center;
 }
 
+.lang-btn-container{
+    position: fixed;
+    display: flex;
+    gap: 20px;
+    top: var(--navbar-heigth);
+    right: var(--navbar-heigth);
+    font-size: 20px;
+    font-family: var(--font-secondary);
+    z-index: 50;
+}
+
+
+
+.selected-lang{
+    font-weight: 700;
+}
+
 
 /*   ______________________   CURSOR   ______________________   */
 
@@ -445,7 +462,7 @@ input, textarea{
 .nav-transparent-mode.navbar-frame{
     background-color: rgba(0, 0, 0, 0);
 }
-.nav-dark-mode .abr-nav-logotype, .nav-dark-mode .nav-link-option, .nav-transparent-mode .abr-nav-logotype, .nav-transparent-mode .nav-link-option{ 
+.nav-dark-mode .abr-nav-logotype, .nav-dark-mode .nav-link-option, .nav-transparent-mode .abr-nav-logotype, .nav-transparent-mode .nav-link-option, .nav-dark-mode .lang-option, .nav-transparent-mode .lang-option{ 
     color: var(--background-color);
 }
 
