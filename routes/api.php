@@ -2,13 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AdressController;
 use App\Http\Controllers\Api\MarkerController;
+use App\Http\Api\Controllers\ChatGptController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\ScheduleController;
-use App\Http\Controllers\Api\MessageController;
-use App\Http\Controllers\Api\MenuController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -61,6 +62,9 @@ Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
 Route::put('menu/update-menu', [MenuController::class, 'updateMenu']);
 Route::delete('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
 Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
+
+Route::get('chatbot/create-thread', [ChatGptController::class, 'createThread']);
+Route::get('chatbot/addMessage/{threadId}', [ChatGptController::class, 'createThread']);
 
 
 
