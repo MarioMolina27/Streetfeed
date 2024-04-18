@@ -66,6 +66,7 @@ Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunch
 Route::get('chatbot/createThread', [ChatGptController::class, 'createThread']);
 Route::post('chatbot/addMessage/{threadId}', [ChatGptController::class, 'addMessage']);
 
+Route::post('marker/create-marker', [MarkerController::class, 'createMarker']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
