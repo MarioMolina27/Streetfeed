@@ -6,7 +6,7 @@
             <button class="heart-button" style="outline: 0;" @click.stop.prevent="toggleHeart">
                 <i :class="heartClass" style="font-size: 1.5rem"></i>
             </button>
-            <img :alt="`Provider image`" :src="`img/${provider.type_users[0].pivot.type_of_provider}.png`" class="card-img-top img-fluid" />
+            <img :alt="`Provider image`" :src="`img/${provider.type_users[0].pivot.type_of_provider}${typeExtension}`" class="card-img-top img-fluid" />
           
           </div>
           <p class="fs-5">
@@ -35,7 +35,8 @@ export default{
     },
     data(){
       return {
-        isRequesting: false
+        isRequesting: false,
+        imageExtension: ''
       }
     },
     computed: {
@@ -48,7 +49,17 @@ export default{
             total += menu.launchpack.length;
         });
         return total;
-      } 
+      },
+      typeExtension() {
+        if (this.provider.type_users[0].pivot.type_of_provider == 'restaurante') {
+          return '.jpg';
+        } else {
+          return '.png';
+        }
+      }
+    },
+    mounted() {
+      
     },
     methods: {
       toggleHeart(event) {

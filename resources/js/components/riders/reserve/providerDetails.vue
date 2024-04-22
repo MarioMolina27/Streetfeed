@@ -6,7 +6,7 @@
         </template>
         <template v-else>
             <div class="container-fluid">
-                <div v-if ="provider && provider.type_users && provider.type_users.length > 0" class="detail-header" :style="`background-image: url(../img/${provider.type_users[0].pivot.type_of_provider}.png)`">
+                <div v-if ="provider && provider.type_users && provider.type_users.length > 0" class="detail-header" :style="`background-image: url(../img/${provider.type_users[0].pivot.type_of_provider}${typeExtension})`">
                 <h1 class="provider-name">{{ provider.nickname }}</h1>
                 <button class="heart-button" style="outline: 0;" @click="toggleHeart">
                     <i :class="heartClass" style="font-size: 1.5rem"></i>
@@ -100,7 +100,14 @@ export default{
         },
         showReserveData() {
             return this.menus.length === 0 || this.menus.some(menu => menu.launchpacks > 0);
-        }
+        },
+        typeExtension() {
+            if (this.provider.type_users[0].pivot.type_of_provider == 'restaurante') {
+            return '.jpg';
+            } else {
+            return '.png';
+            }
+      }
     },
     methods: {
         loadProvider() {
