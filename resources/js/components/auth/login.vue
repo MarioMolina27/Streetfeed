@@ -4,7 +4,7 @@
             <div class="logo-text">STREETFEED</div>
             <!-- primera columna: LOGIN -->
             <div class="col-md-6 d-flex flex-column justify-content-center" id="loginColumn" v-show="showLogin">
-                <div class="content-wrapper" style="margin: 0 5rem;">
+                <div class="content-wrapper" style="margin: 0 5rem; border: 1px solid var(--secondary-color); border-radius: 5%; padding: 1rem 0;">
                     <!-- Contenido de la primera columna -->
                     <div class="container-fluid text-center ">
                         <img src="img/login/logoEQ7.svg" class="" alt="Logo Streetfeed">
@@ -13,9 +13,9 @@
                         </h1>
                     </div>
                     <!-- Buttons Type User -->
-                    <div class="container-fluid my-3 sign-in-google ">
-                        <div class="row justify-content-center">
-                            <div class="col-md-6">
+                    <!-- <div class="container-fluid my-3 sign-in-google ">
+                        <div class="w-100 row justify-content-center">
+                            <div class="col-6 col-md-6">
                                 <button 
                                     type="button" 
                                     class="btn w-100 btn-type-user" 
@@ -25,7 +25,32 @@
                                     PROVIDER
                                 </button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-6 col-md-6">
+                                <button
+                                    type="button"
+                                    class="btn w-100 btn-type-user"
+                                    :class="{ 'selected': selectedUserType === 'Rider' }"
+                                    @click="selectUserType('Rider')"
+                                >
+                                    RIDER
+                                </button>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="container-fluid my-3 sign-in-google">
+                        <div class="w-100 row justify-content-center">
+                            <div class="col-6 col-md-6">
+                                <button 
+                                    type="button" 
+                                    class="btn w-100 btn-type-user" 
+                                    :class="{ 'selected': selectedUserType === 'Provider' }" 
+                                    @click="selectUserType('Provider')"
+                                >
+                                    PROVIDER
+                                </button>
+                            </div>
+                            <div class="col-6 col-md-6">
                                 <button
                                     type="button"
                                     class="btn w-100 btn-type-user"
@@ -37,6 +62,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- divider line -->
                     <div class="container-fluid my-3 divider-login ">
                         <div class="line my-3"></div>
@@ -62,6 +88,15 @@
                         <div class="register-access">
                             Don’t have an account? <a href="#" id="registerLink">Sign Up Now</a>
                         </div>
+                    </div>
+                    <!-- buttons translate -->
+                    <div class="mt-5 d-flex align-items-center justify-content-center gap-3">
+                        <button class="lang-btn">CAT</button>
+                        <button class="lang-btn active">ESP</button>
+                        <button class="lang-btn">ENG</button>
+                        <!-- <button class="lang-btn" :class="{ 'active': language === 'ca' }">{{translations.catalanAbrLabel}}</button>
+                        <button class="lang-btn" :class="{ 'active': language === 'es' }">{{translations.spanishAbrLabel}}</button>
+                        <button class="lang-btn" :class="{ 'active': language === 'en' }">{{translations.englishAbrLabel}}</button> -->
                     </div>
                 </div>
             </div>
@@ -92,21 +127,24 @@
                     
                     <!-- form register -->
                     <div class="container-fluid register-form d-flex flex-column align-items-center justify-content-center">
-                        <form action="" autocomplete="off" class="d-flex px-5">
+                        <!-- d-flex px-5 -->
+                        <div class="form-register">
                             <!-- Step 1 -->
-                            <div id="step-1" class="flex-column step" style="display: flex;">
+                            <div id="step-1" class="flex-column justify-content-evenly step" style="" v-if="registerPage==1">
                                 <!-- title step 1 -->
-                                <h2 class="text-center">Type <span class="title-secondary">User</span></h2>
-                                <h5 class="text-center">¿Como deseas apoyar?</h5>
+                                <div>
+                                    <h2 class="text-center">Type <span class="title-secondary">User</span></h2>
+                                    <h5 class="text-center">¿Como deseas apoyar?</h5>
+                                </div>
                                 <!-- ckeck type user -->
                                 <div class="row mb-1 align-items-center mt-5 type-user-section">
-                                    <div class="col d-flex justify-content-center align-items-center check-type-user">
+                                    <div class="col d-flex justify-content-center align-items-center check-type-user" @click="selectTypeUser($event)">
                                         <div class="type-user-container">
                                             <!-- image user -->
                                             <img src="img/login/rider-user.png" alt="Rider Image" class="img-user">
                                         </div>
                                     </div>
-                                    <div class="col d-flex justify-content-center align-items-center check-type-user">
+                                    <div class="col d-flex justify-content-center align-items-center check-type-user" @click="selectTypeUser($event)">
                                         <div class="type-user-container">
                                             <!-- image user -->
                                             <img src="img/login/provider-user.png" alt="" class="img-user">
@@ -120,25 +158,27 @@
                                 </div>
                             </div>
                             <!-- Step 2 -->
-                            <div id="step-2" class="flex-column step" style="display: none;">
+                            <div id="step-2" class="flex-column justify-content-evenly step" v-if="registerPage==2">
                                 <!-- title step 2 -->
                                 <h2 class="text-center">You <span class="title-secondary">Info</span></h2>
                                 <!-- Content Step 2 -->
-                                <div class="mb-3">
-                                    <label for="email-login" class="form-label">Name</label>
-                                    <input class="form-control input-login" type="text" name="email-login" placeholder="Your name">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email-login" class="form-label">Surnames</label>
-                                    <input class="form-control input-login" type="text" name="email-login" placeholder="Your surnames">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email-login" class="form-label">E-mail</label>
-                                    <input class="form-control input-login" type="text" name="email-login" placeholder="you@example.com">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password-login" class="form-label">Password</label>
-                                    <input class="form-control input-login" type="password" name="password-login" placeholder="Your password">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="email-login" class="form-label">Name</label>
+                                        <input class="form-control input-login" type="text" name="email-login" placeholder="Your name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email-login" class="form-label">Surnames</label>
+                                        <input class="form-control input-login" type="text" name="email-login" placeholder="Your surnames">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email-login" class="form-label">E-mail</label>
+                                        <input class="form-control input-login" type="text" name="email-login" placeholder="you@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password-login" class="form-label">Password</label>
+                                        <input class="form-control input-login" type="password" name="password-login" placeholder="Your password">
+                                    </div>
                                 </div>
                                 <div class="mb-3 btn-step">
                                     <a href="#" class="prev-step">PREV</a>
@@ -146,38 +186,28 @@
                                 </div>
                             </div>
                             <!-- Step 3 -->
-                            <div id="step-3" class="flex-column step" style="display: none;">
+                            <div id="step-3" class="flex-column justify-content-evenly step"  v-if="registerPage==3">
                                 <!-- title step 3 -->
                                 <h2 class="text-center">You <span class="title-secondary">Address</span></h2>
                                 <!-- content step 3 -->
-                                <div class="mb-3">
-                                    <label for="country-register" class="form-label">Country</label>
-                                    <input class="form-control input-login" type="text" name="country-register" id="country-register" placeholder="Select a country" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="city-register" class="form-label">City</label>
-                                    <input class="form-control input-login" type="text" name="city-register" id="city-register" placeholder="Select a city" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="p-code-register" class="form-label">Postal Code</label>
-                                    <input class="form-control input-login" type="text" name="p-code-register" id="p-code-register" placeholder="Your postal code" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="address-register" class="form-label">Address</label>
-                                    <input class="form-control input-login" type="text" name="address-register" id="address-register" placeholder="Your address">
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <label for="number-address-register" class="form-label">Number</label>
-                                        <input class="form-control input-login" name="number-address-register" id="number-address-register" type="number" placeholder="1">
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="address-register" class="form-label">Address</label>
+                                        <input class="form-control input-login" type="text" name="address-register" id="address-register" placeholder="Your address">
                                     </div>
-                                    <div class="col-md-4">
-                                        <label for="floor-address-register">Floor</label>
-                                        <input class="form-control input-login" name="floor-address-register" id="floor-address-register" type="text" placeholder="Primero (1º)">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="door-address-register">Door</label>
-                                        <input class="form-control input-login" name="door-address-register" id="door-address-register" type="text" placeholder="Primera (1ª)">
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="number-address-register" class="form-label">Number</label>
+                                            <input class="form-control input-login" name="number-address-register" id="number-address-register" type="number" placeholder="1">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="floor-address-register">Floor</label>
+                                            <input class="form-control input-login" name="floor-address-register" id="floor-address-register" type="text" placeholder="Primero (1º)">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="door-address-register">Door</label>
+                                            <input class="form-control input-login" name="door-address-register" id="door-address-register" type="text" placeholder="Primera (1ª)">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mb-3 btn-step">
@@ -186,12 +216,14 @@
                                 </div>
                             </div>
                             <!-- Step 4 -->
-                            <div id="step-4" class="flex-column step" style="display: none;">
+                            <div id="step-4" class="flex-column step w-100" style=" margin: auto; width: fit-content !important; padding: 2rem;" v-if="registerPage==4">
                                 <!-- title step 4 -->
                                 <h2 class="text-center">Business <span class="title-secondary">Info</span></h2>
                                 <h5 class="text-center fw-light">HORARY</h5>
                                 <!-- content step 4 -->
-                                <template v-for="(day, index) in daysOfWeek" :key="index">
+                                <!-- d-flex flex-column align-items-center overflow-y-auto h-100 border w-100 -->
+                                <div class="horary-container" style="overflow-y: auto; height: 60%; width: 400px; padding: 1rem">
+                                    <template v-for="(day, index) in daysOfWeek" :key="index">
                                     <div class="row mt-3 d-flex align-items-center justify-content-center">
                                             <div class="col-lg-4 col-12 d-flex flex-row align-items-center">
                                                 <img src="img/Alarmclock.svg" alt="img-first-category-game" class="img-profile-stats" />
@@ -216,13 +248,14 @@
                                     </div>
                                     <div v-if="index !== daysOfWeek.length - 1" class="divider-schedule"></div>
                                 </template>
-                                <div class="mb-3 btn-step">
+                                </div>
+                                <div class="mb-3 btn-step" style="margin-top: 2.5rem;">
                                     <a href="#" class="prev-step">PREV</a>
                                     <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
                                 </div>
                             </div>
                             <!-- Step 5 -->
-                            <div id="step-5" class="step border" style="display: none;">
+                            <div id="step-5" class="flex-column step border"  v-if="registerPage==5">
                                 <!-- title step 5 -->
                                 <h2 class="text-center">You <span class="title-secondary">Summary</span></h2>
                                 <div class="mb-3 btn-step">
@@ -230,7 +263,7 @@
                                     <button class="btn btn-register next-step" type="submit">FINISH</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 
@@ -259,8 +292,9 @@ export default {
             daysOfWeek: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
             shifts : [],
             displayShifts: false,
-            selectUserType: null, // Tipo de usuario seleccionado
+            selectedUserType: null, // Tipo de usuario seleccionado 'Login'
             showLogin: true, // Inicialmente mostramos la columna de inicio de sesion
+            registerPage: 1,
         };
     },
     created() {
@@ -273,9 +307,21 @@ export default {
                 });
     },
     methods: {
+        // Register
+        selectTypeUser(event) {
+            // Remove the 'active' class from all elements with the 'check-type-user' class
+            let containersTypeUser = document.querySelectorAll('.check-type-user');
+            containersTypeUser.forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Add the 'active' class to the clicked container
+            event.target.closest('.check-type-user').classList.add('active');
+        },
         toggleView(view) {
             this.showLogin = view === 'login';
         },
+        // Login
         selectUserType(userType) {
             this.selectedUserType = userType;
         },
@@ -448,7 +494,7 @@ export default {
 
             // Mostrar el paso seleccionado
             const currentStep = document.getElementById(`step-${stepNumber}`);
-            currentStep.style.display = 'block';
+            currentStep.style.display = 'flex';
 
             // Actualizar la barra de progreso y las lineas conectoras
             const stepNavs = document.querySelectorAll('.step-nav');
@@ -469,6 +515,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.registerPage);
 
         /*
         document.querySelectorAll('.btn-type-user').forEach(function(button) {
@@ -514,21 +561,16 @@ export default {
         }.bind(this));
         
 
-        document.querySelectorAll('.next-step, .prev-step').forEach(button => {
+        document.querySelectorAll('.next-step').forEach(button => {
             button.addEventListener('click', (event) => {
-                event.preventDefault();
-                const currentStep = parseInt(button.closest('.step').id.replace('step-', ''));
-                const nextStep = button.classList.contains('next-step') ? currentStep + 1 : currentStep -1;
-                this.navigateToFormStep(nextStep);
+                this.registerPage++;
+                console.log(this.registerPage)
             })
         });
 
         document.querySelectorAll('.prev-step').forEach(a => {
             a.addEventListener('click', (event) => {
-                event.preventDefault();
-                const currentStep = parseInt(button.closest('.step').id.replace('step-', ''));
-                const prevStep = a.classList.contains('prev-step') ? currentStep - 1 : currentStep + 1;
-                this.navigateToFormStep(prevStep);
+                this.registerPage--;
             })
         });
             
@@ -636,9 +678,13 @@ button {
 
 /* sign-in google {}*/
 
+.sign-in-google {
+    width: 100%;
+}
+
 .sign-in-google button {
     width: 100%;
-    border: 2px solid var(--secondary-color);
+    border: 1px solid var(--secondary-color);
     border-radius: 8px;
     font-family: var(--primary-font);
     font-size: 1.3rem;
@@ -646,11 +692,6 @@ button {
     color: var(--text-color);
     box-shadow: 1px 1px 1px var(--text-color);
     white-space: nowrap;
-}
-
-.sign-in-google button i {
-    margin-right: 1.2rem;
-    color: inherit;
 }
 
 .sign-in-google button:hover {
@@ -673,13 +714,6 @@ button {
     color: var(--primary-street-feed);
     font-size: 120%;
     
-}
-
-.selected {
-    /* Estilos para el boton seleccionado */
-    background-color: var(--secondary-color);
-    color: var(--primary-street-feed);
-    font-size: 120%;
 }
 
 /* Divider Login */
@@ -761,7 +795,7 @@ button {
     width: 100%;
     padding: 0 0 0 .8rem;
     margin: 0;
-    border: 2px solid var(--secondary-color);
+    border: 1px solid var(--secondary-color);
     border-radius: 8px;
     line-height: 2.5rem;
     background: none;
@@ -818,6 +852,46 @@ button {
     background: var(--text-color);
     color: var(--primary-street-feed);
     padding: .3em;
+}
+
+.lang-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    color: #081733;
+}
+
+.lang-btn:hover:not(.active) {
+    text-decoration: underline;
+}
+
+.lang-btn.active {
+    
+    padding: 7px;
+    border-radius: 3px;
+    background-color: #b17a3b;
+    color: #FDF8EB;
+}
+.mobile-lang-btn {
+    width: 50%;
+    background: #FDF8EB;
+    cursor: pointer;
+    padding: 7px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    color: #b17a3b;
+}
+
+.mobile-lang-btn:hover:not(.active) {
+    text-decoration: underline;
+}
+
+.mobile-lang-btn.active {
+    background-color: #b17a3b;
+    color: #FDF8EB;
 }
 
 /* --- FORM REGISTER --- */
@@ -897,6 +971,10 @@ button {
     position: relative;
 }
 
+.check-type-user .active {
+    background-color: var(--secondary-color);
+}
+
 .type-user-container {
     display: flex;
     justify-content: center;
@@ -939,48 +1017,98 @@ button {
 }
 
 /* media-queries */
+@media only screen and (min-width: 1024px) and (max-width: 1430px) {
+    /* CSS for laptop devices */
+    .register-access,
+    .login-access span {
+        font-size: 80%;
+    }
 
-/* // Medium devices (tablets, 768px and up) */
-@media (max-width: 768px) {
-    /* #loginColumn .content-wrapper {
-        padding-right: 0;
-        padding-left: 0;
-    } */
+    .type-user-container {
+        flex-wrap: nowrap;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    /* CSS for tablet devices */
+    .register-access,
+    .login-access span {
+        font-size: 65%;
+    }
+} 
+
+/* // Mobile Devices (Portrait and landscape) */
+@media only screen and (max-width: 767px) {
     .logo-text,
     .logo-column {
         display: none !important;
+    }
+
+    .register-access,
+    .login-access span {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 85%;
+    }
+
+    .btn-step { padding: 0; }
+    .btn-step button { width: 70%; }
+    .btn-step a,
+    .btn-step button {
+        font-size: 75%;
+    }
+
+    .register-form form {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 
 @media (max-width: 576px){
 
-.login-access span,
-.register-access {
-    font-size: .9em;
-}
+    /* .login-access span,
+    .register-access {
+        font-size: .9em;
+        font-size: 75%;
+    } */
 
-#loginColumn .content-wrapper {
-    padding-right: 1rem !important;
-    padding-left: 1rem !important;
-    margin: 0 !important;
-}
+    #loginColumn .content-wrapper {
+        padding-right: 1rem !important;
+        padding-left: 1rem !important;
+        margin: 0 !important;
+    }
 
-.type-user-section {
-    flex-wrap: nowrap;
-    justify-content: center;
-}
+    .type-user-section {
+        /* flex-wrap: nowrap; */
+        justify-content: center;
+        gap: 1rem;
+    }
 
-.btn-step { padding: 0; }
-.btn-step button { width: 70%; }
+    
 
-.input-login {
-    line-height: 1.8rem;
-}
+    .input-login {
+        line-height: 1.8rem;
+    }
 
-.login-form label,
-.register-form label {
-    font-size: 1rem;
-}
+    .login-form label,
+    .register-form label {
+        font-size: 1rem;
+    }
+
+    .sign-in-google {
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap
+
+    }
+
+    .conector {
+        height: 1px;
+        width: 2.5rem;
+    }
+
+
 }
 
 </style>
