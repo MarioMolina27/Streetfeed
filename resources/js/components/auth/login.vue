@@ -13,30 +13,6 @@
                         </h1>
                     </div>
                     <!-- Buttons Type User -->
-                    <!-- <div class="container-fluid my-3 sign-in-google ">
-                        <div class="w-100 row justify-content-center">
-                            <div class="col-6 col-md-6">
-                                <button 
-                                    type="button" 
-                                    class="btn w-100 btn-type-user" 
-                                    :class="{ 'selected': selectedUserType === 'Provider' }" 
-                                    @click="selectUserType('Provider')"
-                                >
-                                    PROVIDER
-                                </button>
-                            </div>
-                            <div class="col-6 col-md-6">
-                                <button
-                                    type="button"
-                                    class="btn w-100 btn-type-user"
-                                    :class="{ 'selected': selectedUserType === 'Rider' }"
-                                    @click="selectUserType('Rider')"
-                                >
-                                    RIDER
-                                </button>
-                            </div>
-                        </div>
-                    </div> -->
 
                     <div class="container-fluid my-3 sign-in-google">
                         <div class="w-100 row justify-content-center">
@@ -110,27 +86,60 @@
                     </div>
                     
                     <!-- section steps -->
-                    <div class="w-100 mb-3 d-flex justify-content-center align-items-center ">
-                        <div class="step-nav step-active">1</div>
-                        <div class="conector"></div>
-                        <div class="step-nav">2</div>
-                        <div class="conector"></div>
-                        <div class="step-nav">3</div>
-                        <div class="conector"></div>
-                        <div class="step-nav">4</div>
-                        <div class="conector"></div>
-                        <div class="step-nav">5</div>
+                    <div class="w-100 mb-3 d-flex justify-content-center align-items-center">
+                        <!-- Iteramos sobre los pasos y les aplicamos la clase 'step-active' si corresponde -->
+                        <!-- div v-for="step in totalSteps" :key="step" class="step-container" v-if="shouldShowStep(step)" -->
+                        <!-- div v-for="step in userType === 'rider' ? totalSteps - 1 : totalSteps" :key="step" class="step-container" -->
+                        <div v-for="step in userType === 'rider' ? totalSteps - 1 : totalSteps" :key="step" class="step-container">
+                            <!-- <div class="step-nav" :class="{ 'step-active': step === registerPage }">{{ step }}</div> -->
+                            <!-- Añadimos un conector después de cada paso, excepto después del último -->
+                            <!-- <div class="conector" v-if="step < totalSteps && shouldShowConnector(step)"></div> -->
+                            <!-- Solo mostramos los step-nav y conectores que correspondan al tipo de usuario -->
+                            <div v-if="shouldShowStep(step)" class="step-nav" :class="{ 'step-active': step === registerPage }">{{ step }}</div>
+                            <div v-if="shouldShowConnector(step)" class="conector"></div>
+                        </div>
                     </div>
-
+                    <!-- <div class="w-100 mb-3 d-flex justify-content-center align-items-center"> -->
+                        <!-- <template v-for="(step, index) in steps" :key="index">
+      
+        <div class="step-nav" :class="{ 'step-active': index + 1 === currentStep }">{{ index + 1 }}</div>
+        <div class="conector" v-if="index !== steps.length - 1"></div>
+      </div>
+    </template> -->
+    <!-- Utilizamos v-for para generar los pasos y los conectores -->
+                    <!-- <div class="step-container"> -->
+                        <!-- <div class="d-flex align-items-center" v-for="(step, index) in steps" :key="index"> -->
+                            <!-- <div v-for="step in totalSteps" :key="step" class="step-container"> -->
+                                <!-- <div class="step-nav" :class="{ 'step-active': step === registerPage }">{{ step }}</div> -->
+                        <!-- Añadimos un conector después de cada paso, excepto después del último -->
+                        <!-- <div v-if="index < steps - 1" class="conector"></div> -->
+                        <!-- <div class="conector" v-if="step < totalSteps"> -->
+                            <!-- </div> -->
+                        <!-- <div class="step-nav" :class="{ 'step-active': index + 1 === currentStep }">{{ index + 1 }}</div> -->
+                        
+                        <!--  -->
+                        
+      
+      <!-- <div v-for="step in totalSteps" :key="step" class="step-container"> -->
+        <!-- <div class="step-nav" :class="{ 'step-active': step === registerPage }">{{ step }}</div> -->
+        <!-- Añadimos un conector después de cada paso, excepto después del último -->
+        <!-- <div class="conector" v-if="step < totalSteps"></div> -->
+      <!-- </div> -->
+    <!-- </div> -->
+                        <!--  -->
+                    <!-- </div>
+                </div> -->
+    
+                    
+                    <!-- </div> -->
                     <!-- title -->
                     <h1 class="text-center mt-5 d-none" id="title-register">Registrate y unete al cambio</h1>
                     
                     <!-- form register -->
                     <div class="container-fluid register-form d-flex flex-column align-items-center justify-content-center">
-                        <!-- d-flex px-5 -->
                         <div class="form-register">
                             <!-- Step 1 -->
-                            <div id="step-1" class="flex-column justify-content-evenly step" style="" v-if="registerPage==1">
+                            <div id="step-1" class="d-flex flex-column justify-content-evenly step" v-if="registerPage === 1">
                                 <!-- title step 1 -->
                                 <div>
                                     <h2 class="text-center">Type <span class="title-secondary">User</span></h2>
@@ -138,27 +147,25 @@
                                 </div>
                                 <!-- ckeck type user -->
                                 <div class="row mb-1 align-items-center mt-5 type-user-section">
-                                    <div class="col d-flex justify-content-center align-items-center check-type-user" @click="selectTypeUser($event)">
+                                    <div class="col d-flex justify-content-center align-items-center check-type-user" @click="selectTypeUser($event, 'rider')">
                                         <div class="type-user-container">
                                             <!-- image user -->
                                             <img src="img/login/rider-user.png" alt="Rider Image" class="img-user">
                                         </div>
                                     </div>
-                                    <div class="col d-flex justify-content-center align-items-center check-type-user" @click="selectTypeUser($event)">
+                                    <div class="col d-flex justify-content-center align-items-center check-type-user" @click="selectTypeUser($event, 'provider')">
                                         <div class="type-user-container">
                                             <!-- image user -->
-                                            <img src="img/login/provider-user.png" alt="" class="img-user">
+                                            <img src="img/login/provider-user.png" alt="Provider Image" class="img-user">
                                         </div>
                                     </div>
-                        
                                 </div>
                                 <div class="mb-3 btn-step mt-5">
-                                    <!-- <a href="">PREV</a> -->
-                                    <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
+                                    <button class="btn btn-register next-step" @click="nextStep">NEXT</button>
                                 </div>
                             </div>
                             <!-- Step 2 -->
-                            <div id="step-2" class="flex-column justify-content-evenly step" v-if="registerPage==2">
+                            <div id="step-2" class="flex-column justify-content-evenly step" v-if="registerPage === 2">
                                 <!-- title step 2 -->
                                 <h2 class="text-center">You <span class="title-secondary">Info</span></h2>
                                 <!-- Content Step 2 -->
@@ -181,42 +188,54 @@
                                     </div>
                                 </div>
                                 <div class="mb-3 btn-step">
-                                    <a href="#" class="prev-step">PREV</a>
-                                    <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
+                                    <!-- <a href="#" class="prev-step" @click="registerPage--">PREV</a> -->
+                                    <a href="#" class="prev-step" @click="prevStep" :disabled="registerPage === 1">PREV</a>
+                                    <!-- <button class="btn btn-register next-step" @click="registerPage++">NEXT</button> -->
+                                    <button class="btn btn-register next-step" @click="nextStep">NEXT</button>
                                 </div>
                             </div>
                             <!-- Step 3 -->
-                            <div id="step-3" class="flex-column justify-content-evenly step"  v-if="registerPage==3">
+                            <div id="step-3" class="d-flex flex-column justify-content-evenly step"  v-if="registerPage === 3">
                                 <!-- title step 3 -->
                                 <h2 class="text-center">You <span class="title-secondary">Address</span></h2>
                                 <!-- content step 3 -->
                                 <div>
-                                    <div class="mb-3">
-                                        <label for="address-register" class="form-label">Address</label>
-                                        <input class="form-control input-login" type="text" name="address-register" id="address-register" placeholder="Your address">
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <IconField iconPosition="left" class="input-register-container">
+                                                <InputIcon class="pi pi-search input-icon-register"> </InputIcon>
+                                                <InputText v-model="adress" placeholder="Your address" class="input-register" style="padding-left: 40px;" />
+                                            </IconField>
+                                        </div>
+                                        
+                                        <!-- <label for="address-register" class="form-label">Address</label> -->
+                                        <!-- <input class="form-control input-login" type="text" name="address-register" id="address-register" placeholder="Your address"> -->
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-4">
-                                            <label for="number-address-register" class="form-label">Number</label>
-                                            <input class="form-control input-login" name="number-address-register" id="number-address-register" type="number" placeholder="1">
+                                            <!-- <label for="number-address-register" class="form-label">Number</label> -->
+                                            <InputText v-model="number" placeholder="Number" class="input-register"/>
+                                            <!-- <input class="form-control input-login" name="number-address-register" id="number-address-register" type="number" placeholder="1"> -->
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="floor-address-register">Floor</label>
-                                            <input class="form-control input-login" name="floor-address-register" id="floor-address-register" type="text" placeholder="Primero (1º)">
+                                            <!-- <label for="floor-address-register">Floor</label> -->
+                                            <InputText v-model="floor" placeholder="Floor" class="input-register"/>
+                                            <!-- <input class="form-control input-login" name="floor-address-register" id="floor-address-register" type="text" placeholder="Primero (1º)"> -->
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="door-address-register">Door</label>
-                                            <input class="form-control input-login" name="door-address-register" id="door-address-register" type="text" placeholder="Primera (1ª)">
+                                            <!-- <label for="door-address-register">Door</label> -->
+                                            <InputText v-model="door" placeholder="Door" class="input-register"/>
+                                            <!-- <input class="form-control input-login" name="door-address-register" id="door-address-register" type="text" placeholder="Primera (1ª)"> -->
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-3 btn-step">
-                                    <a href="#" class="prev-step">PREV</a>
-                                    <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
+                                    <a href="#" class="prev-step" @click="prevStep" :disabled="registerPage === 1">PREV</a>
+                                    <button class="btn btn-register next-step" @click="nextStep">NEXT</button>
                                 </div>
                             </div>
                             <!-- Step 4 -->
-                            <div id="step-4" class="flex-column step w-100" style=" margin: auto; width: fit-content !important; padding: 2rem;" v-if="registerPage==4">
+                            <div id="step-4" class="flex-column step w-100" style=" margin: auto; width: fit-content !important; padding: 2rem;" v-if="registerPage === 4 && userType === 'provider'">
                                 <!-- title step 4 -->
                                 <h2 class="text-center">Business <span class="title-secondary">Info</span></h2>
                                 <h5 class="text-center fw-light">HORARY</h5>
@@ -250,17 +269,17 @@
                                 </template>
                                 </div>
                                 <div class="mb-3 btn-step" style="margin-top: 2.5rem;">
-                                    <a href="#" class="prev-step">PREV</a>
-                                    <button class="btn btn-register next-step prev-step" type="submit">NEXT</button>
+                                    <a href="#" class="prev-step" @click="prevStep" :disabled="registerPage === 1">PREV</a>
+                                    <button class="btn btn-register next-step" @click="nextStep">NEXT</button>
                                 </div>
                             </div>
                             <!-- Step 5 -->
-                            <div id="step-5" class="flex-column step border"  v-if="registerPage==5">
+                            <div id="step-5" class="flex-column step border"  v-if="registerPage === 5">
                                 <!-- title step 5 -->
                                 <h2 class="text-center">You <span class="title-secondary">Summary</span></h2>
                                 <div class="mb-3 btn-step">
-                                    <a href="" class="prev-step">PREV</a>
-                                    <button class="btn btn-register next-step" type="submit">FINISH</button>
+                                    <a href="#" class="prev-step" @click="prevStep" :disabled="registerPage === 1">PREV</a>
+                                    <button class="btn btn-register next-step" @click="nextStep">FINISH</button>
                                 </div>
                             </div>
                         </div>
@@ -278,6 +297,9 @@
 
 <script>
 import { gsap } from "gsap";
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 import Calendar from 'primevue/calendar';
 import { homeRouteAdmin, mainRiderPage, mainProviderPage} from '../../utilities/constant.js';
 export default {
@@ -286,6 +308,7 @@ export default {
     },
     data() {
         return {
+            inputValue: '',
             translations: {},
             nickname: '',
             password: '',
@@ -295,6 +318,16 @@ export default {
             selectedUserType: null, // Tipo de usuario seleccionado 'Login'
             showLogin: true, // Inicialmente mostramos la columna de inicio de sesion
             registerPage: 1,
+            totalSteps: 5,
+            userType: null, // Tipo de usuario seleccionado
+            // Register
+            currentStep: 1,
+            steps: 5,
+            selectedType: null,
+            username: '',
+            userSurnames: '',
+            emailRegister: '',
+            passwordRegister: '',
         };
     },
     created() {
@@ -308,15 +341,73 @@ export default {
     },
     methods: {
         // Register
-        selectTypeUser(event) {
+        // Funcion para avanzar al siguiente step
+        nextStep() {
+            if (this.registerPage < this.totalSteps) {
+                // Si el userType es 'rider' y estamos en el paso 3, avanzamos directamente el paso 5
+                if ( this.userType === 'rider' && this.registerPage === 3) {
+                    this.registerPage = 5;
+                } else {
+                    this.registerPage++;
+                }
+            }
+        },
+        // Funcion para retroceder al paso anterior
+        prevStep() {
+            // Si el tipo de usuario es 'rider' y estamos en el paso 5, retrocedemos directamente al paso 3
+            if (this.userType === 'rider' && this.registerPage === 5) {
+                this.registerPage = 3;
+            } else if (this.registerPage > 1) {
+                this.registerPage--;
+            }
+        },
+        // Funcion para seleccionar el tipo de usuario
+        selectTypeUser(event, type) {
+            this.userType = type;
+            // Si el tipo de usuario es 'rider' y estamos en el paso 4, retrocedemos al paso 3
+            if (type === 'rider' && this.registerPage === 4) {
+                this.registerPage = 3;
+            }
             // Remove the 'active' class from all elements with the 'check-type-user' class
-            let containersTypeUser = document.querySelectorAll('.check-type-user');
+            let containersTypeUser = document.querySelectorAll('.type-user-container');
             containersTypeUser.forEach(container => {
                 container.classList.remove('active');
             });
 
             // Add the 'active' class to the clicked container
-            event.target.closest('.check-type-user').classList.add('active');
+            event.target.closest('.type-user-container').classList.add('active');
+        },
+        // Funcion para determinar si se debe mostrar un paso en particular
+        shouldShowStep(step) {
+            // Si el userType es 'rider' y el paso es el 4, lo reemplazamos con el paso 5
+            if (this.userType == 'rider' && step === 4) {
+                return this.registerPage === 5; //false; // No mostrar el paso 4 si el userType es 'rider'
+            }
+            // Si el userType es 'rider' y estamos en el paso 5, mostrar el paso 4 (5 visualmente)
+            // step === 4 &&
+            if (this.userType === 'rider' && this.registerPage === 5 && step === 4) {
+                return true;
+            }
+            // Si el userType es 'rider' y estamos en el paso 4, mostrar el paso 5 visualmente
+            if (this.userType === 'rider' && this.registerPage === 4 && step === 5) {
+                return true;
+            }
+            // Si el userType es 'rider' y el paso es el 4, lo reemplazamos con el paso 5
+            if (this.userType === 'rider' && step === 4) {
+                return this.registerPage === 5;
+            }
+            // Mostrar los primeros 4 pasos para 'rider' o los 5 pasos para 'provider'
+            return true;
+            
+        },
+        // Funcion para determinar si se debe mostrar un conector despues del paso en particular
+        shouldShowConnector(step) {
+            // Si el userType es 'rider' y el paso es el 4, no mostramos el conector despues de ese paso
+            if (this.userType === 'rider' && step === 4) {
+                return false; // No mostrar el conector despues del paso 3 si el userType es 'rider'
+            }
+            // Mostramos el conector despues de cada paso, excepto despues del ultimo
+            return step < this.totalSteps;
         },
         toggleView(view) {
             this.showLogin = view === 'login';
@@ -488,47 +579,11 @@ export default {
             });
         },
         navigateToFormStep(stepNumber) {
-            // Ocultamos todos los pasos
-            const steps = document.querySelectorAll('.step');
-            steps.forEach(step => step.style.display = 'none');
-
-            // Mostrar el paso seleccionado
-            const currentStep = document.getElementById(`step-${stepNumber}`);
-            currentStep.style.display = 'flex';
-
-            // Actualizar la barra de progreso y las lineas conectoras
-            const stepNavs = document.querySelectorAll('.step-nav');
-            const connectors = document.querySelectorAll('.conector');
-            stepNavs.forEach((nav, index) => {
-                if (index + 1 <= stepNumber) {
-                    nav.classList.add('step-active');
-                    if (connectors[index]) {
-                        connectors[index].classList.add('conector-active');
-                    }
-                } else {
-                    nav.classList.remove('step-active');
-                    if (connectors[index]) {
-                        connectors[index].classList.remove('conector-active');
-                    }
-                }
-            })
+            this.currentStep = stepNumber;
         }
     },
     mounted() {
         console.log(this.registerPage);
-
-        /*
-        document.querySelectorAll('.btn-type-user').forEach(function(button) {
-            button.addEventListener('click', function() {
-                Remover la clase 'selected' de todos los botones
-                document.querySelectorAll('.btn-type-user.selected').forEach(function(btn) {
-                    btn.classList.remove('selected');
-                });
-                Agregar la clase 'selected' al botón clicado
-                this.classList.add('selected');
-            });
-        });
-        */
 
         document.getElementById('registerLink').addEventListener('click', function(e) {
             e.preventDefault();
@@ -559,24 +614,11 @@ export default {
     }
             this.mostrarLogin();
         }.bind(this));
-        
-
-        document.querySelectorAll('.next-step').forEach(button => {
-            button.addEventListener('click', (event) => {
-                this.registerPage++;
-                console.log(this.registerPage)
-            })
-        });
-
-        document.querySelectorAll('.prev-step').forEach(a => {
-            a.addEventListener('click', (event) => {
-                this.registerPage--;
-            })
-        });
-            
     },
     components: {
-        Calendar
+        Calendar,
+        IconField,
+        InputText,
     }
 }
 
@@ -609,6 +651,11 @@ button {
 
 #registerColumn .content-wrapper {
     opacity: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    padding-top: 1rem;
 }
 
 #registerColumn h1,
@@ -791,7 +838,8 @@ button {
     color: var(--secondary-color);
 }
 
-.input-login {
+.input-login,
+.input-register {
     width: 100%;
     padding: 0 0 0 .8rem;
     margin: 0;
@@ -805,7 +853,8 @@ button {
     color: var(--action-color);
 }
 
-.input-login:focus {
+.input-login:focus,
+.input-register:focus {
     border-color: var(--action-color);
     color: rgb(152, 78, 174);
     box-shadow: 0 1px 1px rgba(152, 78, 174, 0.075)inset, 0 0 8px rgba(152, 78, 174,0.6);
@@ -825,6 +874,11 @@ button {
     box-shadow: 1px 1px 1px var(--text-color);
 }
 
+.form-register {
+    border: 1px solid green;
+    width: 80%;
+}
+
 .btn-register {
     background: var(--action-color);
     font-family: var(--primary-font), sans-serif;
@@ -833,6 +887,7 @@ button {
     border-radius: 8px;
     color: var(--primary-street-feed);
     box-shadow: 1px 1px 1px var(--text-color);
+    width: 45%;
 }
 
 .register-access,
@@ -900,6 +955,11 @@ button {
     font-weight: 600;
 }
 
+.step-container {
+    display: flex;
+    align-items: center;
+}
+
 .step-nav {
     width: 50px;
     height: 50px;
@@ -911,6 +971,8 @@ button {
     justify-content: center;
     color: var(--secondary-color);
     position: relative;
+
+    margin: 0;
 }
 
 .step-active {
@@ -922,7 +984,7 @@ button {
 
 .conector {
     height: 2px;
-    width: 5.5rem;
+    width: 1.5rem;
     background: var(--secondary-color);
 }
 
@@ -940,15 +1002,40 @@ button {
     margin: 0 3rem;
 }
 
+/* Estilos para componentes de Register Form */
+/* Componentes de Vue */
+.input-register-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.input-icon-register {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+/* .input-register {
+    width: 100%;
+    background: none;
+    border: 1px solid var(--secondary-color);
+} */
+
 .btn-step {
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: space-around;
-    padding: 0 3rem;
+    /* padding: 0 3rem; */
 }
 
 .btn-step a {
+    width: 45%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -961,18 +1048,14 @@ button {
     box-shadow: 1px 1px 1px var(--text-color);
 }
 
-.btn-step a,
+/* .btn-step a,
 .btn-step button {
     width: 25%;
-}
+} */
 
 .check-type-user {
     width: 430px;
     position: relative;
-}
-
-.check-type-user .active {
-    background-color: var(--secondary-color);
 }
 
 .type-user-container {
@@ -983,6 +1066,10 @@ button {
     width: 200px;
     height: 200px;
     border-radius: 5%;
+}
+
+.type-user-container.active {
+    background-color: var(--secondary-color);
 }
 
 .type-user-container input {
