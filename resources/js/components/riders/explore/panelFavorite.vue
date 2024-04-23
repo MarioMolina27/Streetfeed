@@ -33,7 +33,7 @@
                 <div class="row">
                     <template v-for="(provider) in favoriteProviders">
                         <div class="col-lg-6 col-md-12 col-sm-12 col-12 mb-3 d-flex justify-content-center">
-                            <favorite-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></favorite-card>
+                            <favorite-card :provider = provider :translations = "translations" :user="user" @favoriteToggled="refreshData"></favorite-card>
                         </div>
                     </template>
                 </div>

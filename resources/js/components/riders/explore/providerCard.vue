@@ -32,7 +32,8 @@ import Tag from 'primevue/tag';
 export default{
     props: {
       provider: Object,
-      translations: Object
+      translations: Object,
+      user: Object
     },
     data(){
       return {
@@ -69,7 +70,7 @@ export default{
         }, 300);
         
         axios.post('api/users/toggle-favorite-provider', {
-            userId: 4,
+            userId: this.user.id_user,
             providerId: this.provider.id_user
         })
         .then(response => {

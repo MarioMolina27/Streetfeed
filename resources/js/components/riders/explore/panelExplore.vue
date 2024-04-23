@@ -16,7 +16,7 @@
           <h2>{{translations.discoverProvidersCloseToYou}}</h2>
           <div class="card-container d-flex flex-nowrap">
             <template v-for="(provider) in nearProviders">
-              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+              <provider-card :provider = provider :translations = "translations" :user="user" @favoriteToggled="refreshData"></provider-card>
             </template>
           </div>
         </div>
@@ -24,7 +24,7 @@
           <h2>{{translations.discoverProvidersMoreLike}}</h2>
           <div class="card-container d-flex flex-nowrap">
             <template v-for="(provider) in hasMoreFavoritesPrvoviders">
-              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+              <provider-card :provider = provider :translations = "translations" :user="user" @favoriteToggled="refreshData"></provider-card>
             </template>
           </div>
         </div>
@@ -32,7 +32,7 @@
           <h2>{{translations.favoriteLabel}}</h2>
           <div class="card-container d-flex flex-nowrap">
             <template v-for="(provider) in favouriteProviders">
-              <provider-card :provider = provider :translations = "translations" @favoriteToggled="refreshData"></provider-card>
+              <provider-card :provider = provider :translations = "translations" :user="user" @favoriteToggled="refreshData"></provider-card>
             </template>
           </div>
         </div>  

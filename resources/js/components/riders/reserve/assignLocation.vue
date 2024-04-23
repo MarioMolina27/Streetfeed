@@ -47,7 +47,6 @@ export default {
             accessToken: "pk.eyJ1Ijoic3RyZWV0ZmVlZCIsImEiOiJjbHRkOWMzMXgwMDlyMmpybnA0MGt1N3RpIn0.jBsWG7vIB54CaqmpwbMapw",
             mapStyle: "mapbox://styles/mapbox/light-v11",
             defaultLocation: { lat: 41.388752, lng: 2.17271 },
-            userId: 4,
             reserveData: [],
             userCurrentLocation: { latitude: null, longitude: null },
             menus: JSON.parse(this.menusjson),
@@ -78,7 +77,7 @@ export default {
             zoom: 16
         });
         this.countLaunchpacks();
-        axios.get(`api/users/reserve-data/${this.userId}/${this.menus[0].id}`)
+        axios.get(`api/users/reserve-data/${this.user.id_user}/${this.menus[0].id}`)
             .then(response => {
                 this.reserveData = response.data;
                 this.reserveData.markers.forEach(marker => {
@@ -206,7 +205,7 @@ export default {
         doReserve() {
             if(this.launchpacksLeft === 0) {
                 axios.post('api/delivery/do-reserve', {
-                    userId: this.userId,
+                    userId: this.user.id_user,
                     menus: this.menus,
                     assignMarkers: this.homelessInformation
                 })

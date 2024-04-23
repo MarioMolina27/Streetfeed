@@ -38,7 +38,7 @@
     </div>
   </div>
   <Dialog v-model:visible="showChatDialog" modal class="dialog-responsive">
-    <Chat :user="userChat" :loggedUser="userLogged" :lang="lang"/>
+    <Chat :user="userChat" :loggedUser="user" :lang="lang"/>
   </Dialog>
 </template>
 
@@ -50,13 +50,13 @@ export default {
     props: {
         delivery: Object,
         lang: String,
-        translations: Object
+        translations: Object,
+        user: Object
     },
     data() {
       return {
         showChatDialog: false,
         userChat: {},
-        userLogged: 4,
       }
     },
     computed: {

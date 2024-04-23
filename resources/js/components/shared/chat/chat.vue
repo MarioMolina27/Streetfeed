@@ -43,8 +43,8 @@ export default {
     inject: ['dialogRef'],
     props: {
         user: Object,
-        loggedUser: Number,
-        lang: String
+        loggedUser: Object,
+        lang: String,
     },
     data() {
         return {
@@ -66,20 +66,21 @@ export default {
         
         setInterval(() => {
             this.getMessages();
-        }, 5000);
+        }, 3000);
     },
     
     methods: {
         getMessages() {
-            axios.get(`/api/message/get-messages/${this.loggedUser}/${this.user.id_user}`)
+            axios.get(`/api/message/get-messages/${this.loggedUser.id_user}/${this.user.id_user}`)
                 .then(response => {
-                    if (response.data.length !== this.messages.length) {
-                        this.messages = response.data;
-                        this.dateSintax();
-                        this.$nextTick(() => {
-                            this.scrollToBottom();
+                    this.messages = response.data.sort((a, b) => {
+                            return new Date(a.timestamp) - new Date(b.timestamp);
                         });
-                    }
+                
+                    this.dateSintax();
+                    this.$nextTick(() => {
+                        this.scrollToBottom();
+                    });
                 })
                 .catch(error => {
                     console.log(error);
@@ -153,7 +154,7 @@ export default {
             const message = this.$refs.messageInput.value.trim();
             if (message) {
                 axios.post('/api/message/send-message', {
-                    id_user: this.loggedUser,
+                    id_user: this.loggedUser.id_user,
                     id_user_receiver: this.user.id_user,
                     message: message
                 })
