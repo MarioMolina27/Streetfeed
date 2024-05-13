@@ -26,7 +26,7 @@ export function updateMenu(menu) {
             drink_product: menu.drink_product,
             active: menu.active
         };
-        return axios.put(url, data);
+        return axios.post(url, data);
     } catch (error) {
         console.log('Error:', error);
     }
@@ -35,7 +35,7 @@ export function updateMenu(menu) {
 export function deleteMenu(id) {
     const url = `api/menu/delete-menu/${id}`;
     try {
-        return axios.delete(url);
+        return axios.post(url);
     } catch (error) {
         console.log('Error:', error);
     }
@@ -47,7 +47,7 @@ export function updateLaunchpacks(menu,numLaunchpacks) {
         const data = {
             numLaunchpack: numLaunchpacks
         };
-        return axios.put(url, data);
+        return axios.post(url, data);
     } catch (error) {
         console.log('Error:', error);
     }

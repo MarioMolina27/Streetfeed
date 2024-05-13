@@ -20,9 +20,9 @@ export const fecthAllUsers = async () => {
 
 export const deleteUser = async (id) => {
     console.log(id);
-    const url = `api/users/${id}`;
+    const url = `api/users/desactivate/${id}`;
     try{
-        const response = await axios.delete(url);
+        const response = await axios.post(url);
         const data = await response.data;
         return data;
     }

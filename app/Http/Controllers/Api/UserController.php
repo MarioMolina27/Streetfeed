@@ -81,6 +81,18 @@ class UserController extends Controller
         }
     }
 
+    public function desactivateUser(Request $request, User $user) {
+        try 
+        {
+            $user->active = 0;
+            $user->save();
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(['message' => 'Error al eliminar el usuario'], 500);
+        }
+    }
+
     public function reactivate(Request $request, User $user)
     {
         try 

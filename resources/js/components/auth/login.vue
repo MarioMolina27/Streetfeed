@@ -1,5 +1,25 @@
 <template>
     <div class="container-fluid vh-100">
+        <div class="login-sample">
+            <div class="mb-5">
+                <span class="sample-info"><strong>Register is on development.</strong> <br>Please use the following users to login</span>
+            </div>
+            <div class="sample-user mb-3">
+                <p class="mb-0">RIDER</p>
+                <span class="me-5">User: <strong>Hector</strong></span>
+                <span>Password: <strong>1234</strong></span>
+            </div>
+            <div class="sample-user mb-3">
+                <p class="mb-0">PROVIDER</p>
+                <span class="me-5">User: <strong>Mercadona</strong></span>
+                <span>Password: <strong>1234</strong></span>
+            </div>
+            <div class="sample-user mb-3">
+                <p class="mb-0">ADMIN</p>
+                <span class="me-5">User: <strong>pol</strong></span>
+                <span>Password: <strong>1234</strong></span>
+            </div>
+        </div>
         <div class="row h-100 position-relative overflow-hidden">
             <div class="logo-text">STREETFEED</div>
             <!-- primera columna: LOGIN -->
@@ -40,6 +60,9 @@
                     <!-- divider line -->
                     <div class="container-fluid my-3 divider-login ">
                         <div class="line my-3"></div>
+                    </div>
+                    <div v-if="errorLogin" class="error-login-container">
+                        <p class="text-center mb-0 fw-bold">Usuario o contraseña incorrectos</p>
                     </div>
                     <!-- form login -->
                     <div class="container-fluid login-form d-flex flex-column align-items-center justify-content-center ">
@@ -261,6 +284,7 @@ export default {
             displayShifts: false,
             selectUserType: null, // Tipo de usuario seleccionado
             showLogin: true, // Inicialmente mostramos la columna de inicio de sesion
+            errorLogin: false
         };
     },
     created() {
@@ -295,15 +319,15 @@ export default {
                     } else if((typeUser == '3')) {
                         window.open(homeRouteAdmin,"_self")
                     }
+                    this.errorLogin = false;
                 } else {
-                    //mensaje de error
-                    console.log('incorrct')
+                    this.errorLogin = true;
                 }
                 
             })
             .catch(error => {
                 console.error('Error al loguearse', error);
-                console.log('incorrct')
+                this.errorLogin = true;
             });
 
             //si es correcto -> auth
@@ -541,6 +565,34 @@ export default {
 </script>
 
 <style scoped>
+.login-sample {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    z-index: 1000;
+    border-radius: 0 0 0 1rem;
+}
+.sample-info {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: red;
+}
+.sample-user > span {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.error-login-container {
+    background-color: rgba(255, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
 
 a {
     text-decoration: none;

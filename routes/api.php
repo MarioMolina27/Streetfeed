@@ -40,6 +40,7 @@ Route::post('users/changePassword/{user}', [UserController::class, 'changePasswo
 
 
 Route::apiResource('users', UserController::class);
+Route::post('users/desactivate/{user}', [UserController::class, 'desactivateUser']);
 Route::get('users/get-provider/{nickname}/{user}', [UserController::class, 'getProviderByNick']);
 Route::get('users/near-providers/{user}', [UserController::class, 'getMoreNearProviders']);
 Route::get('users/has-more-favourites-providers/{user}', [UserController::class, 'getBetterProviders']);
@@ -59,9 +60,9 @@ Route::post('message/send-message', [MessageController::class, 'sendMessage']);
 Route::post('message/delete-message', [MessageController::class, 'deleteMessage']);
 Route::get('menu/get-menus/{user}', [MenuController::class, 'getMenusfromProvider']);
 Route::post('menu/create-menu', [MenuController::class, 'createMenu']);
-Route::put('menu/update-menu', [MenuController::class, 'updateMenu']);
-Route::delete('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
-Route::put('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
+Route::post('menu/update-menu', [MenuController::class, 'updateMenu']);
+Route::post('menu/delete-menu/{menu}', [MenuController::class, 'deleteMenu']);
+Route::post('menu/updateLaunchPack/{menu}', [MenuController::class, 'updateLaunchPack']);
 
 Route::get('chatbot/createThread', [ChatGptController::class, 'createThread']);
 Route::post('chatbot/addMessage/{threadId}', [ChatGptController::class, 'addMessage']);
